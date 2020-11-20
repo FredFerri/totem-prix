@@ -1,0 +1,240 @@
+<%- include('head'); -%>
+
+<body>
+	<div class="main bg-grey min-h-screen">
+		<h1 class="pt-6 mb-6 text-center text-3xl leading-9 font-extrabold text-gray-900">FINALISEZ VOTRE INSCRIPTION !</h1>
+
+		<%-include('alert-error'); -%>
+
+		<div class="w-3/4 m-auto py-10"
+			<div class="md:grid md:grid-cols-2 md:gap-6">
+				<div class="">
+			      <div class="px-4 sm:px-0">
+			        <h3 class="font-bold text-lg font-medium leading-6 text-gray-900 mb-5">Informations personnelles</h3>
+			      </div>
+			    </div>		
+				<div class="mt-5 md:mt-0 md:col-span-2">
+					<form id="form-confirm-user">
+						<input type="hidden" name="id_user" id="id_user" value="<%= user_id %>">
+						<input type="hidden" name="token" id="token" value="<%= activation_token %>">
+					        <div class="shadow overflow-hidden sm:rounded-md">
+					          <div class="px-4 py-5 bg-white sm:p-6">
+					            <div class="grid grid-cols-6 gap-6">
+
+					              <div class="col-span-6 sm:col-span-6">
+					                <input type="radio" name="civil" id="civil_mr" class="civil form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" value="Monsieur">
+					                <label class="" for="civil_mme">Monsieur</label>
+					                <input type="radio" name="civil" id="civil_mr" class="civil form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" value="Madame">
+					                <label class="" for="civil_mme">Madame</label>
+					              </div>
+
+					              <div class="col-span-6 sm:col-span-3">
+					                <label for="first_name" class="block text-sm font-medium leading-5 text-gray-700">Votre prénom</label>
+					                <input id="first_name" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>
+
+					              <div class="col-span-6 sm:col-span-3">
+					                <label for="last_name" class="block text-sm font-medium leading-5 text-gray-700">Votre nom</label>
+					                <input id="last_name" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>	
+
+
+								   <div class="col-span-6 sm:col-span-3">
+					                <label for="tel" class="block text-sm font-medium leading-5 text-gray-700">Votre numéro de téléphone</label>
+					                <input type="tel" id="tel" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>
+
+								   <div class="col-span-6 sm:col-span-3">
+					                <label for="password" class="block text-sm font-medium leading-5 text-gray-700">Votre mot de passe (au moins 6 caractères)</label>
+					                <input type="password" id="password" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>				              
+					            </div>
+					        </div>
+					    </div>
+					</form>
+				</div>
+
+
+			<div class="hidden sm:block">
+			  <div class="py-5">
+			  </div>
+			</div>
+
+
+			<div class="mt-10 sm:mt-0">
+			  <div class="md:grid md:grid-cols-2 md:gap-6">
+			    <div class="">
+			      <div class="px-4 sm:px-0">
+			        <h3 class="font-bold text-lg font-medium leading-6 text-gray-900">Informations entreprise</h3>
+			      </div>
+			    </div>
+			    <div class="mt-5 md:mt-0 md:col-span-2">
+			      <form action="#" method="POST">
+			        <div class="shadow overflow-hidden sm:rounded-md">
+			          <div class="px-4 py-5 bg-white sm:p-6">
+			            <div class="grid grid-cols-6 gap-6">
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="company_name" class="block text-sm font-medium leading-5 text-gray-700">Nom de l'entreprise</label>
+			                <input type="text" id="company_name" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="tva" class="block text-sm font-medium leading-5 text-gray-700">Numéro de TVA</label>
+			                <input type="text" id="tva" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="siret" class="block text-sm font-medium leading-5 text-gray-700">Numéro de SIRET</label>
+			                <input type="text" id="siret" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="company_adresse" class="block text-sm font-medium leading-5 text-gray-700">Adresse</label>
+			                <input type="text" id="company_adresse" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="company_cp" class="block text-sm font-medium leading-5 text-gray-700">Code postal</label>
+			                <input type="text" id="company_cp" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>   
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="company_city" class="block text-sm font-medium leading-5 text-gray-700">Ville</label>
+			                <input type="text" id="company_city" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>                          
+
+			            </div>
+			           </div>
+			        </div>
+			      </form>
+			    </div>
+			   </div>
+			</div>
+
+		<div class="hidden sm:block">
+		  <div class="py-5">
+		  </div>
+		</div>
+
+		<div class="text-left">
+              <span class="inline-flex rounded-md shadow-sm">
+                <button id="confirm_submit" type="submit" class="inline-flex justify-center py-3 px-5 border border-transparent text-md leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                  Valider
+                </button>
+              </span>
+        </div>
+
+		</div>
+
+	</div>
+
+	<%- include('modal-success') -%>
+
+
+</body>
+
+</html>
+<script type="text/javascript">
+	$('#confirm_submit').on('click', function(e) {
+		e.preventDefault();
+		let civil = $('.civil:checked').val();
+		if (!civil) {
+			$('.error-message').find('.error-message-txt').text('Vous devez indiquer une civilité');
+		   	$('.error-message').show();						
+		}
+		else if ($('#password').val().length < 6) {
+			$('.error-message').find('.error-message-txt').text('Votre mot de passe doit contenir au moins 6 caractères');
+		   	$('.error-message').show();
+		}
+		else if ($('#tel').val().length < 10 || $('#tel').val().length > 13) {
+			$('.error-message').find('.error-message-txt').text('Numéro de téléphone non valide');
+		   	$('.error-message').show();		
+		}
+		else if ($('#tva').val().length > 0 && $('#tva').val().length < 11) {
+			$('.error-message').find('.error-message-txt').text('Numéro de TVA non valide');
+		   	$('.error-message').show();				
+		}
+		else if ($('#siret').val().length < 14) {
+			$('.error-message').find('.error-message-txt').text('Numéro SIRET non valide');
+		   	$('.error-message').show();		
+		}	
+		else if ($('#company_adresse').val().length < 5) {
+			$('.error-message').find('.error-message-txt').text('Veuillez indiquer une adresse valide');
+		   	$('.error-message').show();				
+		}				
+		else if ($('#company_cp').val().length < 5 || $('#company_cp').val().length > 7) {
+			$('.error-message').find('.error-message-txt').text('Veuillez indiquer un code postal valide');
+		   	$('.error-message').show();				
+		}	
+		else if ($('#company_city').val().length < 3) {
+			$('.error-message').find('.error-message-txt').text('Veuillez indiquer une ville');
+		   	$('.error-message').show();				
+		}			
+		else if ($('#last_name').val().length < 3 ) {
+			$('.error-message').find('.error-message-txt').text('Veuillez indiquer votre nom de famille');
+		   	$('.error-message').show();				
+		}		
+		else if ($('#first_name').val().length < 3 ) {
+			$('.error-message').find('.error-message-txt').text('Veuillez indiquer votre prénom');
+		   	$('.error-message').show();				
+		}	
+		else if ($('#company_name').val().length < 3 ) {
+			$('.error-message').find('.error-message-txt').text('Veuillez indiquer le nom de votre entreprise');
+		   	$('.error-message').show();				
+		}									
+		else {		
+
+			let id_user = $('#id_user').val();
+			let token = $('#token').val();  
+
+			let infos = {
+				id_user: id_user,
+				token: token,
+				civil: civil,
+				last_name: $('#last_name').val(),
+				first_name: $('#first_name').val(),
+				tel: $('#tel').val(),
+				password: $('#password').val(),
+				company_name: $('#company_name').val(),
+				tva: $('#tva').val(),
+				siret: $('#siret').val(),
+				company_adresse: $('#company_adresse').val(),
+				company_cp: $('#company_cp').val(),
+				company_city: $('#company_city').val(),
+			}
+			
+			$.ajax({
+			   url : `/user-confirmation/${id_user}/${token}`,
+			   type : 'POST',
+			   data: infos,
+			   dataType : 'json',
+			   success : function(resultat, statut){
+			   		$('.success-modal h3').text('Compte validé !');
+			   		$('.btn-validate').text('Se connecter');
+			   		$('.success-modal').show();	 
+			   },
+
+			   error : function(resultat, statut, erreur){
+			   		alert(erreur);
+			   		alert(resultat.JSONerror.message);
+					$('.error-message').find('.error-message-txt').text(resultat.JSONerror.message);
+		   			$('.error-message').show();	
+			   },
+
+			});	
+		}
+	})
+
+	function goToDashboard() {
+		window.location.href = '/';
+	}
+
+	$('.error-message-close').on('click', function() {
+		$(this).parent().parent().parent().parent().parent('.error-message').hide();
+	})	
+
+	$('.success-message-close').on('click', function() {
+		$(this).parent().parent().parent().parent().parent('.success-message').hide();
+	})			
+
+</script>

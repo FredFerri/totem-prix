@@ -1,0 +1,788 @@
+<%- include('head'); -%>
+
+<body>
+	<div class="flex overflow-hidden bg-gray-100 min-h-screen">
+
+	<%- include('nav'); -%>
+
+<div class="main mt-32 sm:mt-5 md:mt-5 lg:mt-5 w-3/4 mx-auto px-5">
+	<%- include('alert-error'); -%>
+	<h1 class="text-2xl font-bold leading-7 text-cool-gray-900 sm:leading-9 sm:truncate">Tableau de bord</h1>
+	<div class="station-cards-block">
+		<%- include('form-add-station'); %>
+
+		<button class="btn-add-station bg-gray-800 inline-flex items-center px-2 py-1 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">Ajouter une station</button>
+		<% if (userInfos.stations.length < 1) { %>
+			<p class="my-3">Aucune station enregistrée</p>
+		<% }
+		else { %>
+			<ul class="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2 auto-rows-max auto-cols-auto my-10">
+				<% userInfos.stations.forEach(function(station) { %>	
+				  <li id="station-card_<%= station.id %>" class="station-card col-span-1 bg-white rounded-lg shadow" data-subscription="<%= station.subscription_id %>">
+				    <div class="w-full flex items-center justify-between p-6 space-x-6">
+				      <div class="flex-1 truncate">
+				        <div class="flex items-center space-x-3">
+				          <h3 class="text-gray-900 text-sm leading-5 font-medium truncate"><%= station.name %></h3>
+				          <% if (station.active === true) {
+				          	%>
+				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-teal-100 rounded-full"> Active </span>
+				          	<% } 
+				          else {
+				          	%> 		          	
+				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-red-200 rounded-full"> Inactive </span> 
+				          	<a href="#" id="btn-activate-station_<%= station.id %>" class="btn-activate-station text-xs text-blue-500">+ Cliquez ici pour activer</a>
+				          	<%} %>
+				        </div>
+				        <p class="mt-1 text-gray-500 text-sm leading-5 truncate"><%= station.street %> - <%= station.cp %> - <%= station.city %></p>
+				      </div>
+				      <img class="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0" src="/images/total-logo.jpg" alt="">
+				    </div>
+					  <div id="automation_<%= station.automation.id %>" class="automation-block w-full py-3 px-6">
+					  	<div class="w-full flex my-2 items-baseline">
+					  		<% if (station.automation.mosaic_state == 'Erreur') { %>
+					  			<span class="h-4 w-4 bg-red-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-red-500 rounded-full"></span></span><span><%= station.automation.mosaic_state %></span>
+					  		<% }
+					  		else if (station.automation.mosaic_state == 'Actif') { %>
+					  			<span class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-green-500 rounded-full"></span></span><span><%= station.automation.mosaic_state %></span>
+					  		<% } 
+					  		else { %>
+					  			<span class="h-4 w-4 bg-yellow-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-yellow-500 rounded-full"></span></span><span><%= station.automation.mosaic_state %></span>	
+					  		<% } %>				  			
+					  		 - Dernière connexion à Mosaïc: <%= station.automation.mosaic_last_connexion %>
+					  	</div>
+					  	<div class="w-full flex my-2 items-baseline">
+					  		<% if (station.automation.roulezeco_state == 'Erreur') { %>
+					  			<span class="h-4 w-4 bg-red-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-red-500 rounded-full"></span></span><span><%= station.automation.roulezeco_state %></span>
+					  		<% }
+					  		else if (station.automation.roulezeco_state == 'Actif') { %>
+					  			<span class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-green-500 rounded-full"></span></span><span><%= station.automation.roulezeco_state %></span>
+					  		<% } 
+					  		else { %>
+					  			<span class="h-4 w-4 bg-yellow-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-yellow-500 rounded-full"></span></span><span><%= station.automation.roulezeco_state %></span>	
+					  		<% } %>
+					  		 - Dernière connexion à Roulez Eco: <%= station.automation.roulezeco_last_connexion %>
+					  	</div>
+					  </div>	
+					  <div class="w-full px-6 mb-4">
+					  	<input type="hidden" class="automation-id" value="<%= station.automation.id %>">
+					  	<button id="test-credentials_<%= station.automation.id %>" type="button" class="test-credentials bg-gray-800 inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">	  
+					  		Lancer un test
+					  	</button>
+
+					  	<button type="button" class="btn-loading hidden bg-gray-800 flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150 cursor-not-allowed" disabled>
+							<svg class="w-6 h-6 animate-spin bg-white-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+						  Test en cours...
+						</button>
+					  </div>	    
+				    <div class="btns-row border-t border-gray-200">
+				      <div class="-mt-px flex">
+				        <div class="w-0 flex-1 flex border-r border-gray-200">
+				          <a href="#" id="btn-edit-station_<%= station.id %>" class="btn-edit-station relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: pencil -->
+							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+							</svg>
+				            <span class="ml-3">Modifier</span>
+				          </a>
+				        </div>
+				        <div class="-ml-px w-0 flex-1 flex">
+				          <a href="#" id="btn-add-disrupt_<%= station.id %>" class="btn-add-disrupt relative w-0 flex-1 inline-flex items-center justify-center py-4 px-2 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: phone -->
+							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
+							</svg>
+				            <span class="ml-3">Déclarer une rupture (<%= station.disruptTotal %> en rupture)</span>
+				          </a>
+				        </div>
+						<div class="-ml-px w-0 flex-1 flex">
+				          <a href="#" id="btn-remove-station_<%= station.id %>" class="btn-remove-station relative w-0 flex-1 inline-flex items-center justify-center py-4 px-2 text-sm leading-5 text-gray-700 font-medium border-l-2 border-gray-100  hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: phone -->
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+				            <span class="ml-3">Supprimer</span>
+				          </a>
+				        </div>				        
+				      </div>
+				    </div>
+				  </li>
+
+
+				<li id="edit-station-card_<%= station.id %>" class="hidden edit-station-card col-span-1 bg-white rounded-lg shadow">
+				    <div class="w-full flex items-center justify-between p-6 space-x-6">
+				      <div class="flex-1 truncate">
+				        <div class="flex items-center space-x-3">
+				          <h3 class="text-gray-900 text-sm leading-5 font-medium truncate"><%= station.name %></h3>
+				          <% if (userInfos.activate == 'true') {
+				          	%>
+				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-teal-100 rounded-full"> Active </span>
+				          	<% } 
+				          else {
+				          	%> 		          	
+				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-red-200 rounded-full"> Inactive </span> 
+				          	<%} %>
+				        </div>
+				        <p class="mt-1 text-gray-500 text-sm leading-5 truncate"><%= station.street %> - <%= station.cp %> - <%= station.city %></p>
+				      </div>
+				      <img class="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0" src="/images/total-logo.jpg" alt="">
+				    </div>
+					<form class="form-edit-station" id="form-edit-station_<%= station.id %>">
+						<div class="grid grid-cols-2 gap-3 sm:grid-cols-1 lg:grid-cols-2 px-6">
+							<label for="edit-station-name_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Nom de la station</label>
+			                <input type="text" id="edit-station-name_<%=station.id %>" class="edit-station-name mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.name %>">	
+	  
+							<label for="edit-station-street_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Adresse</label>
+			                <input type="text" id="edit-station-street_<%=station.id %>" class="edit-station-street mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.street %>">
+							<label for="edit-station-cp_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Code Postal</label>
+			                <input type="text" id="edit-station-cp_<%=station.id %>" class="edit-station-cp mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.cp %>">	  
+							<label for="edit-station-city_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Ville</label>
+			                <input type="text" id="edit-station-city_<%=station.id %>" class="edit-station-city mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.city %>">	
+			            </div>
+			           
+						<div class="px-6">                
+			            	<p class="font-bold text-sm col-span-3 my-5">
+			            		Identifiants Mosaïc
+			            	</p>
+			                <div class="grid grid-col-2">	            
+								<label for="edit-mosaic-username_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Nom d'utilisateur Mosaïc</label>
+				                <input type="text" id="edit-mosaic-username_<%=station.id %>" class="edit-mosaic-username mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.automation.mosaic_username %>">
+								<label for="edit-mosaic-password_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Mot de passe Mosaïc</label>
+				                <input type="password" id="edit-mosaic-password_<%=station.id %>" class="edit-mosaic-password mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.automation.mosaic_password %>">	
+				            </div>
+				        </div>    
+
+				        <div class="px-6"> 
+			            	<p class="font-bold text-sm col-span-3 my-5">
+			            		Identifiants Roulez-eco
+			            	</p>
+			                <div class="grid grid-col-2">
+								<label for="edit-roulezeco-username_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Nom d'utilisateur Roulez-eco</label>
+				                <input type="text" id="edit-roulezeco-username_<%=station.id %>" class="edit-roulezeco-username mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.automation.roulezeco_username %>">
+								<label for="edit-roulezeco-password_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Mot de passe Roulez-eco</label>
+				                <input type="password" id="edit-roulezeco-password_<%=station.id %>" class="edit-roulezeco-password mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.automation.roulezeco_password %>">
+				            </div>
+				        </div>
+
+						<div class="px-6 mb-6"> 
+			            	<p class="font-bold text-sm col-span-3 my-5">
+			            		Horaire quotidien de l'automatisation
+			            	</p>
+			                <div class="grid grid-col-2">
+								<label for="edit-roulezeco-password_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Heure</label>
+				                <input type="time" id="edit-scraping-time_<%=station.id %>" class="edit-scraping-time mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" min="21:00" max="23:59" required value="<%= station.automation.scraping_time %>">
+			                </div>
+			            </div>    
+					</form>		    
+				    <div class="border-t border-gray-200">
+				      <div class="-mt-px flex">
+				        <div class="w-0 flex-1 flex border-r border-gray-200">
+				          <a href="#" id="btn-submit-edit-station_<%= station.id %>" class="btn-submit-edit-station relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: check -->
+							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+							</svg>
+				            <span class="ml-3 text-green-500">Valider</span>
+				          </a>
+				        </div>
+				        <div class="cancel-edit-station -ml-px w-0 flex-1 flex">
+				          <a href="#" id="btn-cancel_<%= station.id %>" class="btn-cancel relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: x -->
+							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+				            <span class="ml-3 text-red-500">Annuler</span>
+				          </a>
+				        </div>
+				      </div>
+				    </div>
+				  </li>
+
+				  <% }) %>
+			</ul>
+		<% } %>
+		
+	</div>
+
+
+
+	<div class="email-alert-block grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 auto-rows-max my-10">
+		<h2 class="text-2xl font-bold leading-7 text-cool-gray-900 sm:leading-9 sm:truncate">Mes alertes email</h2>
+		<div class="email-alert-block_top">
+			<h4 class="text-md leading-5 text-cool-black-300 font-medium">Vous recevrez nos emails à cette adresse :</h4>
+			<div class="email-alert-input mt-3">
+				<span class="email-alert-input_email text-sm leading-5 text-blue-500 font-medium"><%= userInfos.email_alert %></span>
+				<div class="email-alert-block-edit">
+					<form>
+						<input type="email" class="email-alert-input_email form-input" value="<%= userInfos.email_alert %>">
+						<input type="submit" class="bg-gray-800 inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150" value="Valider">
+						<button class="cancel-edit-station bg-gray-200 inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-black hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">Annuler</button>
+					</form>
+				</div>
+				<button class="btn-edit bg-gray-800 inline-flex items-center px-2 py-1 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">Modifier</button>
+			</div>
+		</div>
+		<div class="email-alrt-block_bottom mt-3">
+			<h4 class="text-md leading-5 text-cool-black-300 font-medium">Configurez ici vos alertes email:</h4>
+			<label class="text-sm leading-5 text-cool-gray-500 font-medium" for="alert-email">Recevoir un mail quotidien de confirmation après mise à jour de vos tarifs sur Roulez-eco</label>
+			<% if (userInfos.email_alert_enabled === true) { %>
+				<input checked id="alert-email" type="checkbox">
+			<% }
+			else { %>
+				<input id="alert-email" type="checkbox">
+			<% } %>
+		</div>
+	</div>
+</div>
+<%- include('modal-success'); %>
+<%- include('modal-disrupt'); %>
+<%- include('modal-confirm'); %>
+<%- include('modal-error-activation'); %>
+<input type="hidden" class="user-id" value="<%= userInfos.id %>">
+<input type="hidden" class="user-payment-method" value="<%= userInfos.payment_method %>">
+</body>
+
+</html>
+<script type="text/javascript">
+
+	$('.btn-add-station').on('click', function(e) {
+		e.preventDefault();
+		if ($('.add-station-block').is(':hidden')) {
+			$('.add-station-block').show();
+		}
+	})
+
+	$('.btn-edit-station').on('click', function(e) {
+		e.preventDefault();
+		let id_station = $(this).attr('id');
+		id_station = id_station.replace('btn-edit-station_', '');
+		if ($('#edit-station-card_'+id_station).is(':hidden')) {
+			$('#edit-station-card_'+id_station).show();
+			$('#edit-station-card_'+id_station).css('grid-row', 'span 2');
+			$('#station-card_'+id_station).hide();
+		}
+	})
+
+	$('.cancel-edit-station .btn-cancel').on('click', function(e) {
+		e.preventDefault();
+		let id_station = $(this).attr('id');
+		id_station = id_station.replace('btn-cancel_', '');		
+		$('#edit-station-card_'+id_station).hide();
+		$('#station-card_'+id_station).show();
+		$('#edit-station-card_'+id_station).css('grid-row', '');
+	})
+
+	$('.cancel-add-station').on('click', function(e) {
+		e.preventDefault();
+		$('.add-station-block').hide();
+	})
+
+	$('.edit-oil-type').one('click', function(e) {
+		$('.oilList-has-been-edited').val('ok');
+	})
+
+
+	$('#btn-submit-add-station').on('click', function(e) {
+		e.preventDefault();
+		$('.form-add-station').submit();		
+	})
+
+	$('.form-add-station').on('submit', function(e) {
+		e.preventDefault();	
+		let station_name = $('#add-station-name').val();
+		let station_street = $('#add-station-street').val();
+		let station_cp = $('#add-station-cp').val();
+		let station_city = $('#add-station-city').val();
+		let mosaic_username = $('#add-mosaic-username').val();
+		let mosaic_password = $('#add-mosaic-password').val();
+		let roulezeco_username = $('#add-roulezeco-username').val();
+		let roulezeco_password = $('#add-roulezeco-password').val();
+		let scraping_time = $('#add-scraping-time').val();
+		scraping_time = scraping_time+':00';
+						
+
+		let datas = {
+			station_name: station_name,
+			station_street: station_street,
+			station_cp: station_cp,
+			station_city: station_city,
+			mosaic_username: mosaic_username,
+			mosaic_password: mosaic_password,
+			roulezeco_username: roulezeco_username,
+			roulezeco_password: roulezeco_password,
+			scraping_time: scraping_time
+		};
+
+		let verification = checkFormDatas(datas);	
+
+		if (verification !== false) {	
+			$.ajax({
+			   url : '/station-manage/',
+			   type : 'POST',
+			   data: datas,
+			   dataType : 'json',
+			   success : function(resultat, statut){
+			   		console.dir(resultat);
+			   		$('.success-modal h3').text('Nouvelle station créée !');
+			   		$('.success-modal .btn-validate').text('Ok');
+			   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+			   		$('.success-modal').show();	
+			   },
+			   error : function(resultat, statut, erreur){
+			   		loadError(resultat.responseJSON.message);
+			   		return false;
+			   }
+			})	
+		}	
+
+	})
+
+	$('.btn-submit-edit-station').on('click', function() {
+		let id_station = $(this).attr('id').replace('btn-submit-edit-station_', '');
+		$('#form-edit-station_'+id_station).submit();
+	})
+
+	$('.form-edit-station').on('submit', function(e) {
+		e.preventDefault();	
+		let id_station = $(this).attr('id');
+		id_station = id_station.replace('form-edit-station_', '');
+		let id_automation =  $('#station-card_'+id_station).find('.automation-id').val();
+		id_automation = id_automation.replace('form-edit-station_', '');
+		id_station = id_station.replace('form-edit-station_', '');
+		let station_id = $('#station-id_'+id_station).val();		
+		let station_name = $('#edit-station-name_'+id_station).val();
+		let station_street = $('#edit-station-street_'+id_station).val();
+		let station_cp = $('#edit-station-cp_'+id_station).val();
+		let station_city = $('#edit-station-city_'+id_station).val();
+		let mosaic_username = $('#edit-mosaic-username_'+id_station).val();
+		let mosaic_password = $('#edit-mosaic-password_'+id_station).val();
+		let roulezeco_username = $('#edit-roulezeco-username_'+id_station).val();
+		let roulezeco_password = $('#edit-roulezeco-password_'+id_station).val();
+		let scraping_time = $('#edit-scraping-time_'+id_station).val();
+		scraping_time = scraping_time+':00';
+
+
+		let datas = {
+			station_name: station_name,
+			station_street: station_street,
+			station_cp: station_cp,
+			station_city: station_city,
+			mosaic_username: mosaic_username,
+			mosaic_password: mosaic_password,
+			roulezeco_username: roulezeco_username,
+			roulezeco_password: roulezeco_password,
+			scraping_time: scraping_time
+		};
+
+		let verification = checkFormDatas(datas);
+
+		if (verification !== false) {	
+			$.ajax({
+			   url : '/station-manage/'+id_station+'/'+id_automation,
+			   type : 'PUT',
+			   data: datas,
+			   dataType : 'json',
+			   success : function(resultat, statut){
+			   		console.dir(resultat);
+			   		$('.success-modal h3').text('Informations mises à jour !');
+			   		$('.success-modal .btn-validate').text('Ok');
+			   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+			   		$('.success-modal').show();	
+
+			   },
+			   error : function(resultat, statut, erreur){
+			   		loadError(resultat.responseJSON.message);
+			   		return false;
+			   }
+			})	
+		}
+
+	})	
+
+	var id_station_focus;
+
+	$('.btn-add-disrupt').on('click', function(e) {
+		e.preventDefault();
+		let station_id = $(this).attr('id');
+		station_id = station_id.replace('btn-add-disrupt_', '');
+		id_station_focus = station_id;
+
+		$.ajax({
+		   url : '/station-oils/'+station_id,
+		   type : 'GET',
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.dir(resultat);
+		   		let html = `<div class="edit-disrupt" id="edit-disrupt_${station_id}"><form id="form-disrupt" onsubmit="editDisrupt(event, $(this))">`;
+		   		if (resultat.length == 0) {
+		   			html += '<div class="block"><p>Pas de carburant enregistré pour le moment. Appuyez sur le bouton "Mettre à jour ma liste de carburants" pour récupérer la liste enregistrée sur https://gestion.roulez-eco.fr/</p></div>';
+		   		}
+		   		else {	   		
+			   		for (let i=0; i<resultat.length; i++) {
+			   			if (resultat[i].disrupt === true) {
+			   				let last_disrupt_date = '';
+			   				if (resultat[i].last_disrupt_date) {
+			   					last_disrupt_date = 'Déclaré en rupture le '+resultat[i].last_disrupt_date;
+							}
+			   				html += `
+			   				<div class="block">
+							<span role="checkbox" tabindex="0" aria-checked="true" id="toggle-disrupt_${resultat[i].id}" class="toggle-disrupt bg-green-300 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline">
+							  <!-- On: "translate-x-5", Off: "translate-x-0" -->
+							  <span aria-hidden="true" class="toggle-btn translate-x-5 inline-block h-5 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
+							</span>
+
+			   				<label for="oil-${resultat[i].id}">${resultat[i].name}</label>
+			   				<span class="oil-edit-info">
+			   					${last_disrupt_date}
+			   				</span>
+			   				</div>`;
+			   			}
+			   			else {
+
+			   				html += `
+			   				<div class="block">
+							<span role="checkbox" tabindex="0" aria-checked="false" id="toggle-disrupt_${resultat[i].id}" class="toggle-disrupt bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline">	
+							  <!-- On: "translate-x-5", Off: "translate-x-0" -->
+							  <span aria-hidden="true" class="toggle-btn translate-x-0 inline-block h-5 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
+							</span>								
+			   				<label for="oil-${resultat[i].id}">${resultat[i].name}</label>
+			   				</div>`;
+			   			}
+			   		}
+		   		}
+		   		$('.disrupts-modal .modal-text-infos').html(html);
+		   		$('.disrupts-modal').show();
+		   },
+		   error : function(resultat, statut, erreur){
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})			
+	})
+
+	function editDisrupt(event, elt) {
+		event.preventDefault();
+		$(elt).hide();
+		$(elt).next('.btn-loading').css('display', 'flex');
+		//let station_id = $(elt).parent().attr('id');
+		//station_id = station_id.replace('edit-disrupt_', '');
+		let datas = {};
+		datas['station_id'] = id_station_focus;
+		$('.toggle-disrupt').each(function() {
+			let oilId = $(this).attr('id').replace('toggle-disrupt_', '');
+			let oilValue = false;
+			if ($(this).attr('aria-checked') == 'true') {
+				oilValue = true;
+			}
+			datas[oilId] = oilValue; 
+		})
+
+		console.dir(datas);
+
+
+		$.ajax({
+		   url : '/disrupts/',
+		   type : 'POST',
+		   data: datas,
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.dir(resultat);
+		    	$('.disrupts-modal').hide();
+		    	document.location.reload();
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		$('.disrupts-modal').hide();
+		   		loadError(resultat.responseJSON.message);
+		   }
+		})
+	}
+
+
+
+	$('.email-alert-block_top .btn-edit').on('click', function() {
+		$(this).hide();
+		$('span.email-alert-input_email').hide();
+		$('.email-alert-block-edit').show();
+	})
+
+	$('.cancel-edit-station').on('click', function(e) {
+		e.preventDefault();
+		$('.email-alert-block-edit').hide();
+		$('span.email-alert-input_email').show();
+		$('.email-alert-block_top .btn-edit').show();
+	})
+
+	$('.email-alert-block-edit > form').on('submit', function(e) {
+		e.preventDefault();
+		let user_id = $('.user-id').val();
+		let new_email = $('input.email-alert-input_email').val();
+		$.ajax({
+		   url : '/user-manage/'+user_id,
+		   type : 'PUT',
+		   data: {mode: 'email-alert', new_email: new_email},
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.dir(resultat);
+		   		$('.success-modal h3').text('Informations mises à jour !');
+		   		$('.success-modal .btn-validate').text('Ok');
+		   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+		   		$('.success-modal').show();	
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})		
+	})
+
+	$('#alert-email').on('click', function() {
+		let user_id = $('.user-id').val();	
+		let email_alert = false;
+		if ($(this).is(':checked')) {
+			email_alert = true;
+		}
+		$.ajax({
+		   url : '/user-manage/'+user_id,
+		   type : 'PUT',
+		   data: {mode: 'email-alert-enabled', email_alert: email_alert},
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.dir(resultat);
+		    	$('.email-alert-block-edit .btn-cancel').click();
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})	
+	})
+
+
+	$('.test-credentials').on('click', function(e) {
+		e.preventDefault();
+		let automation_id = $(this).attr('id').replace('test-credentials_', '');
+		$(this).hide();
+		$(this).next('.btn-loading').css('display', 'flex');		
+		$.ajax({
+		   url : '/test-credentials/'+automation_id,
+		   type : 'GET',
+		   data: {},
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.dir(resultat);
+		   		let mosaicResultHtml;
+		   		let roulezecoResultHtml;
+		   		if (resultat.mosaicTest.error === true) {
+		   			mosaicResultHtml = '<li>Mosaïc: <span class="text-red-600">Echec</span></li>';
+		   		}
+		   		else {
+		   			mosaicResultHtml = '<li>Mosaïc: <span class="text-green-400">Succès !</span></li>';
+		   		}
+		   		if (resultat.roulezecoTest.error === true) {
+		   			roulezecoResultHtml = '<li>Roulez-eco: <span class="text-red-600">Echec</span></li>';
+		   		}
+		   		else {
+		   			roulezecoResultHtml = '<li>Roulez-eco: <span class="text-green-400">Succès !</span></li>';
+		   		}		   	
+		   		$('.success-modal h3').text('Résultat du test');
+		   		$('.success-modal .modal-text-infos').html(`<ul>${mosaicResultHtml}${roulezecoResultHtml}`);
+		   		$('.success-modal .btn-validate').text('Ok');
+		   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+		   		$('.success-modal').show();	
+		    	$('.btn-loading').hide();
+		    	$('.test-credentials').show();		   		
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})		
+	})
+
+	$(document).on('click','.toggle-disrupt',function(){
+		if ($(this).attr('aria-checked') == 'true') {
+			$(this).attr('aria-checked', 'false');
+			$(this).removeClass('bg-green-300');
+			$(this).addClass('bg-gray-200');			
+			$(this).find('.toggle-btn').removeClass('translate-x-5');
+			$(this).find('.toggle-btn').addClass('translate-x-0');
+		}
+		else {
+			$(this).attr('aria-checked', 'true');
+			$(this).removeClass('bg-gray-200');
+			$(this).addClass('bg-green-300');			
+			$(this).find('.toggle-btn').removeClass('translate-x-0');
+			$(this).find('.toggle-btn').addClass('translate-x-5');
+		}
+	})
+
+	function reload() {
+		document.location.reload();
+	}
+
+	function closeModal(e) {
+		e.preventDefault();
+		$('.modal').hide();
+	}
+
+	function removeStation(station_id, subscription_id, automation_id) {
+		$.ajax({
+		   url : '/station/'+station_id,
+		   type : 'DELETE',
+		   data: {
+		   	subscription_id: subscription_id,
+		   	automation_id: automation_id
+		   	},
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		$('.confirm-modal').hide();
+		   		$('.success-modal h3').text('Suppression');
+		   		$('.success-modal .modal-text-infos').html(`<p>Station supprimée !</p>`);
+		   		$('.success-modal .btn-validate').text('Ok');
+		   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+		   		$('.success-modal').show();	
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})			
+	}
+
+	$('.error-message-close').on('click', function() {
+		$(this).parent().parent().parent().parent().parent('.error-message').hide();
+	})	
+
+	$('.btn-remove-station').on('click', function() {
+		let station_id = $(this).attr('id').replace('btn-remove-station_', '');
+		let subscription_id = $('#station-card_'+station_id).attr('data-subscription');
+		let automation_id = $(this).parents('.btns-row').prev().find('.automation-id').val();
+		let station_name = $('#station-card_'+station_id).find('h3').text();
+   		$('.confirm-modal h3').text('Suppression');
+   		$('.confirm-modal .modal-text-infos').html(`<p>Êtes-vous certain de vouloir supprimer la station "${station_name}"</p>`);
+   		$('.confirm-modal .btn-validate').attr('onclick', `removeStation(${station_id}, '${subscription_id}', '${automation_id}')`);
+   		$('.confirm-modal').show();			
+	})		
+
+	function checkFormDatas(datas) {
+		if (datas.station_name == '') {
+			loadError("Vous devez renseigner un nom de station");
+	   		return false;		
+		}
+		if (datas.company_name == '') {
+			loadError("Vous devez renseigner un nom de société");
+	   		return false;		
+		}		
+		if (datas.station_street == '') {
+			loadError("Vous devez renseigner une adresse");
+	   		return false;		
+		}	
+		if (datas.station_city == '') {
+			loadError("Vous devez renseigner une ville");
+	   		return false;		
+		}	
+		if (datas.station_cp.length < 5 || datas.station_cp.length > 7) {
+			loadError("Vous devez renseigner un code postal valide");
+	   		return false;		
+		}
+		if (datas.mosaic_username.length < 2) {
+			loadError("Vous devez renseigner un nom d'utilisateur Mosaïc");
+	   		return false;		
+		}	
+		if (datas.roulezeco_username.length < 2) {
+			loadError("Vous devez renseigner un nom d'utilisateur Roulez-eco");
+	   		return false;		
+		}		
+		if (datas.mosaic_password.length < 3) {
+			loadError("Vous devez renseigner un mot de passe Mosaïc");
+	   		return false;		
+		}		
+		if (datas.roulezeco_password.length < 3) {
+			loadError("Vous devez renseigner un mot de passe Roulez-eco");
+	   		return false;		
+		}	
+		if (datas.scraping_time.length < 5) {
+			loadError("Vous devez indiquer un horaire d'automatisation");
+	   		return false;			
+		}				
+
+	}
+
+	$('.btn-activate-station').on('click', function() {
+		let payment_method = $('.user-payment-method').val();
+		if (!payment_method) {
+			$('.error-activate-modal').show();
+		}
+		else {
+			let id_station = $(this).attr('id').replace('btn-activate-station_', '');
+			let station_name = $('#station-card_'+id_station).find('h3').text();
+	   		$('.confirm-modal h3').text('Souscription à un abonnement');
+	   		$('.confirm-modal .modal-text-infos').html(`<p>En poursuivant, vous confirmez vouloir activer l'abonnement Argos de 30€ HT/mois pour la station "${station_name}"</p>`);
+	   		$('.confirm-modal .btn-validate').text('Confirmer');
+	   		$('.confirm-modal .btn-validate').attr('onclick', `activateStation(${id_station})`);
+	   		$('.confirm-modal').show();	
+		}
+	})
+
+	function activateStation(id_station) {
+		let id_user = $('.user-id').val();
+		let station_name = $('#edit-station-name_'+id_station).val();	
+
+		$.ajax({
+		   url : '/station-activate/',
+		   type : 'POST',
+		   data: {
+		   	id_station: id_station,
+		   	id_user: id_user,
+		   	station_name: station_name
+		   },
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   	$('.confirm-modal').hide();
+	   		$('.success-modal h3').text(resultat.message);
+	   		$('.success-modal .btn-validate').text('Ok');
+	   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+	   		$('.success-modal').show();			   
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})	
+	}
+
+	function goToMyAccount() {
+		let user_id = $('.user-id').val();
+		document.location.href = '/profil/'+user_id;
+	}
+
+	function loadError(message) {
+		$('.error-message').find('.error-message-txt').text(message);
+		$('.error-message').show();		
+	}	
+
+	function updateOilList(event, elt) {
+		let id_station = $(elt).parents('.btns-block').prev().find('.edit-disrupt').attr('id');
+		id_station = id_station.replace('edit-disrupt_', '');
+		event.preventDefault();
+		$(elt).hide();
+		$(elt).prev('.btn-loading').css('display', 'flex');		
+		$.ajax({
+		   url : '/update-oil-list/',
+		   type : 'POST',
+		   data: {
+		   	id_station: id_station
+		   },
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   	document.location.reload();	   
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		$('.disrupts-modal').hide();
+		   		loadError(resultat.responseJSON.message);
+
+		   		//setTimeout(function() {
+		   		//	document.location.reload();
+		   		//}, 3000)
+		   }
+		})			
+	}
+
+</script>

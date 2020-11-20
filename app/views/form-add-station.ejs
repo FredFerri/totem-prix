@@ -1,0 +1,71 @@
+<div class="hidden add-station-block col-span-1 bg-white rounded-lg shadow my-5">
+    <div class="w-full items-center justify-between pt-6 space-x-6">
+	<form class="form-add-station">
+		<div class="grid grid-cols-2 gap-3 sm:grid-cols-1 lg:grid-cols-2 px-6">
+			<label for="add-station-name" class="block text-sm font-medium leading-5 text-gray-700">Nom de la station</label>
+            <input type="text" id="add-station-name" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="">		  
+			<label for="add-station-street" class="block text-sm font-medium leading-5 text-gray-700">Adresse</label>
+            <input type="text" id="add-station-street" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="">
+			<label for="add-station-cp" class="block text-sm font-medium leading-5 text-gray-700">Code Postal</label>
+            <input type="text" id="add-station-cp" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="">	  
+			<label for="add-station-city" class="block text-sm font-medium leading-5 text-gray-700">Ville</label>
+            <input type="text" id="add-station-city" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="">	
+        </div>
+		<div class="px-6">                
+        	<p class="font-bold text-sm col-span-3 my-5">
+        		Identifiants Mosaïc
+        	</p>
+            <div class="grid grid-col-2">	            
+				<label for="add-mosaic-username" class="block text-sm font-medium leading-5 text-gray-700">Nom d'utilisateur Mosaïc</label>
+                <input type="text" id="add-mosaic-username" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="">
+				<label for="add-mosaic-password" class="block text-sm font-medium leading-5 text-gray-700">Mot de passe Mosaïc</label>
+                <input type="password" id="add-mosaic-password" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="">	
+            </div>
+        </div>    
+
+        <div class="px-6"> 
+        	<p class="font-bold text-sm col-span-3 my-5">
+        		Identifiants Roulez-eco
+        	</p>
+            <div class="grid grid-col-2">
+				<label for="add-roulezeco-username" class="block text-sm font-medium leading-5 text-gray-700">Nom d'utilisateur Roulez-eco</label>
+                <input type="text" id="add-roulezeco-username" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="">
+				<label for="add-roulezeco-password" class="block text-sm font-medium leading-5 text-gray-700">Mot de passe Roulez-eco</label>
+                <input type="password" id="add-roulezeco-password" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="">
+            </div>
+        </div>
+
+		<div class="px-6 mb-6"> 
+        	<p class="font-bold text-sm col-span-3 my-5">
+        		Horaire quotidien de l'automatisation
+        	</p>
+            <div class="grid grid-col-2">
+				<label for="add-roulezeco-password" class="block text-sm font-medium leading-5 text-gray-700">Heure</label>
+                <input type="time" id="add-scraping-time" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" required value="">
+            </div>
+        </div>    
+	</form>		    
+    <div class="border-t border-gray-200" style="margin-left: 0;">
+      <div class="-mt-px flex" >
+        <div class="w-0 flex-1 flex border border-gray-200">
+          <a href="#" id="btn-submit-add-station" class="btn-submit-add-station relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+            <!-- Heroicon name: check -->
+			<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+			</svg>
+            <span class="ml-3 text-green-500">Enregistrer</span>
+          </a>
+        </div>
+        <div class="cancel-add-station -ml-px w-0 flex-1 flex">
+          <a href="#" id="add-station-btn-cancel" class="btn-cancel relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+            <!-- Heroicon name: x -->
+			<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+			</svg>
+            <span class="ml-3 text-red-500">Annuler</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+Thu Nov 19 2020 23:59:24 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 54 
+Fri Nov 20 2020 11:20:27 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 81 

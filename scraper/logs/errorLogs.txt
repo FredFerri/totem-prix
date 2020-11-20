@@ -1,0 +1,39 @@
+Tue Nov 17 2020 18:23:11 GMT+0100 (Central European Standard Time) - Scraping failed for station 68 on website undefined
+		: Error: [object Object] 
+Tue Nov 17 2020 18:38:11 GMT+0100 (Central European Standard Time) - Credentials expired for station 68 on website mosaic 
+Tue Nov 17 2020 18:59:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 68 on website mosaic 
+Tue Nov 17 2020 19:41:16 GMT+0100 (Central European Standard Time) - TEST CREDENTIALS ERROR : UNKNOWN ERROR FOR STATION undefined, FOR AUTOMATION undefined, WEBSITE = MOSAIC 
+Tue Nov 17 2020 19:42:00 GMT+0100 (Central European Standard Time) - TEST CREDENTIALS ERROR : UNKNOWN ERROR FOR STATION undefined, FOR AUTOMATION undefined, WEBSITE = MOSAIC 
+Tue Nov 17 2020 20:01:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 66 on website mosaic 
+Tue Nov 17 2020 21:22:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 58 on website mosaic 
+Tue Nov 17 2020 21:23:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 62 on website mosaic 
+Tue Nov 17 2020 21:43:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 45 on website mosaic 
+Tue Nov 17 2020 21:51:23 GMT+0100 (Central European Standard Time) - Credentials expired for automation 56 on website roulezeco 
+Tue Nov 17 2020 22:01:22 GMT+0100 (Central European Standard Time) - Credentials expired for automation 60 on website roulezeco 
+Tue Nov 17 2020 22:11:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 46 on website mosaic 
+Tue Nov 17 2020 23:24:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 59 on website mosaic 
+Wed Nov 18 2020 00:00:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 63 on website mosaic 
+Wed Nov 18 2020 08:21:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 65 on website mosaic 
+Wed Nov 18 2020 15:01:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 64 on website mosaic 
+Wed Nov 18 2020 15:01:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 64 on website mosaic 
+Wed Nov 18 2020 16:01:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 49 on website mosaic 
+Wed Nov 18 2020 16:01:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 49 on website mosaic 
+Wed Nov 18 2020 16:01:51 GMT+0100 (Central European Standard Time) - TEST CREDENTIALS ERROR : TEST SUCCEED 
+			FOR STATION undefined, 
+			FOR AUTOMATION undefined, 
+			WEBSITE = ROULEZECO 
+Wed Nov 18 2020 16:31:22 GMT+0100 (Central European Standard Time) - Credentials expired for automation 67 on website roulezeco 
+Wed Nov 18 2020 18:59:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 68 on website mosaic 
+Wed Nov 18 2020 18:59:15 GMT+0100 (Central European Standard Time) - Credentials expired for automation 68 on website mosaic 
+Wed Nov 18 2020 20:01:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 66 on website mosaic 
+Wed Nov 18 2020 21:01:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 83 on website mosaic 
+Wed Nov 18 2020 21:22:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 58 on website mosaic 
+Wed Nov 18 2020 21:23:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 62 on website mosaic 
+Wed Nov 18 2020 21:43:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 45 on website mosaic 
+Wed Nov 18 2020 21:51:22 GMT+0100 (Central European Standard Time) - Credentials expired for automation 56 on website roulezeco 
+Wed Nov 18 2020 22:01:23 GMT+0100 (Central European Standard Time) - Credentials expired for automation 60 on website roulezeco 
+Wed Nov 18 2020 22:11:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 46 on website mosaic 
+Wed Nov 18 2020 23:24:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 59 on website mosaic 
+Thu Nov 19 2020 00:00:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 63 on website mosaic 
+Thu Nov 19 2020 08:21:10 GMT+0100 (Central European Standard Time) - Credentials expired for automation 65 on website mosaic 
+Thu Nov 19 2020 08:59:11 GMT+0100 (Central European Standard Time) - Credentials expired for automation 87 on website mosaic 

@@ -1,0 +1,45 @@
+<dl class="hidden edit-profil-block" id="edit-profil-infos">
+  <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Civilité
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+        <input type="radio" class="civil_radio" id="civil_radio_monsieur" name="civil_radio" value="Monsieur" <% if (userInfos.civil == 'Monsieur') { %> checked <% } %>>
+    <label for="civil_radio_monsieur">Monsieur</label>  
+    <input type="radio" class="civil_radio" name="civil_radio" value="Madame" id="civil_radio_madame" <% if (userInfos.civil == 'Madame') { %> checked<% } %>>
+    <label for="civil_radio_madame">Madame</label>
+    </dd>
+  </div>        
+  <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Nom
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+        <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="first_name" name="first_name" placeholder="Votre prénom" value="<%= userInfos.first_name %>">
+    </dd>
+  </div>
+  <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Prénom
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="last_name" name="last_name" placeholder="Votre nom" value="<%= userInfos.last_name %>">
+    </dd>
+  </div>
+  <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+    Numéro de téléphone
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="tel" id="tel" name="tel" placeholder="Téléphone" value="<%= userInfos.tel %>">
+    </dd>
+  </div>
+  <div class="flex mt-5 sm:mt-0 sm:px-6 sm:py-5">
+  <button type="submit" name="profil-edit-infos_submit" id="profil-edit-infos_submit" class="group relative w-20 flex justify-center py-1 px-1 border border-transparent text-sm leading-5 font-small rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out mr-3">
+    Valider
+  </button>
+  <button name="edit-profil-infos_cancel" id="edit-profil-infos_cancel" class="btn-cancel group relative w-20 flex justify-center py-1 px-1 border border-transparent text-sm leading-5 font-small rounded-md text-black bg-gray-300 hover:bg-black-500 focus:outline-none focus:border-gray-300 focus:shadow-outline-gray-300 active:bg-gray-300 transition duration-150 ease-in-out mr-3">
+    Annuler
+  </button> 
+  </div>
+</dl>

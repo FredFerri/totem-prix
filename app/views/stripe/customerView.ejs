@@ -1,0 +1,33 @@
+<%- include('base.ejs'); -%>
+
+<div class="customer-view">
+  <% for (product of products) { %>
+  <div class="customer-view-products">
+    <h2><%=product.name%></h2>
+    <div class="customer-view-plans">
+      <% for (plan of product.plans) { %>
+      <div class="customer-view-plan">
+        <form action="/signUp" method="POST">
+          <input type="hidden" value="<%= product.name %>" name="productName"/>
+          <input type="hidden" value="<%= plan.id %>" name="planId"/>
+          <input type="hidden" value="<%= plan.nickname %>" name="planName"/>
+          <input type="hidden" value="<%= plan.amount %>" name="planAmount"/>
+          <input type="hidden" value="<%= plan.interval %>" name="planInterval"/>
+          <input type="hidden" value="<%= plan.interval_count %>" name="planIntervalCount"/>
+          <h3><%=plan.nickname%> &mdash; <%= plan.amount %> / 
+            <% if (plan.interval_count > 1) { %> 
+              <%= plan.interval_count %> <%= plan.interval %>s      
+            <% } 
+            else { %>
+              <%= plan.interval %>
+            <% } %>
+          </h3>
+          <input class="btn" type="submit" value="Sign Up"/>
+        </form>
+      </div>
+      <% } %>
+    </div>
+  </div>
+  <% } %>
+</div>
+

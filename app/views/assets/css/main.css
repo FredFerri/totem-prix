@@ -1,0 +1,27 @@
+.form-user-edit {
+	display: none;
+}
+
+.email-alert-block-edit {
+	display: none;
+}
+
+.menu-txt {
+	margin-left: 10px;
+}
+
+.bg-grey {
+	background-color: #F4F5F7;
+}
+
+
+animation: spin 1s linear infinite;
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

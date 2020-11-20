@@ -1,0 +1,498 @@
+<%- include('head'); -%>
+
+<body>
+	<div class="flex overflow-hidden bg-gray-100">
+
+	<%- include('nav'); -%>
+
+	<div class="main-profile w-4/6 mx-auto mt-32 sm:mt-5 md:mt-5 lg:mt-5 min-h-screen">
+		<!--
+		  Tailwind UI components require Tailwind CSS v1.8 and the @tailwindcss/ui plugin.
+		  Read the documentation to get started: https://tailwindui.com/documentation
+		-->
+		<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+		  <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+		    <h3 class="text-lg leading-6 font-medium text-gray-900">
+		      Mon compte
+		    </h3>
+		    <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+		      Détail des informations personnelles
+		    </p>
+		  </div>
+
+		  <%-include('alert-error'); -%>
+
+		  <div class="px-4 py-5 sm:p-0">
+		    <dl id="profil-infos">
+		      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">		    
+		    	<a href="#" id="btn-edit-profil-infos" class="btn-profil-edit text-sm font-small text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out col-span-2">
+                    Modifier vos informations personnelles
+            	</a>
+              </div>
+		      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Civilité
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          <%= userInfos.civil %>
+		        </dd>
+		      </div>		    
+		      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Nom
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          <%= userInfos.last_name %>
+		        </dd>
+		      </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Prénom
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          <%= userInfos.first_name %>
+		        </dd>
+		      </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Numéro de Téléphone
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          <%= userInfos.tel %>
+		        </dd>
+		      </div>
+		    </dl>
+
+			<%- include('profil-edit-infos'); -%>		    
+
+		    <dl id="profil-password">
+		      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+		    	<a href="#" id="btn-edit-profil-password" class="btn-profil-edit text-sm font-small text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out col-span-2">
+                    Modifier votre mot de passe
+            	</a>
+              </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Mot de passe
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          ********
+		        </dd>
+		      </div>
+		    </dl>
+
+		    <%- include('profil-edit-password'); -%>
+
+		    <dl id="profil-company">
+		      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+		    	<a href="#" id="btn-edit-profil-company" class=" btn-profil-edit text-sm font-small text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out col-span-2">
+                    Modifier vos informations entreprise
+            	</a>
+              </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Nom de la société
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          <%= userInfos.company_name %>
+		        </dd>
+		      </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Numéro de TVA
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          <%= userInfos.tva_num %>
+		        </dd>
+		      </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Numéro de SIRET
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          <%= userInfos.siret %>
+		        </dd>
+		      </div>	
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Adresse de facturation
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		        	<%= userInfos.company_adresse %>
+		        </dd>
+		      </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Code Postal
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		        	<%= userInfos.company_cp %>
+		        </dd>
+		      </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Ville
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		        	<%= userInfos.company_city %>
+		        </dd>
+		      </div>
+		    </dl>	
+		    <%- include('profil-edit-company'); -%>
+
+			<dl id="profil-payments">
+		      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+		    	<a href="#" id="btn-edit-profil-payments" class=" btn-profil-edit text-sm font-small text-indigo-600 hover:text-indigo-500 transition duration-150 ease-in-out col-span-2">
+                    Modifier vos moyens de paiement
+            	</a>
+              </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Moyen de paiement utilisé
+		        </dt>
+		        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+		          <%= userInfos.payment_method %>
+		        </dd>
+		      </div>
+		      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+		        <dt class="text-sm leading-5 font-medium text-gray-500">
+		          Détails
+		        </dt>
+		        <% if (userInfos.payment_method == 'cb') { %>	        
+			        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+			          <%= paymentInfos.cb.cardNumber %>
+			        </dd>
+		        <% }
+		        else if (userInfos.payment_method == 'sepa') { %>
+			        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+			          <%= paymentInfos.sepa.iban %>
+			        </dd>		        
+		        <% } %>
+		      </div>
+		    </dl>	
+		    <%- include('profil-edit-payments'); -%>		    
+		</div>
+	</div>
+	<input type="hidden" id="user-id" value="<%= userInfos.id %>">
+	<input type="hidden" id="user-payment-method" value="<%= userInfos.payment_method %>">
+
+	<%- include('modal-success'); %>
+
+</body>
+
+<script>
+	$('document').ready(function() {
+		if ($('#user-payment-method').val() == 'cb') {
+			$('#option_cb').click();
+		}
+		else if ($('#user-payment-method').val() == 'sepa') {
+			$('#option_sepa').click()
+		}
+	})
+
+	$('nav a.group').removeClass('text-white');
+	$('nav a.group').removeClass('bg-gray-900');
+	$('nav a.group').addClass('text-gray-300');
+	$('.menu-profile').addClass('text-white');
+	$('.menu-profile').removeClass('text-gray-300');
+	$('.menu-profile').addClass('bg-gray-900');
+
+	$('.btn-profil-edit').on('click', function(e) {
+		e.preventDefault();
+		let id = $(this).attr('id');
+		let editBlockName = id.replace('btn-', '');
+		let originalBlockName = editBlockName.replace('edit-', '');
+		$('#'+originalBlockName).hide();
+		$('#'+editBlockName).show();
+	})
+
+	$('.edit-profil-block .btn-cancel').on('click', function() {
+		$('.edit-profil-block').hide();
+		let id_edit_block = $(this).attr('id');
+		let id_original_block = id_edit_block.replace('edit-', '').replace('_cancel', '');
+		$('#'+id_original_block).show();
+	})	
+
+	var user_id = $('#user-id').val();
+
+	$('#profil-edit-infos_submit').on('click', function(e) {
+		e.preventDefault();
+		let civil = $('.civil_radio:checked').val();
+		let first_name = $('#first_name').val();
+		let last_name = $('#last_name').val();
+		let tel = $('#tel').val();
+
+		if (civil == '' || !civil) {
+			loadError('Vérifiez que toutes les informations soient remplies correctement');
+			return false;			
+		}
+
+		if (first_name.length < 2 || last_name.length < 2 || tel.length < 10 || tel.length > 14) {
+			loadError('Vérifiez que toutes les informations soient remplies correctement');
+			return false;
+		}
+
+		let datas = {
+			mode: 'infos',
+			civil: civil,
+			first_name: $('#first_name').val(),
+			last_name: $('#last_name').val(),
+			tel: $('#tel').val()
+		};
+
+		$.ajax({
+		   url : `/user-manage/${user_id}/`,
+		   type : 'PUT',
+		   data: datas,
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.dir(resultat);
+		   		loadModal();
+		   },
+		   error : function(resultat, statut, erreur) {
+			   	loadError(resultat.responseJSON.message);
+			   	return false;   	
+		   }
+		})
+	})
+
+	$('#profil-edit-password_submit').on('click', function(e) {
+		e.preventDefault();
+		let password = $('#password').val();
+		let password_confirm = $('#password_confirm').val();
+		if (password != password_confirm) {
+			loadError('Les deux mots de passe ne correspondent pas');
+			return false;
+		}
+		if (password.length < 6) {
+			loadError('Votre mot de passe doit contenir au moins 6 caractères');
+			return false;
+		}
+		else {	
+			$.ajax({
+			   url : `/user-manage/${user_id}/`,
+			   type : 'PUT',
+			   data: {mode: 'password', password: password},
+			   dataType : 'json',
+			   success : function(resultat, statut){
+			   		console.dir(resultat);
+			    	loadModal();
+			   },
+			   error : function(resultat, statut, erreur) {
+			   		loadError(resultat.responseJSON.message);
+			   		return false;
+			   }
+			})		
+		}
+	})
+
+	$('#profil-edit-company_submit').on('click', function(e) {
+		e.preventDefault();
+		if ($('#tva').val().length > 0 && $('#tva').val().length < 11) {
+			$('.error-message').find('.error-message-txt').text('Numéro de TVA non valide');
+		   	$('.error-message').show();				
+		}
+		else if ($('#siret').val().length< 14) {
+			loadError('Numéro SIRET non valide');
+			return false;				
+		}		
+		else if ($('#company_cp').val().length < 5 || $('#company_cp').val().length > 7) {
+			loadError('Veuillez indiquer un code postal valide');
+			return false;				
+		}	
+		else if ($('#company_name').val().length < 2) {
+			loadError("Veuillez indiquer un nom d'entreprise");
+			return false;				
+		}	
+		else if ($('#company_city').val().length < 2) {
+			loadError("Veuillez indiquer une ville");
+			return false;				
+		}							
+
+		else {	
+			let datas = {
+				mode: 'company',
+				company_name: $('#company_name').val(),
+				tva_num: $('#tva').val(),
+				siret: $('#siret').val(),
+				company_adresse: $('#company_adresse').val(),
+				company_cp: $('#company_cp').val(),
+				company_city: $('#company_city').val()
+			};
+
+			$.ajax({
+			   url : `/user-manage/${user_id}/`,
+			   type : 'PUT',
+			   data: datas,
+			   dataType : 'json',
+			   success : function(resultat, statut){
+			   		console.dir(resultat);
+			    	loadModal();
+			   },
+			   error : function(resultat, statut, erreur) {
+		   			loadError(resultat.responseJSON.message);
+		   			return false;
+			   }
+			})
+		}
+
+	})
+
+	$('#profil-edit-payment_submit').on('click', function() {
+		let payment_type;
+		let infos_payment;
+		let user_id = $('#user-id').val();
+		let myCard = $('.card-js');
+
+		if ($('#option_cb').is(':checked')) {
+			payment_type = 'cb';
+			let cardNumber = myCard.CardJs('cardNumber');
+			let expiryMonth = myCard.CardJs('expiryMonth');
+			let expiryYear = myCard.CardJs('expiryYear');
+			let cvc = myCard.CardJs('cvc');
+
+			infos_payment = {
+				cardNumber: cardNumber,
+				expiryMonth: expiryMonth,
+				expiryYear: expiryYear,
+				cvc: cvc
+			};
+
+			console.dir(infos_payment);
+		}
+		else if ($('#option_sepa').is(':checked')) {
+			payment_type = 'sepa';
+			let iban = $('#iban').val();
+			infos_payment = {
+				iban: iban
+			};
+		}
+		else {
+			return false;
+		}
+
+		$.ajax({
+		   url : `/payment/${user_id}/`,
+		   type : 'PUT',
+		   data: {infos_payment: infos_payment, payment_type: payment_type},
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.dir(resultat);
+		    	loadModal();
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})	
+	})
+
+	function loadModal() {
+   		$('.success-modal #modal-headline').text('Modification validée !')
+   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+   		$('.success-modal .btn-validate').text('OK');
+    	$('.success-modal').show();	
+	}
+
+	function reload() {
+		document.location.reload();
+	}
+
+	$('.error-message-close').on('click', function() {
+		$(this).parent().parent().parent().parent().parent('.error-message').hide();
+	})	
+
+
+	$('.option_payment').on('change', function() {
+		if ($('#option_sepa').is(':checked')) {
+			$('.sepa-block').show();
+			$('.cb-block').hide();
+		}
+		else if ($('#option_cb').is(':checked')) {
+			$('.cb-block').show();
+			$('.sepa-block').hide();
+		}		
+	})
+
+	document.getElementById('iban').addEventListener('input', function (e) {
+	  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
+	});	
+
+	$('#profil-edit-payment-cb_submit').on('click', function() {
+		let cardInfos = $('.card-js');
+		let cardMonth = cardInfos.CardJs('expiryMonth');
+		if (cardMonth.length == 1) {
+			cardMonth = '0'+cardMonth;
+		}
+		let datas = {	
+			cardNumber: cardInfos.CardJs('cardNumber'),
+			expiryMonth: cardMonth,
+			expiryYear: cardInfos.CardJs('expiryYear'),
+			cvc: cardInfos.CardJs('cvc'),
+			userLastName: $('#last_name').val(),
+			userFirstName: $('#first_name').val(),
+			userEmail: $('#email').val(),
+			userId: $('#user-id').val()
+		};
+
+		console.dir(datas);
+
+		if (datas.cardNumber.length < 16 || datas.expiryMonth.length < 1 || datas.expiryYear.length < 2 || datas.cvc.length < 3) {
+		   	loadError("Informations de paiement invalides");	
+   			return false;	
+		}
+
+
+		$.ajax({
+		   url : `/user-add-cb/${user_id}/`,
+		   type : 'POST',
+		   data: datas,
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		loadModal();
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		console.dir(resultat);
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})			
+	})
+
+
+	$('#profil-edit-payment-sepa_submit').on('click', function() {
+		let datas = {	
+			iban: $('#iban').val(),
+			userEmail: $('#email').val(),
+			userLastName: $('#last_name').val(),
+			userFirstName: $('#first_name').val(),
+			userPhone: $('#tel').val()
+		};
+
+		if (datas.iban.length < 27) {
+		   	loadError('Veuillez indiquer un IBAN valide');
+   			return false;	
+		}
+
+		$.ajax({
+		   url : `/user-add-sepa/${user_id}/`,
+		   type : 'POST',
+		   data: datas,
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		loadModal();
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		console.dir(resultat);
+			   	loadError(resultat.responseJSON.message);
+				return false;	
+		   }
+		})			
+	})	
+
+	function loadError(message) {
+		$('.error-message').find('.error-message-txt').text(message);
+		$('.error-message').show();		
+	}
+
+</script>

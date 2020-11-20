@@ -1,0 +1,2 @@
+Thu Nov 19 2020 11:01:16 GMT+0100 (Central European Standard Time) - Error: connect ECONNREFUSED 127.0.0.1:8181 
+Thu Nov 19 2020 11:09:19 GMT+0100 (Central European Standard Time) - Problème rencontré pour le station 82: Error: connect ECONNREFUSED 127.0.0.1:8181 

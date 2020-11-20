@@ -1,0 +1,127 @@
+Tue Aug 04 2020 12:26:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 12:26:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 12:27:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 12:27:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 12:34:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 12:34:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 12:36:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 12:36:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 13:04:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 13:04:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 13:05:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 13:05:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 13:06:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 13:06:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 13:12:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 13:12:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 13:13:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 13:13:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 14:55:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 14:55:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 14:56:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 14:56:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 14:58:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Tue Aug 04 2020 14:58:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 14:59:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Aug 04 2020 14:59:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Wed Aug 05 2020 07:20:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:20:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Wed Aug 05 2020 07:20:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Wed Aug 05 2020 07:26:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:26:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Wed Aug 05 2020 07:26:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Wed Aug 05 2020 07:29:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:30:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Wed Aug 05 2020 07:32:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Wed Aug 05 2020 07:37:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Wed Aug 05 2020 07:38:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Wed Aug 05 2020 07:41:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:43:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:44:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:45:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:51:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:52:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 07:57:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:11:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:25:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:32:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:33:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:34:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:39:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:40:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:41:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:42:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:45:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:50:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:52:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 08:55:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 09:01:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 09:07:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 10:07:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 11:07:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:07:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:14:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:18:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:22:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:25:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:30:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:31:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:34:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:37:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:39:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:44:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 12:47:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 13:38:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 13:40:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 13:43:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 13:45:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 13:53:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 13:57:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Wed Aug 05 2020 14:10:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 14:35:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 14:37:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 14:41:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 14:42:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 14:47:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Wed Aug 05 2020 15:47:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 5003 SCHEDULED !! 
+Thu Aug 06 2020 12:54:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Thu Aug 06 2020 13:04:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Thu Aug 06 2020 13:04:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 13:04:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Thu Aug 06 2020 13:12:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Thu Aug 06 2020 13:12:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 13:12:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Thu Aug 06 2020 13:20:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Thu Aug 06 2020 13:20:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 13:20:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Thu Aug 06 2020 13:38:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Thu Aug 06 2020 13:38:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 13:38:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Thu Aug 06 2020 13:43:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Thu Aug 06 2020 13:43:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 13:43:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Thu Aug 06 2020 13:51:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 3 SCHEDULED !! 
+Thu Aug 06 2020 13:55:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 13:55:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Thu Aug 06 2020 13:57:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 13:57:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Thu Aug 06 2020 14:19:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 14:23:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 2 SCHEDULED !! 
+Thu Aug 06 2020 14:23:00 GMT+0000 (Coordinated Universal Time) - AUTOMATION 1 SCHEDULED !! 
+Tue Nov 17 2020 17:41:10 GMT+0100 (Central European Standard Time) - Scraping failed for station 68 on website undefined
+		: ReferenceError: stationId is not defined 
+Tue Nov 17 2020 18:05:10 GMT+0100 (Central European Standard Time) - CREDENTIALS ERROR FOR STATION 68, AUTOMATION 61, WEBSITE = mosaic 
+Tue Nov 17 2020 18:10:10 GMT+0100 (Central European Standard Time) - Scraping failed for station 68 on website undefined
+		: Error: [object Object] 
+Tue Nov 17 2020 18:56:26 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 64 
+Tue Nov 17 2020 23:59:29 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 54 
+Wed Nov 18 2020 09:05:24 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 62 
+Wed Nov 18 2020 11:05:27 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 63 
+Wed Nov 18 2020 18:56:24 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 64 
+Wed Nov 18 2020 19:54:26 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 64 
+Wed Nov 18 2020 23:59:24 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 54 
+Wed Nov 18 2020 23:59:24 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 54 
+Thu Nov 19 2020 08:53:26 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 64 
+Thu Nov 19 2020 08:56:28 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 64 
+Thu Nov 19 2020 09:05:26 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 62 
+Thu Nov 19 2020 11:05:24 GMT+0100 (Central European Standard Time) - SCRAPING SUCCEED FOR AUTOMATION 63 
