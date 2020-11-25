@@ -303,19 +303,23 @@ app.put('/user-manage/:id_user', [
 		}
 		else {		
 			try {	
-				console.log('UPDATE');	
+				console.log('UPDATE');
+				let id_stripe = await User.getStripeId(req.params.id_user);
 				let result = false;
 				if (req.body.mode == 'infos') {
 					result = await User.updateInfos(req.params.id_user, req.body);
+					await STRIPE_API.updateCustomerInfos(req.body, id_stripe);
 				}
 				else if (req.body.mode == 'password') {
 					result = await User.updatePassword(req.params.id_user, req.body);
 				}
 				else if (req.body.mode == 'company') {
 					result = await User.updateCompany(req.params.id_user, req.body);
+					await STRIPE_API.updateCustomerCompanyInfos(req.body, id_stripe);
 				}
 				else if (req.body.mode == 'email') {
 					result = await User.updateEmail(req.params.id_user, req.body.new_email);
+					await STRIPE_API.updateCustomerEmail(req.body.new_email, id_stripe);
 				}	
 				else if (req.body.mode == 'email-alert') {
 					result = await User.updateEmailAlert(req.params.id_user, req.body.new_email);
@@ -926,8 +930,7 @@ app.post('/user-add-cb/:user_id', async function(req, res) {
 			console.log(user_id_stripe);
 			if (user_id_stripe == null) {
 				console.log(' §§§§ CREATE CUSTOMER §§§§§');
-				let userName = card_infos.userLastName + ' ' + card_infos.userFirstName;
-				user_id_stripe = await STRIPE_API.createCustomer(userName, card_infos.userEmail)
+				user_id_stripe = await STRIPE_API.createCustomer(card_infos)
 		    	await User.setStripeId(req.params.user_id, user_id_stripe);		
 			}
 			await User.setCreditCard(card_infos, req.params.user_id);
@@ -959,8 +962,7 @@ app.post('/user-add-sepa/:user_id', async function(req, res) {
 			let user_id_stripe = await User.getStripeId(req.params.user_id);
 			console.log(user_id_stripe);
 			if (user_id_stripe == null) {
-				let userName = sepa_infos.userLastName + ' ' + sepa_infos.userFirstName;
-				user_id_stripe = await STRIPE_API.createCustomer(userName, sepa_infos.userEmail)				
+				user_id_stripe = await STRIPE_API.createCustomer(sepa_infos)				
 		    	await User.setStripeId(req.params.user_id, user_id_stripe);		
 			}
 			await User.setSepa(sepa_infos, req.params.user_id);

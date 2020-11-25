@@ -722,6 +722,7 @@
 	})
 
 	function activateStation(id_station) {
+		displayLoader();
 		let id_user = $('.user-id').val();
 		let station_name = $('#edit-station-name_'+id_station).val();	
 
@@ -735,6 +736,7 @@
 		   },
 		   dataType : 'json',
 		   success : function(resultat, statut){
+		   	hideLoader();
 		   	$('.confirm-modal').hide();
 	   		$('.success-modal h3').text(resultat.message);
 	   		$('.success-modal .btn-validate').text('Ok');
@@ -784,5 +786,23 @@
 		   }
 		})			
 	}
+
+	function displayLoader() {
+		$('body').css(
+			{
+				'opacity': '0.4',
+				'background-color': '#000'
+			}
+		);
+	}
+
+	function hideLoader() {
+		$('body').css(
+			{
+				'opacity': '1',
+				'background-color': '#fff'
+			}
+		);
+	}	
 
 </script>

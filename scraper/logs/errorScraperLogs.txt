@@ -43,3 +43,63 @@ Fri Nov 20 2020 15:01:10 GMT+0100 (Central European Standard Time) - Credentials
 Fri Nov 20 2020 15:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 64 on website mosaic 
 Fri Nov 20 2020 15:01:21 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 81 on website mosaic 
 Fri Nov 20 2020 15:01:22 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 80 on website mosaic 
+Sun Nov 22 2020 03:00:30 GMT+0100 (Central European Standard Time) - Scraping failed for automation 61 on website undefined
+		: Error: Timeout hit: 30000 
+Sun Nov 22 2020 07:00:30 GMT+0100 (Central European Standard Time) - Scraping failed for automation 61 on website undefined
+		: Error: Timeout hit: 30000 
+Sun Nov 22 2020 10:00:30 GMT+0100 (Central European Standard Time) - Scraping failed for automation 61 on website undefined
+		: Error: Timeout hit: 30000 
+Sun Nov 22 2020 18:00:30 GMT+0100 (Central European Standard Time) - Scraping failed for automation 61 on website undefined
+		: Error: Timeout hit: 30000 
+Sun Nov 22 2020 23:00:30 GMT+0100 (Central European Standard Time) - Scraping failed for automation 61 on website undefined
+		: Error: Timeout hit: 30000 
+Mon Nov 23 2020 04:00:30 GMT+0100 (Central European Standard Time) - Scraping failed for automation 61 on website undefined
+		: Error: Timeout hit: 30000 
+Mon Nov 23 2020 09:00:30 GMT+0100 (Central European Standard Time) - Scraping failed for automation 61 on website undefined
+		: Error: Timeout hit: 30000 
+Mon Nov 23 2020 11:33:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 82 on website mosaic 
+Mon Nov 23 2020 14:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 74 on website mosaic 
+Mon Nov 23 2020 14:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 73 on website mosaic 
+Mon Nov 23 2020 14:01:21 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 75 on website mosaic 
+Mon Nov 23 2020 14:01:21 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 77 on website mosaic 
+Mon Nov 23 2020 15:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 78 on website mosaic 
+Mon Nov 23 2020 15:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 64 on website mosaic 
+Mon Nov 23 2020 15:01:21 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 80 on website mosaic 
+Mon Nov 23 2020 15:01:21 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 81 on website mosaic 
+Mon Nov 23 2020 16:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 49 on website mosaic 
+Mon Nov 23 2020 20:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 66 on website mosaic 
+Mon Nov 23 2020 21:01:11 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 83 on website mosaic 
+Mon Nov 23 2020 21:22:11 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 58 on website mosaic 
+Mon Nov 23 2020 21:23:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 62 on website mosaic 
+Mon Nov 23 2020 21:43:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 45 on website mosaic 
+Mon Nov 23 2020 21:51:23 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 56 on website roulezeco 
+Mon Nov 23 2020 22:01:22 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 60 on website roulezeco 
+Mon Nov 23 2020 22:11:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 46 on website mosaic 
+Mon Nov 23 2020 23:24:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 59 on website mosaic 
+Tue Nov 24 2020 00:00:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 63 on website mosaic 
+Tue Nov 24 2020 08:21:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 65 on website mosaic 
+Tue Nov 24 2020 08:49:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 85 on website mosaic 
+Tue Nov 24 2020 08:58:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 86 on website mosaic 
+Tue Nov 24 2020 11:33:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 82 on website mosaic 
+Tue Nov 24 2020 14:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 74 on website mosaic 
+Tue Nov 24 2020 14:01:11 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 73 on website mosaic 
+Tue Nov 24 2020 14:01:21 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 75 on website mosaic 
+Tue Nov 24 2020 14:01:22 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 77 on website mosaic 
+Tue Nov 24 2020 15:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 78 on website mosaic 
+Tue Nov 24 2020 15:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 64 on website mosaic 
+Tue Nov 24 2020 15:01:21 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 81 on website mosaic 
+Tue Nov 24 2020 15:01:21 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 80 on website mosaic 
+Tue Nov 24 2020 16:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 49 on website mosaic 
+Tue Nov 24 2020 20:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 66 on website mosaic 
+Tue Nov 24 2020 21:01:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 83 on website mosaic 
+Tue Nov 24 2020 21:22:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 58 on website mosaic 
+Tue Nov 24 2020 21:23:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 62 on website mosaic 
+Tue Nov 24 2020 21:43:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 45 on website mosaic 
+Tue Nov 24 2020 21:51:24 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 56 on website roulezeco 
+Tue Nov 24 2020 22:01:22 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 60 on website roulezeco 
+Tue Nov 24 2020 22:11:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 46 on website mosaic 
+Tue Nov 24 2020 23:24:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 59 on website mosaic 
+Wed Nov 25 2020 00:00:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 63 on website mosaic 
+Wed Nov 25 2020 08:21:11 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 65 on website mosaic 
+Wed Nov 25 2020 08:49:11 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 85 on website mosaic 
+Wed Nov 25 2020 08:58:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 86 on website mosaic 

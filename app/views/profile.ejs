@@ -22,6 +22,8 @@
 
 		  <%-include('alert-error'); -%>
 
+		  <div id="loader"></div>
+
 		  <div class="px-4 py-5 sm:p-0">
 		    <dl id="profil-infos">
 		      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">		    
@@ -217,6 +219,7 @@
 
 	$('#profil-edit-infos_submit').on('click', function(e) {
 		e.preventDefault();
+		displayLoader();
 		let civil = $('.civil_radio:checked').val();
 		let first_name = $('#first_name').val();
 		let last_name = $('#last_name').val();
@@ -246,10 +249,12 @@
 		   data: datas,
 		   dataType : 'json',
 		   success : function(resultat, statut){
+		   		hideLoader();
 		   		console.dir(resultat);
 		   		loadModal();
 		   },
 		   error : function(resultat, statut, erreur) {
+		   		hideLoader();
 			   	loadError(resultat.responseJSON.message);
 			   	return false;   	
 		   }
@@ -258,6 +263,7 @@
 
 	$('#profil-edit-password_submit').on('click', function(e) {
 		e.preventDefault();
+		displayLoader();
 		let password = $('#password').val();
 		let password_confirm = $('#password_confirm').val();
 		if (password != password_confirm) {
@@ -275,10 +281,12 @@
 			   data: {mode: 'password', password: password},
 			   dataType : 'json',
 			   success : function(resultat, statut){
+			   		hideLoader();
 			   		console.dir(resultat);
 			    	loadModal();
 			   },
 			   error : function(resultat, statut, erreur) {
+			   		hideLoader();
 			   		loadError(resultat.responseJSON.message);
 			   		return false;
 			   }
@@ -288,6 +296,7 @@
 
 	$('#profil-edit-company_submit').on('click', function(e) {
 		e.preventDefault();
+		displayLoader();
 		if ($('#tva').val().length > 0 && $('#tva').val().length < 11) {
 			$('.error-message').find('.error-message-txt').text('Numéro de TVA non valide');
 		   	$('.error-message').show();				
@@ -326,10 +335,12 @@
 			   data: datas,
 			   dataType : 'json',
 			   success : function(resultat, statut){
+			   		hideLoader();
 			   		console.dir(resultat);
 			    	loadModal();
 			   },
 			   error : function(resultat, statut, erreur) {
+			   		hideLoader();
 		   			loadError(resultat.responseJSON.message);
 		   			return false;
 			   }
@@ -339,6 +350,7 @@
 	})
 
 	$('#profil-edit-payment_submit').on('click', function() {
+		displayLoader();
 		let payment_type;
 		let infos_payment;
 		let user_id = $('#user-id').val();
@@ -377,10 +389,12 @@
 		   data: {infos_payment: infos_payment, payment_type: payment_type},
 		   dataType : 'json',
 		   success : function(resultat, statut){
+		   		hideLoader();
 		   		console.dir(resultat);
 		    	loadModal();
 		   },
 		   error : function(resultat, statut, erreur) {
+		   		hideLoader();
 		   		loadError(resultat.responseJSON.message);
 		   		return false;
 		   }
@@ -419,6 +433,7 @@
 	});	
 
 	$('#profil-edit-payment-cb_submit').on('click', function() {
+		displayLoader();
 		let cardInfos = $('.card-js');
 		let cardMonth = cardInfos.CardJs('expiryMonth');
 		if (cardMonth.length == 1) {
@@ -432,6 +447,12 @@
 			userLastName: $('#last_name').val(),
 			userFirstName: $('#first_name').val(),
 			userEmail: $('#email').val(),
+			companyTva: $('#tva').val(),
+			companySiret: $('#siret').val(),
+			companyAdresse: $('#company_adresse').val(),
+			companyCity: $('#company_city').val(),
+			companyCp: $('#company_cp').val(),
+			companyName: $('#company_name').val(),
 			userId: $('#user-id').val()
 		};
 
@@ -449,9 +470,11 @@
 		   data: datas,
 		   dataType : 'json',
 		   success : function(resultat, statut){
+		   		hideLoader();
 		   		loadModal();
 		   },
 		   error : function(resultat, statut, erreur) {
+		   		hideLoader();
 		   		console.dir(resultat);
 		   		loadError(resultat.responseJSON.message);
 		   		return false;
@@ -461,11 +484,18 @@
 
 
 	$('#profil-edit-payment-sepa_submit').on('click', function() {
+		displayLoader();
 		let datas = {	
 			iban: $('#iban').val(),
 			userEmail: $('#email').val(),
 			userLastName: $('#last_name').val(),
 			userFirstName: $('#first_name').val(),
+			companyTva: $('#tva').val(),
+			companySiret: $('#siret').val(),
+			companyAdresse: $('#company_adresse').val(),
+			companyCity: $('#company_city').val(),
+			companyCp: $('#company_cp').val(),
+			companyName: $('#company_name').val(),
 			userPhone: $('#tel').val()
 		};
 
@@ -480,9 +510,11 @@
 		   data: datas,
 		   dataType : 'json',
 		   success : function(resultat, statut){
+		   		hideLoader();
 		   		loadModal();
 		   },
 		   error : function(resultat, statut, erreur) {
+		   		hideLoader();
 		   		console.dir(resultat);
 			   	loadError(resultat.responseJSON.message);
 				return false;	
@@ -493,6 +525,24 @@
 	function loadError(message) {
 		$('.error-message').find('.error-message-txt').text(message);
 		$('.error-message').show();		
+	}
+
+	function displayLoader() {
+		$('body').css(
+			{
+				'opacity': '0.4',
+				'background-color': '#000'
+			}
+		);
+	}
+
+	function hideLoader() {
+		$('body').css(
+			{
+				'opacity': '1',
+				'background-color': '#fff'
+			}
+		);
 	}
 
 </script>

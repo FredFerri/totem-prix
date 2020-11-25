@@ -218,14 +218,34 @@ function attachPaymentMethod(user_id_stripe, payment_id) {
 }
 
 
-function createCustomer(user_name, user_email) {
+function createCustomer(infos) {
   return new Promise(async function(resolve, reject) {  
     try {
-      console.log(`CREATE CUSTOMER  - ${user_name} / ${user_email}`);
+      console.log(`CREATE CUSTOMER  - ${infos.userLastName} / ${infos.userEmail}`);
+      let userName = infos.userFirstName + ' ' + infos.userLastName;
+      let companyAdresse = infos.companyAdresse + ' ' + infos.companyCp + ' ' + infos.companyCity;
+      let tvaNum = infos.companyTva;
+      tvaNum = (tvaNum.length < 11 ? 0 : tvaNum);     
       const customer = await stripe.customers.create({
-        name: user_name,
-        email: user_email
+        name: userName,
+        email: infos.userEmail,
+        preferred_locales: ['fr-FR'],
+        metadata: {
+          companyName: infos.companyName,
+          companyAdresse: companyAdresse,
+          companyTva: tvaNum,
+        },
+        invoice_settings: {
+          custom_fields: [
+              {"name": 'Société', "value": infos.companyName},
+              {"name": 'Adresse', "value": companyAdresse},
+              {"name": 'Numéro de TVA', "value": tvaNum},
+              {"name": 'Numéro SIRET', "value": infos.companySiret},
+          ]
+        
+        }
       })
+
       resolve(customer.id);
     }  
     catch(err) {
@@ -233,8 +253,78 @@ function createCustomer(user_name, user_email) {
       reject(err);
     }
   })
-
 }
+
+function updateCustomerEmail(new_email, user_id_stripe) {
+  return new Promise(async function(resolve, reject) {  
+    try {
+      const customer = await stripe.customers.update(
+        user_id_stripe, 
+        {
+          email: new_email,
+        }
+      )
+      resolve(customer.id);
+    }  
+    catch(err) {
+      console.log(err);
+      reject(err);
+    }
+  })
+}
+
+function updateCustomerInfos(infos, user_id_stripe) {
+  return new Promise(async function(resolve, reject) {  
+    try { 
+      let userName = infos.first_name + ' ' + infos.last_name;
+      const customer = await stripe.customers.update(
+        user_id_stripe, 
+        {
+          name: userName
+        }
+      )
+      resolve(customer.id);
+    }  
+    catch(err) {
+      console.log(err);
+      reject(err);
+    }
+  })
+}
+
+function updateCustomerCompanyInfos(infos, user_id_stripe) {
+  return new Promise(async function(resolve, reject) {  
+    try { 
+      let companyAdresse = infos.company_adresse + ' ' + infos.company_cp + ' ' + infos.company_city;
+      let tvaNum = infos.tva_num;
+      tvaNum = (tvaNum.length < 11 ? 0 : tvaNum); 
+      const customer = await stripe.customers.update(
+        user_id_stripe, 
+        {
+          metadata: {
+            companyName: infos.company_name,
+            companyAdresse: companyAdresse,
+            companyTva: tvaNum,
+          },
+          invoice_settings: {
+            custom_fields: [
+                {"name": 'Société', "value": infos.company_name},
+                {"name": 'Adresse', "value": companyAdresse},
+                {"name": 'Numéro de TVA', "value": tvaNum},
+                {"name": 'Numéro SIRET', "value": infos.siret},
+            ]            
+          }
+        }
+      )
+      resolve(customer.id);
+    }  
+    catch(err) {
+      console.log(err);
+      reject(err);
+    }
+  })
+}
+
 
 function updateCustomerDefaultPaymentMethod(customer_id, paymentMethod_id) {
   return new Promise(async function(resolve, reject) {
@@ -300,6 +390,9 @@ module.exports = {
   createPaymentMethodSepa,
   attachPaymentMethod,
   createCustomer,
+  updateCustomerEmail,
+  updateCustomerInfos,
+  updateCustomerCompanyInfos,
   getPaymentMethods,
   updateCustomerDefaultPaymentMethod,
   getInvoices
