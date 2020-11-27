@@ -1,8 +1,7 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const roulezEco = require('./getRoulezEco');
-const dateMaj = '30/06/2020';
-const heureMaj = '23.30';
+const moment = require('moment');
 
 
 const blockedResourceTypes = [
@@ -128,8 +127,6 @@ module.exports = {
           societeName: societeName,
           stationAdresse: stationAdresse,
           stationPrix: carbusTab,
-          dateMaj: dateMaj,
-          heureMaj: heureMaj
         };
 
         let results = [infos, absentCarbus];

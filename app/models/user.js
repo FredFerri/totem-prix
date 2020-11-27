@@ -2,7 +2,7 @@ const paths = require('../../paths');
 let db = require(paths.path_db+'dbInit');
 const moment = require('moment');
 const cryptojs = require('crypto');
-const encrypt = require('./encrypt');
+const encrypt = require(paths.path_app_controllers+'encrypt');
 
 
 exports.create = async function(datas) {

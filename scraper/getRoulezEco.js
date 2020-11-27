@@ -72,17 +72,12 @@ module.exports = {
                     let indexHtml = indexCarbu - 1;
                     let prixEuros = carbuDatas.stationPrix[z].carbuPrice.split('.')[0];
                     let prixCents = carbuDatas.stationPrix[z].carbuPrice.split('.')[1];
-                    let heure = carbuDatas.heureMaj.split('.')[0];
-                    let mins = carbuDatas.heureMaj.split('.')[1];
                     let blockCarbu = document.querySelector('#fuel_'+indexCarbu).parentNode.parentNode;
                     if (blockCarbu.querySelector('#fuel_'+indexCarbu).checked == true) {
                       blockCarbu.querySelector('#fuel_'+indexCarbu).click();
                     }
                     document.querySelector('#maj_prix_prices_'+indexHtml+'_euro').value = prixEuros;
                     document.querySelector('#maj_prix_prices_'+indexHtml+'_cents').value = prixCents;
-                    document.querySelector('#maj_prix_prices_'+indexHtml+'_beginDate_date').value = carbuDatas.dateMaj;
-                    document.querySelector('#maj_prix_prices_'+indexHtml+'_beginDate_time_hour').value = heure;
-                    document.querySelector('#maj_prix_prices_'+indexHtml+'_beginDate_time_minute').value = mins;
                   }
                 }
 
@@ -97,7 +92,7 @@ module.exports = {
             console.log('OKKKK 3');
 
             await page.waitFor(2000);
-            // await page.click('.submitForm > .btn_submit');
+            await page.click('.submitForm > .btn_submit');
             await page.close();
             resolve(true);
           }

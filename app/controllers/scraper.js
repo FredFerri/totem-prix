@@ -1,5 +1,4 @@
 const paths = require('../../paths');
-const dbManager = require(paths.path_db+'dbManager');
 const scheduleManager = require(paths.path_scraper+'scheduleManager');
 const clusterManager = require(paths.path_scraper+'clusterManager');
 const mosaic = require(paths.path_scraper+'getMosaic');

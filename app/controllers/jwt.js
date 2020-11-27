@@ -5,7 +5,7 @@ exports.authentification = async function(idUser) {
 	return new Promise(function(resolve, reject) {
 		const token = jwt.sign({ idUser: idUser }, jwtKey, {
 			algorithm: "HS256",
-			expiresIn: '1h',
+			expiresIn: '2h',
 		});	
 		console.dir(token);
 		resolve(token);	

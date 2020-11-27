@@ -1,16 +1,14 @@
 const paths = require('../paths');
 const schedule = require('node-schedule');
-const clusterManager = require('./clusterManager');
 const Automation = require(paths.path_app_models+'automation');
 const writeLog = require('./writeLog');
-const fs = require('fs');
 const moment = require('moment');
 const sendMail = require('./sendMail');
 const { Cluster } = require('puppeteer-cluster');
 const getMosaic = require('./getMosaic');
 const getRoulezEco = require('./getRoulezEco');
-const stationOil = require(paths.path_app_controllers+'station_oil_history');
-const encrypt_nohash = require(paths.path_app_models+'encrypt-nohash');
+const stationOil = require(paths.path_app_models+'station_oil_history');
+const encrypt_nohash = require(paths.path_app_controllers+'encrypt-nohash');
 
 module.exports = {
 
@@ -97,6 +95,7 @@ module.exports = {
                     let absentCarbus = result[1];
                     let result2 = await getRoulezEco.launch(page, credentials, result[0], absentCarbus);
                     console.log('ROULEZECO SCRAPING RESULTS FOR AUTOMATION NUM '+data["id"]+' = '+result);
+                    await Automation.updateLastConnexionTime(true, 'roulezeco', data['id']);
                     let stationId = data.id_station;
                     for (let oilTypeObj of carbusDatas) {
                         // console.dir(oilTypeObj);

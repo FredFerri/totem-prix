@@ -1,4 +1,3 @@
-/* Server Side -- Stripe API calls */
 require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_API_KEY);
 const User = require('../models/user');
@@ -36,43 +35,6 @@ function getAllProductsAndPlans() {
 }
 
 
-function createCustomerAndSubscription(requestBody) {
-  return new Promise(async function(resolve, reject) {
-    console.dir(requestBody);
-    let source = requestBody.stripeSource;
-    let email = requestBody.email;
-    let customer_id;
-    let user_id_stripe = await User.getStripeId(requestBody.user_id);
-    console.log('USER ID STRIPE = '+user_id_stripe);
-    if (user_id_stripe == null) {    
-      const customer = await stripe.customers.create({
-          source: source,
-          email: email,
-        }
-      ); 
-      customer_id = customer.id;
-    }
-    else {
-      console.log('ELSE !')
-      customer_id = user_id_stripe;
-    }
-
-    await stripe.subscriptions.create({
-      customer: customer_id,
-      items: [
-        {
-          plan: requestBody.planId,
-          metadata: {
-            station_id: requestBody.station_id,
-            station_name: requestBody.station_name
-          }
-        }
-      ]
-    });
-    resolve();
-  })
-}
-
 function createSubscription(infos) {
   return new Promise(async function(resolve, reject) {
     console.dir(infos);
@@ -90,43 +52,6 @@ function createSubscription(infos) {
       });
       resolve(subscription);    
     })
-}
-
-function createCustomerAndSubscriptionSepa(requestBody) {
-  return new Promise(async function(resolve, reject) {  
-    console.dir(requestBody);
-    let source = requestBody.stripeSource;
-    let email = requestBody.email;
-    let customer_id;
-    let user_id_stripe = await User.getStripeId(requestBody.user_id);
-    console.log('USER ID STRIPE = '+user_id_stripe);
-    if (user_id_stripe == null) {    
-      const customer = await stripe.customers.create({
-          source: source,
-          email: email,
-        }
-      ); 
-      customer_id = customer.id;
-    }
-    else {
-      console.log('ELSE !')
-      customer_id = user_id_stripe;
-    }
-
-    console.log(customer_id);
-
-    const subscription = await stripe.subscriptions.create({
-      customer: customer_id,
-      items: [
-        {
-          plan: requestBody.planId
-        },
-      ],
-      expand: ['latest_invoice.payment_intent']
-    });  
-    resolve();
-  })
-
 }
 
 function getSubscriptionsByUser(user_id_stripe) {
@@ -230,15 +155,18 @@ function createCustomer(infos) {
         name: userName,
         email: infos.userEmail,
         preferred_locales: ['fr-FR'],
+        address: {
+          line1: infos.companyAdresse,
+          city: infos.companyCity,
+          postal_code: infos.companyCp
+        },
         metadata: {
           companyName: infos.companyName,
-          companyAdresse: companyAdresse,
           companyTva: tvaNum,
         },
         invoice_settings: {
           custom_fields: [
               {"name": 'Société', "value": infos.companyName},
-              {"name": 'Adresse', "value": companyAdresse},
               {"name": 'Numéro de TVA', "value": tvaNum},
               {"name": 'Numéro SIRET', "value": infos.companySiret},
           ]
@@ -301,15 +229,18 @@ function updateCustomerCompanyInfos(infos, user_id_stripe) {
       const customer = await stripe.customers.update(
         user_id_stripe, 
         {
+          address: {
+            line1: infos.companyAdresse,
+            city: infos.companyCity,
+            postal_code: infos.companyCp
+          },
           metadata: {
-            companyName: infos.company_name,
-            companyAdresse: companyAdresse,
+            companyName: infos.companyName,
             companyTva: tvaNum,
           },
           invoice_settings: {
             custom_fields: [
                 {"name": 'Société', "value": infos.company_name},
-                {"name": 'Adresse', "value": companyAdresse},
                 {"name": 'Numéro de TVA', "value": tvaNum},
                 {"name": 'Numéro SIRET', "value": infos.siret},
             ]            
@@ -382,8 +313,6 @@ function getInvoices(customer_id) {
 module.exports = {
   getAllProductsAndPlans,
   createSubscription,
-  createCustomerAndSubscription,
-  createCustomerAndSubscriptionSepa,
   getSubscriptionsByUser,
   cancelSubscription,
   createPaymentMethodCard,

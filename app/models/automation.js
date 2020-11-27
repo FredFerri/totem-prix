@@ -61,7 +61,7 @@ exports.updateLastConnexionTime = async function(success, website, id_automation
     let query;
     if (success === false) {
       query = {
-        name: 'update-mosaic-connexion-time-fail',
+        name: `update-${website}-connexion-time-fail`,
         text: `UPDATE automation SET ${website}_last_connexion = $1 
               WHERE id = $2`,
         values: [date_now,  id_automation]
@@ -69,7 +69,7 @@ exports.updateLastConnexionTime = async function(success, website, id_automation
     }
     else {
       query = {
-        name: 'update-mosaic-connexion-time-success',
+        name: `update-${website}-connexion-time-success`,
         text: `UPDATE automation SET ${website}_last_connexion = $1 
               WHERE id = $2`,
         values: [date_now, id_automation]

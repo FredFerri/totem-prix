@@ -11,12 +11,12 @@ const jwtManager = require(paths.path_app_controllers+'jwt');
 const hour = 3600000;
 const helmet = require('helmet');
 const axios = require('axios');
-const encrypt_nohash = require(paths.path_app_models+'encrypt-nohash');
+const encrypt_nohash = require(paths.path_app_controllers+'encrypt-nohash');
 const morgan = require('morgan');
 const session = require('express-session');
 const moment = require('moment');
-const UserController = require(paths.path_app_controllers+'user');
 const scraperController = require(paths.path_app_controllers+'scraper');
+const mailController = require(paths.path_app_controllers+'sendMail');
 const User = require(paths.path_app_models+'user');
 const Station = require(paths.path_app_models+'station');
 const Automation = require(paths.path_app_models+'automation');
@@ -47,7 +47,7 @@ app.get('/', async function(req, res) {
 	console.log("ok");
 	let tokenCheck = await jwtManager.tokenVerification(req.cookies.argos_token);
 	if (tokenCheck === false) {
-		res.status(403).render('index.ejs', {});
+		res.status(403).render('login.ejs', {});
 	}
 	else {		
 		try {
@@ -146,7 +146,7 @@ async function(req, res) {
 		res.status(401).json({message: "Adresse mail introuvable"});
 	}
 	else {
-		let mailResponse = await UserController.sendResetPasswordEmail(verifResponse);
+		let mailResponse = await mailController.sendResetPasswordEmail(verifResponse);
 		if (mailResponse === true) {
 			res.status(200).json({message: "Demande acceptée ! Veuillez consulter votre boite mail et suivre les instructions."})
 		}
@@ -202,7 +202,7 @@ app.post('/user-manage', [
 				let userResponse = await User.createLight(req.body);
 				console.dir(userResponse);
 				if (userResponse.codeError == 0) {
-					let confirmationUrl = await UserController.sendConfirmationMail(userResponse.datas);
+					let confirmationUrl = await mailController.sendConfirmationMail(userResponse.datas);
 					res.status(200).json({message: `Compte créé ! Veuillez consulter votre boite mail afin de confirmer votre compte. (URL = ${confirmationUrl})`, confirmationUrl: confirmationUrl});
 				}
 				else if (userResponse.codeError == 1) {
@@ -308,18 +308,24 @@ app.put('/user-manage/:id_user', [
 				let result = false;
 				if (req.body.mode == 'infos') {
 					result = await User.updateInfos(req.params.id_user, req.body);
-					await STRIPE_API.updateCustomerInfos(req.body, id_stripe);
+					if (id_stripe !== null) {
+						await STRIPE_API.updateCustomerInfos(req.body, id_stripe);
+					}
 				}
 				else if (req.body.mode == 'password') {
 					result = await User.updatePassword(req.params.id_user, req.body);
 				}
 				else if (req.body.mode == 'company') {
 					result = await User.updateCompany(req.params.id_user, req.body);
-					await STRIPE_API.updateCustomerCompanyInfos(req.body, id_stripe);
+					if (id_stripe !== null) {
+						await STRIPE_API.updateCustomerCompanyInfos(req.body, id_stripe);
+					}
 				}
 				else if (req.body.mode == 'email') {
 					result = await User.updateEmail(req.params.id_user, req.body.new_email);
-					await STRIPE_API.updateCustomerEmail(req.body.new_email, id_stripe);
+					if (id_stripe !== null) {
+						await STRIPE_API.updateCustomerEmail(req.body.new_email, id_stripe);
+					}
 				}	
 				else if (req.body.mode == 'email-alert') {
 					result = await User.updateEmailAlert(req.params.id_user, req.body.new_email);
@@ -415,9 +421,9 @@ app.post('/station-manage/', [
 				console.log('VRAIMENT OK');
 				res.status(200).json({message: 'Nouvelle station ajoutée'});
 			}
-			catch(e) {
+			catch(err) {
 				console.log(err);
-				let errMessage = `Problème rencontré pour la station ${id_station}: ${err}`;
+				let errMessage = `Problème rencontré lors de la création d'une nouvelle station: ${err}`;
 				await writeLog('error', errMessage);
 				return res.status(500).json({message: 'Problème rencontré lors de la sauvegarde, veuillez réessayer plus tard.'});	
 			}
@@ -694,44 +700,62 @@ app.get('/invoices/:user_id', async function(req, res) {
 		res.status(403).render('index.ejs', {});		
 	}
 	else {	
-		try {
-			let userInfos = await User.getById(req.params.user_id);
-			if (userInfos.id_stripe) {			
-				let invoices = await STRIPE_API.getInvoices(userInfos.id_stripe);
-				console.dir(invoices);
-				let invoicesList = invoices.data;
-				invoicesInfos = [];
-				for (let i=0; i<invoicesList.length; i++) {
-					let invoiceInfos = {				
-						id: invoicesList[i].id,
-						status: invoicesList[i].status,
-						number: invoicesList[i].number,
-						amount: invoicesList[i].total.toString().substr(0,2) + ',' + invoicesList[i].total.toString().substr(2,2),
-						currency: invoicesList[i].currency,
-						date: moment.unix(invoicesList[i].created).format("DD/MM/YYYY"),
-						url: invoicesList[i].invoice_pdf
-					};
-					invoicesInfos.push(invoiceInfos);
-				}
-
-				console.dir(invoicesInfos);
-				res.status(200).render('invoices.ejs', {userInfos, invoicesInfos});
-			}
-			else {
-				let invoicesInfos = [];
-				res.status(200).render('invoices.ejs', {userInfos, invoicesInfos});
-			}
+		let decodedToken = await jwtManager.tokenDecode(req.cookies.argos_token);
+		if (decodedToken.idUser != req.params.user_id) {
+			res.status(403).render('page-error.ejs');
 		}
-		catch(err) {
-			console.log(err);
-			res.status(500).send({message: err});			
+		else {		
+			try {
+				let userInfos = await User.getById(req.params.user_id);
+				if (userInfos.id_stripe) {			
+					let invoices = await STRIPE_API.getInvoices(userInfos.id_stripe);
+					console.dir(invoices);
+					let invoicesList = invoices.data;
+					invoicesInfos = [];
+					for (let i=0; i<invoicesList.length; i++) {
+						let invoiceInfos = {				
+							id: invoicesList[i].id,
+							status: invoicesList[i].status,
+							number: invoicesList[i].number,
+							amount: invoicesList[i].total.toString().substr(0,2) + ',' + invoicesList[i].total.toString().substr(2,2),
+							currency: invoicesList[i].currency,
+							date: moment.unix(invoicesList[i].created).format("DD/MM/YYYY"),
+							url: invoicesList[i].invoice_pdf
+						};
+						invoicesInfos.push(invoiceInfos);
+					}
+
+					console.dir(invoicesInfos);
+					res.status(200).render('invoices.ejs', {userInfos, invoicesInfos});
+				}
+				else {
+					let invoicesInfos = [];
+					res.status(200).render('invoices.ejs', {userInfos, invoicesInfos});
+				}
+			}
+			catch(err) {
+				console.log(err);
+				res.status(500).send({message: err});			
+			}
 		}
 	}	
 })
 
 app.get('/prices/:user_id', async function(req, res) {
-	let userInfos = await User.getById(req.params.user_id);	
-	res.status(200).render('prices.ejs', {userInfos});
+	let tokenCheck = await jwtManager.tokenVerification(req.cookies.argos_token);	
+	if (tokenCheck === false) {	
+		res.status(403).render('index.ejs', {});		
+	}
+	else {	
+		let decodedToken = await jwtManager.tokenDecode(req.cookies.argos_token);
+		if (decodedToken.idUser != req.params.user_id) {
+			res.status(403).render('page-error.ejs');
+		}
+		else {		
+			let userInfos = await User.getById(req.params.user_id);	
+			res.status(200).render('prices.ejs', {userInfos});
+		}
+	}
 })
 
 app.put('/payment/:user_id', async function(req, res) {
@@ -808,38 +832,38 @@ app.get('/signUp/:user_id/:station_id', (req, res) => {
 });
 
 
-app.post('/processPayment', async function(req, res) {
+// app.post('/processPayment', async function(req, res) {
 
-  var payment_method = req.body.payment_method;
+//   var payment_method = req.body.payment_method;
 
 
-  var product = {
-    name: req.body.productName
-  };
+//   var product = {
+//     name: req.body.productName
+//   };
 
-  var plan = {
-    id: req.body.planId,
-    name: req.body.planName,
-    amount: req.body.planAmount,
-    interval: req.body.planInterval,
-    interval_count: req.body.planIntervalCount
-  }
-  console.dir(product);
-  console.dir(plan);
+//   var plan = {
+//     id: req.body.planId,
+//     name: req.body.planName,
+//     amount: req.body.planAmount,
+//     interval: req.body.planInterval,
+//     interval_count: req.body.planIntervalCount
+//   }
+//   console.dir(product);
+//   console.dir(plan);
 
-  let station = await Station.getById(req.body.station_id);
-  console.log('STATION NAME = '+station.name);
-  req.body.station_name = station.name;
+//   let station = await Station.getById(req.body.station_id);
+//   console.log('STATION NAME = '+station.name);
+//   req.body.station_name = station.name;
 
-  try {
-  	await STRIPE_API.createCustomerAndSubscription(req.body);
-    res.render('stripe/payment.ejs', {product: product, plan: plan, success: true});
-  }
-  catch(err) {
-  	console.log(err);
-    res.render('stripe/payment.ejs', {product: product, plan: plan, success: false});
-  }
-});
+//   try {
+//   	await STRIPE_API.createCustomerAndSubscription(req.body);
+//     res.render('stripe/payment.ejs', {product: product, plan: plan, success: true});
+//   }
+//   catch(err) {
+//   	console.log(err);
+//     res.render('stripe/payment.ejs', {product: product, plan: plan, success: false});
+//   }
+// });
 
 app.get('/sepa/:user_id', function(req, res) {
   STRIPE_API.getAllProductsAndPlans().then(products => {
@@ -866,32 +890,32 @@ app.get('/sepa/:user_id', function(req, res) {
 
 })
 
-app.post('/sepaSubscription', async function(req, res) {
-	console.log('oki');
-	console.dir(req.body);
+// app.post('/sepaSubscription', async function(req, res) {
+// 	console.log('oki');
+// 	console.dir(req.body);
 
-  var product = {
-    name: req.body.productName
-  };
+//   var product = {
+//     name: req.body.productName
+//   };
 
-  var plan = {
-    id: req.body.planId,
-    name: req.body.planName,
-    amount: req.body.planAmount,
-    interval: req.body.planInterval,
-    interval_count: req.body.planIntervalCount
-  }
+//   var plan = {
+//     id: req.body.planId,
+//     name: req.body.planName,
+//     amount: req.body.planAmount,
+//     interval: req.body.planInterval,
+//     interval_count: req.body.planIntervalCount
+//   }
 
-  	try {
-		await STRIPE_API.createCustomerAndSubscription(req.body);
-		await Station.activate(req.body.station_id);
-		res.render('stripe/payment.ejs', {product: product, plan: plan, success: true});
-  	}
-	catch(err) {
-		console.log(err);
-	    res.render('stripe/payment.ejs', {product: product, plan: plan, success: false});
-	}	 	
-})
+//   	try {
+// 		await STRIPE_API.createCustomerAndSubscription(req.body);
+// 		await Station.activate(req.body.station_id);
+// 		res.render('stripe/payment.ejs', {product: product, plan: plan, success: true});
+//   	}
+// 	catch(err) {
+// 		console.log(err);
+// 	    res.render('stripe/payment.ejs', {product: product, plan: plan, success: false});
+// 	}	 	
+// })
 
 app.get('/subscriptions/:user_id', async function(req, res) {
 	let user_id_stripe = await User.getStripeId(req.params.user_id);

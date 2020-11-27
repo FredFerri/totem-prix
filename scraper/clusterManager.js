@@ -1,12 +1,8 @@
 const paths = require('../paths');
-const dbManager = require(paths.path_db+'dbInit');
 const { Cluster } = require('puppeteer-cluster');
-const fs = require('fs');
-const scheduleManager = require('./scheduleManager');
-console.dir(scheduleManager);
 const getMosaic = require('./getMosaic');
 const getRoulezEco = require('./getRoulezEco');
-const pricesManager = require(paths.path_app_controllers+'station_oil_history');
+const pricesManager = require(paths.path_app_models+'station_oil_history');
 const writeLog = require('./writeLog');
 const maxConcurrency = 5;
 const monitor = true;
