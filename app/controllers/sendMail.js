@@ -1,14 +1,78 @@
 const nodemailer = require('nodemailer');
-
+const Email = require('email-templates');
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+);
 
 module.exports = {
-  sendMail: async function(recipient, type, message, datas) {
+
+  sendMailJet: async function(userEmail, userName, type, datas) {
+    return new Promise(function(resolve, reject) {    
+      let subject;
+      let templateId;
+      let variables;
+      if (type == 'inscription') {
+        subject = 'Finalisez votre inscription à totem-prix';
+        templateId = 2030479;
+        variables = {
+          lien_activation: datas
+        };
+      }
+      else if (type == 'inscription-confirmation') {
+        subject = 'Inscription confirmée !';
+        templateId = 2031216;
+      }
+      else {
+        subject = 'Demande de réinitialisation de votre mot de passe totem-prix';
+        templateId = 2031269;
+        variables = {
+          reset_password: datas
+        };        
+      }
+
+      console.log(userEmail);
+      console.log(userName);
+      console.dir(variables);
+      const request = mailjet.post('send', { version: 'v3.1' }).request({
+        "Messages":[
+          {
+            "From": {
+              "Email": "contact@totem-prix.com",
+              "Name": "Totem-prix"
+            },
+            "To": [
+              {
+                "Email": userEmail,
+                "Name": userName
+              }
+            ],
+            "TemplateID": templateId,
+            "TemplateLanguage": true,
+            "Subject": subject,
+            "Variables": variables
+          }
+        ]
+      })
+      request
+        .then(result => {
+          console.log(result.body)
+          resolve(true);
+        })
+        .catch(err => {
+          console.log(err.statusCode)
+          resolve(false);
+        })    
+    })
+  },
+
+  sendMail: async function(recipient, type, datas) {
     var transporter = nodemailer.createTransport({
          service: 'gmail',
          port: 465,
          auth: {
-                user: 'ferri.frederic33@gmail.com',
-                pass: 'aby55inians',
+                user: 'contact@totem-prix.com',
+                pass: 'argos!MFJ176',
             },
               secure: true,    
         });
@@ -21,32 +85,100 @@ module.exports = {
       to = recipient;
     }
 
-    let html_message;
-    if (type == 'error') {
-      html_message = `<p>L'application Argos rencontre un problème concernant la récupération de vos prix : ${message}</p>`;
-    }
-    else {
-      html_message = `<p>Vos tarifs ont bien été mis à jour sur la plateforme roulez-eco, voici le détail : 
-      ${datas}</p>`;
-    }
+    const email = new Email({
+      transport: transporter,
+      send: true,
+      preview: false,
+      views: {
+        options: {
+          extension: 'ejs',
+        },
+      },
+    });
+        
 
-    var mailOptions = {
-      from: 'ferri.frederic33@gmail.com', // sender address
-      to: to, // list of receivers
-      subject: 'Argos - information scraping', // Subject line
-      html: html_message
-    };
+    // let html_message;
+    // if (type == 'error') {
+    //   html_message = `<p>L'application Argos rencontre un problème concernant la récupération de vos prix : ${message}</p>`;
+    // }
+    // else {
+    //   html_message = `<p>Vos tarifs ont bien été mis à jour sur la plateforme roulez-eco, voici le détail : 
+    //   ${datas}</p>`;
+    // }
 
-    console.log(mailOptions);
+    // var mailOptions = {
+    //   from: 'contact@totem-prix.com', // sender address
+    //   to: to, // list of receivers
+    //   subject: 'totem-prix - Informations', // Subject line
+    //   html: html_message
+    // };
 
-    transporter.sendMail(mailOptions, function (err, info) {
-       if(err) {
-          console.log(err)
-       }
-       else {
-          console.log('MAILSENT !');
-       }
-    });   
+  if (type == 'inscription') {  
+    email
+      .send({
+        template: 'inscription',
+        message: {
+          to: to,
+          attachments: [
+            {
+              infos: {confirmationUrl: datas}
+            }
+          ]
+        }
+      })
+      .then(console.log)
+      .catch(console.error);
+  }
+
+  else if (type == 'inscription-confirmation') {
+    email
+      .send({
+        template: 'inscription-confirmation',
+        message: {
+          to: to,
+          attachments: [
+            {
+              infos: {userName: datas}
+            }
+          ]
+        }
+      })
+      .then(console.log)
+      .catch(console.error);
+  }
+
+  else if (type == 'reset-password') {
+    email
+      .send({
+        template: 'reset-password',
+        message: {
+          to: to,
+          attachments: [
+          ]
+        },
+        locals: {
+          locale: 'fr',
+          resetUrl: datas
+        }
+      })
+      .then(console.log)
+      .catch(console.error);
+  }
+
+  else {
+    console.log('WRONG TYPE');
+  }
+
+
+
+    // transporter.sendMail(mailOptions, function (err, info) {
+    //    if(err) {
+    //       console.log(err)
+    //    }
+    //    else {
+    //       console.log('MAILSENT !');
+    //    }
+    // });   
   },
 
   sendConfirmationMail : function(userDatas) {

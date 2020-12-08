@@ -62,13 +62,13 @@ module.exports = {
         // });
 
       try {
-
+        await page.setDefaultNavigationTimeout(0);
         await page.goto('https://www.mosaic.total.fr/');
         await page.waitFor('#login');
         await page.type('#login', data['mosaic_username']);
         await page.type('#pwd', data['mosaic_password']);
         await page.click('input[name="submit"]');
-        await page.waitFor(10000);
+        await page.waitFor(5000);
         let authentication_success = await page.$('.tetemenu');
         if (!authentication_success) {
           reject({message: 'CREDENTIALS ERROR', website: 'mosaic'});

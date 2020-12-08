@@ -1,8 +1,8 @@
 const paths = require('../paths');
 var express = require('express');
 var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
+const https = require('https');
+const fs = require('fs');
 var bodyParser = require('body-parser');
 // const db = require('../db/dbManager');
 const path = require('path');
@@ -28,6 +28,13 @@ const writeLog = require(paths.path_app_controllers+'writeLog');
 const STRIPE_API = require(paths.path_app_controllers+'stripe-functions.js');
 const URL_ARGOS_SCRAPER = 'http://localhost:8181/';
 
+
+var key = fs.readFileSync(__dirname + '/../selfsigned.key');
+var cert = fs.readFileSync(__dirname + '/../selfsigned.crt');
+var options = {
+  key: key,
+  cert: cert
+};
 
 // app.use(express.static(__dirname + '/views/assets'));
 app.use(express.static(path.join(__dirname, '/views/assets')));
@@ -142,11 +149,13 @@ app.post('/password-reset-verif', [
 	],
 async function(req, res) {
 	let verifResponse = await User.emailVerification(req.body.email);
+	console.dir(verifResponse);
 	if (verifResponse === false) {
 		res.status(401).json({message: "Adresse mail introuvable"});
 	}
 	else {
-		let mailResponse = await mailController.sendResetPasswordEmail(verifResponse);
+		let resetUrl = `argos-dev.com:8080/password-reset/${verifResponse.id}/${verifResponse.reset_password_token}`;
+		let mailResponse = await mailController.sendMailJet(req.body.email, verifResponse.first_name, 'reset-password', resetUrl);
 		if (mailResponse === true) {
 			res.status(200).json({message: "Demande acceptée ! Veuillez consulter votre boite mail et suivre les instructions."})
 		}
@@ -202,8 +211,10 @@ app.post('/user-manage', [
 				let userResponse = await User.createLight(req.body);
 				console.dir(userResponse);
 				if (userResponse.codeError == 0) {
-					let confirmationUrl = await mailController.sendConfirmationMail(userResponse.datas);
-					res.status(200).json({message: `Compte créé ! Veuillez consulter votre boite mail afin de confirmer votre compte. (URL = ${confirmationUrl})`, confirmationUrl: confirmationUrl});
+					let confirmationUrl = `totem-prix.com:8080/user-activation/${userResponse.datas.id}/${userResponse.datas.activation_token}/`;
+      				console.log(`CONFIRMATION URL = ${confirmationUrl}`);
+					await mailController.sendMailJet(req.body.email, userResponse.datas.first_name, 'inscription', confirmationUrl);
+					res.status(200).json({message: `Compte créé ! Veuillez consulter votre boite mail afin de confirmer votre compte.`, confirmationUrl: confirmationUrl});
 				}
 				else if (userResponse.codeError == 1) {
 					res.status(400).json({message: "Adresse mail déja enregistrée", confirmationUrl: null});
@@ -268,8 +279,10 @@ app.post('/user-confirmation/:id_user/:token', [
 			res.status(400).json({message: "inputs non valides"});
 		}
 		else {		
-			let confirmationResult = await User.confirm(req.body);
-			if (confirmationResult === true) {
+			let userInfos = await User.confirm(req.body);
+			if (userInfos !== false) {
+				console.dir(userInfos);
+				await mailController.sendMailJet(userInfos.email, userInfos.first_name, 'inscription-confirmation');
 				await User.clearActivationToken(req.params.id_user);
 				res.status(200).json({message: 'Inscription finalisée !', error: false});
 			}
@@ -1081,6 +1094,7 @@ app.post('/update-oil-list/', async function(req, res) {
 	}
 })
 
+var server = https.createServer(options, app);
 
 server.listen(8080, function() {
     console.log('ARGOS APP RUNNING...');

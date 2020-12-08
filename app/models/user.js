@@ -423,7 +423,8 @@ exports.confirm = async function(datas) {
       text: `UPDATE users SET first_name = $1, last_name = $2, tel = $3, password = $4,
             company_name = $5, company_adresse = $6, company_city = $7, company_cp = $8, 
             siret = $9, tva_num = $10, civil = $11
-            WHERE id = $12 AND activation_token = $13`,
+            WHERE id = $12 AND activation_token = $13
+            RETURNING first_name, last_name, email`,
       values: [datas['first_name'], datas['last_name'], datas['tel'], encryptedPassword, 
       datas['company_name'], datas['company_adresse'], datas['company_city'], datas['company_cp'], 
       datas['siret'], datas['tva'], datas['civil'], datas['id_user'], datas['token']]
@@ -433,7 +434,7 @@ exports.confirm = async function(datas) {
       let userConfirmation = await db.query(query);
       console.dir(userConfirmation);
       if (userConfirmation.rowCount > 0) {
-        resolve(true);
+        resolve(userConfirmation.rows[0]);
       }
       else {
         resolve(false);
@@ -450,7 +451,7 @@ exports.emailVerification = async function(email) {
   return new Promise(async function(resolve, reject) { 
     let response = {};   
     console.dir(email);
-    let query = `SELECT id, email FROM users WHERE email='${email}'`;
+    let query = `SELECT id, email, first_name, last_name FROM users WHERE email='${email}'`;
     let userInfos = await db.query(query);
     console.dir(userInfos);
     if (userInfos.rowCount > 0) {
@@ -467,6 +468,8 @@ exports.emailVerification = async function(email) {
       response.id = userInfos.rows[0].id;
       response.email = userInfos.rows[0].email; 
       response.reset_password_token = reset_token;
+      response.first_name = userInfos.rows[0].first_name;
+      response.last_name = userInfos.rows[0].last_name;
       response.error = false;
       resolve(response);
     }

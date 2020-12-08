@@ -41,8 +41,8 @@ module.exports = {
         try {
           console.log('ROULEZ ECO');
           console.dir(carbuDatas);
-
-          await page.goto('https://gestion.roulez-eco.fr/');
+          await page.setDefaultNavigationTimeout(0);
+          await page.goto('https://gestion.roulez-eco.fr/', {waitUntil: 'load', timeout: 0});
           await page.type('#username', credentials.roulezeco_username);
           await page.type('#password', credentials.roulezeco_password);
           await page.click('input[name="_submit"]');
@@ -93,6 +93,10 @@ module.exports = {
 
             await page.waitFor(2000);
             await page.click('.submitForm > .btn_submit');
+            await page.waitFor('#recap');
+            await page.click('.btn_submit[type="submit"]');
+            await page.waitFor(2000);          
+            console.log('OKKKK 4');  
             await page.close();
             resolve(true);
           }

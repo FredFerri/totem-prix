@@ -237,6 +237,7 @@ exports.getByStationId = function(id_station) {
       values: [id_station]
     };          
     try {
+      console.log(query);
       let user = await db.query(query);
       resolve(user.rows[0]);
     }
