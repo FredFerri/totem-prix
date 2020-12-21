@@ -43,18 +43,14 @@ app.post('/test-credentials/', async function(req, res) {
 		console.dir(mosaicTest);
 		if (mosaicTest.error === true) {
 			let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} 
-			FOR STATION ${credentials['id_station']}, 
-			FOR AUTOMATION ${credentials['id']}, 
-			WEBSITE = MOSAIC`; 
+			FOR AUTOMATION ${credentials['automation_id']}, WEBSITE = MOSAIC`; 
 			await writeLog('error', errorMessage);
 		}
 		let roulezecoTest = await roulezeco.testCredentials(credentials);
 		console.dir(roulezecoTest);
 		if (roulezecoTest.error === true) {
 			let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} 
-			FOR STATION ${credentials['station_id']}, 
-			FOR AUTOMATION ${credentials['id']}, 
-			WEBSITE = ROULEZECO`; 
+			FOR AUTOMATION ${credentials['automation_id']}, WEBSITE = ROULEZ ECO`; 
 			await writeLog('error', errorMessage);
 		}
 		res.status(200).send({mosaicTest: mosaicTest, roulezecoTest: roulezecoTest});
@@ -68,25 +64,34 @@ app.post('/test-credentials/', async function(req, res) {
 app.post('/set-disrupts/', async function(req, res) {
 	try {
 		let infosScraping = req.body.infosScraping;
-		await roulezeco.setOilBreak(infosScraping);
+		let disrupt = await roulezeco.setOilBreak(infosScraping);
+		let successMessage = `SET DISRUPT SUCCEED 
+		FOR AUTOMATION ${infosScraping['automation_id']}, WEBSITE = ROULEZ ECO`; 
+		await writeLog('error', errorMessage);			
 		res.status(200).send(true);
 	}
-	catch(err) {
+	catch(errorReturn) {
+		let errorMessage = `SET DISRUPT ERROR : ${errorReturn.message} 
+		FOR AUTOMATION ${infosScraping['automation_id']}, WEBSITE = ROULEZ ECO`; 
+		await writeLog('error', errorMessage);		
 		res.status(500).send(err);
 	}	
 })
 
 app.post('/detect-oils/', async function(req, res) {
+	let roulezeco_username = req.body.roulezeco_username;
+	let roulezeco_password = req.body.roulezeco_password;
+	let automation_id = req.body.automation_id;
 	try {
-		let roulezeco_username = req.body.roulezeco_username;
-		let roulezeco_password = req.body.roulezeco_password;
 		let oilsList = await roulezeco.detectOils(roulezeco_username, roulezeco_password);
 		res.status(200).send(oilsList);
 	}
-	catch(err) {
-		console.log(err);
-		res.status(500).send(err);
-	}	
+	catch(errorReturn) {
+		let errorMessage = `SET DISRUPT ERROR : ${errorReturn.message} 
+		FOR AUTOMATION ${automation_id}, WEBSITE = ROULEZ ECO`; 
+		await writeLog('error', errorMessage);		
+		res.status(500).send(errorReturn.message);
+	}		
 })
 
 app.post('/add-automation/', async function(req, res) {

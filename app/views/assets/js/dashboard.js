@@ -179,7 +179,7 @@ $('.btn-add-disrupt').on('click', function(e) {
 						}
 		   				html += `
 		   				<div class="block">
-						<span role="checkbox" tabindex="0" aria-checked="true" id="toggle-disrupt_${resultat[i].id}" class="toggle-disrupt bg-green-300 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline">
+						<span role="checkbox" tabindex="0" aria-checked="true" id="toggle-disrupt_${resultat[i].id}" class="toggle-disrupt bg-red-400 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline">
 						  <!-- On: "translate-x-5", Off: "translate-x-0" -->
 						  <span aria-hidden="true" class="toggle-btn translate-x-5 inline-block h-5 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
 						</span>
@@ -355,7 +355,7 @@ $('.test-credentials').on('click', function(e) {
 $(document).on('click','.toggle-disrupt',function(){
 	if ($(this).attr('aria-checked') == 'true') {
 		$(this).attr('aria-checked', 'false');
-		$(this).removeClass('bg-green-300');
+		$(this).removeClass('bg-red-400');
 		$(this).addClass('bg-gray-200');			
 		$(this).find('.toggle-btn').removeClass('translate-x-5');
 		$(this).find('.toggle-btn').addClass('translate-x-0');
@@ -363,7 +363,7 @@ $(document).on('click','.toggle-disrupt',function(){
 	else {
 		$(this).attr('aria-checked', 'true');
 		$(this).removeClass('bg-gray-200');
-		$(this).addClass('bg-green-300');			
+		$(this).addClass('bg-red-400');			
 		$(this).find('.toggle-btn').removeClass('translate-x-0');
 		$(this).find('.toggle-btn').addClass('translate-x-5');
 	}
@@ -371,29 +371,50 @@ $(document).on('click','.toggle-disrupt',function(){
 
 
 function removeStation(station_id, subscription_id, automation_id) {
-	$.ajax({
-	   url : '/station/'+station_id,
-	   type : 'DELETE',
-	   data: {
-	   	subscription_id: subscription_id,
-	   	automation_id: automation_id
-	   	},
-	   dataType : 'json',
-	   success : function(resultat, statut){
-	   		$('.confirm-modal').hide();
-	   		$('.success-modal h3').text('Suppression');
-	   		$('.success-modal .modal-text-infos').html(`<p>Station supprimée !</p>`);
-	   		$('.success-modal .btn-validate').text('Ok');
-	   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
-	   		$('.success-modal').show();	
-	   },
-	   error : function(resultat, statut, erreur) {
-	   		loadError(resultat.responseJSON.message);
-	   		return false;
-	   }
-	})			
+	if ($('#input-rmstation_'+station_id).val() == 'supprimer') {	
+		$.ajax({
+		   url : '/station/'+station_id,
+		   type : 'DELETE',
+		   data: {
+		   	subscription_id: subscription_id,
+		   	automation_id: automation_id
+		   	},
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		$('.confirm-modal').hide();
+		   		$('.success-modal h3').text('Suppression');
+		   		$('.success-modal .modal-text-infos').html(`<p>Station supprimée !</p>`);
+		   		$('.success-modal .btn-validate').text('Ok');
+		   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+		   		$('.success-modal').show();	
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})			
+	}
+	else {
+		return false;
+	}
 }
 
+// CODE POUR LA VERSION PAYANTE
+
+// $('.btn-remove-station').on('click', function() {
+// 	let station_id = $(this).attr('id').replace('btn-remove-station_', '');
+// 	let subscription_id = $('#station-card_'+station_id).attr('data-subscription');
+// 	let automation_id = $(this).parents('.btns-row').prev().find('.automation-id').val();
+// 	let station_name = $('#station-card_'+station_id).find('h3').text();
+// 		$('.confirm-modal h3').text('Suppression');
+// 		$('.confirm-modal .modal-text-infos').html(`<p>Êtes-vous certain de vouloir supprimer la station "${station_name}" ? 
+// 			(L'abonnement en cours pour cette station sera résilié et la station sera supprimée de façon définitive)</p>
+// 			<p class="text-sm text-red-600 my-2">Pour confirmer la suppression, veuillez écrire "supprimer" ci dessous, puis cliquer sur "Oui"</p>
+// 			<input id="input-rmstation_${station_id}" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none 
+// 			focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" type="text"/>`);
+// 		$('.confirm-modal .btn-validate').attr('onclick', `removeStation(${station_id}, '${subscription_id}', '${automation_id}')`);
+// 		$('.confirm-modal').show();			
+// })
 
 $('.btn-remove-station').on('click', function() {
 	let station_id = $(this).attr('id').replace('btn-remove-station_', '');
@@ -401,10 +422,14 @@ $('.btn-remove-station').on('click', function() {
 	let automation_id = $(this).parents('.btns-row').prev().find('.automation-id').val();
 	let station_name = $('#station-card_'+station_id).find('h3').text();
 		$('.confirm-modal h3').text('Suppression');
-		$('.confirm-modal .modal-text-infos').html(`<p>Êtes-vous certain de vouloir supprimer la station "${station_name}"</p>`);
+		$('.confirm-modal .modal-text-infos').html(`<p>Êtes-vous certain de vouloir supprimer la station "${station_name}" ? 
+			(Cette suppression est définitive)</p>
+			<p class="text-sm text-red-600 my-2">Pour confirmer la suppression, veuillez écrire <strong>"supprimer"</strong> ci dessous, puis cliquer sur <strong>"Oui"</strong></p>
+			<input id="input-rmstation_${station_id}" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none 
+			focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" type="text"/>`);
 		$('.confirm-modal .btn-validate').attr('onclick', `removeStation(${station_id}, '${subscription_id}', '${automation_id}')`);
 		$('.confirm-modal').show();			
-})		
+})			
 
 function checkFormDatas(datas) {
 	if (datas.station_name == '') {
@@ -450,49 +475,79 @@ function checkFormDatas(datas) {
 
 }
 
+// CODE POUR LA VERSION PAYANTE
+
+// $('.btn-activate-station').on('click', function() {
+// 	let payment_method = $('.user-payment-method').val();
+// 	if (!payment_method) {
+// 		$('.error-activate-modal').show();
+// 	}
+// 	else {
+// 		let id_station = $(this).attr('id').replace('btn-activate-station_', '');
+// 		let station_name = $('#station-card_'+id_station).find('h3').text();
+//    		$('.confirm-modal h3').text('Souscription à un abonnement');
+//    		$('.confirm-modal .modal-text-infos').html(`<p>En poursuivant, vous allez payer la somme de 300€ HT 
+//    			afin de souscrire à l'abonnement d'un an au service totem-prix pour la station "${station_name}"
+//    			<p>
+//    			<p class="text-xs my-2">Pour en savoir plus sur nos tarifs et nos conditions d'abonnement, veuillez cliquez <a href="#">ici</a></p>
+//    			<p class="text-sm text-red-600 my-2">Afin de confirmer votre souscription à cet abonnement, veuillez écrire "je confirme" ci-dessous</p>
+//    			<input id="input-confirmsubscription_${id_station}" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none 
+// 			focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" type="text"/>
+//    			` );
+//    		$('.confirm-modal .btn-validate').text('Confirmer');
+//    		$('.confirm-modal .btn-validate').attr('onclick', `activateStation(${id_station})`);
+//    		$('.confirm-modal').show();	
+// 	}
+// })
+
 $('.btn-activate-station').on('click', function() {
-	let payment_method = $('.user-payment-method').val();
-	if (!payment_method) {
-		$('.error-activate-modal').show();
-	}
-	else {
-		let id_station = $(this).attr('id').replace('btn-activate-station_', '');
-		let station_name = $('#station-card_'+id_station).find('h3').text();
-   		$('.confirm-modal h3').text('Souscription à un abonnement');
-   		$('.confirm-modal .modal-text-infos').html(`<p>En poursuivant, vous confirmez vouloir activer l'abonnement Argos de 30€ HT/mois pour la station "${station_name}"</p>`);
-   		$('.confirm-modal .btn-validate').text('Confirmer');
-   		$('.confirm-modal .btn-validate').attr('onclick', `activateStation(${id_station})`);
-   		$('.confirm-modal').show();	
-	}
-})
+	let id_station = $(this).attr('id').replace('btn-activate-station_', '');
+	let station_name = $('#station-card_'+id_station).find('h3').text();
+	$('.confirm-modal h3').text(`Activation d'une station`);
+	$('.confirm-modal .modal-text-infos').html(`<p>En poursuivant, vous allez activer la mise à jour automatique de vos tarifs pour la station "${station_name}" sur Roulez-eco par l'intermédiaire de nos robots d'automatisation
+		<p>
+		<p class="text-xs my-2">Vous êtes sur la version de test de notre application, aucun paiement n'est nécessaire pour l'activation de ce service.</p>
+		<p class="text-sm text-red-600 my-2">Afin de confirmer l'automatisation des prix pour cette station, veuillez écrire <strong>"je confirme"</strong> ci-dessous</p>
+		<input id="input-confirmsubscription_${id_station}" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none 
+	focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" type="text"/>
+		` );
+	$('.confirm-modal .btn-validate').text('Confirmer');
+	$('.confirm-modal .btn-validate').attr('onclick', `activateStation(${id_station})`);
+	$('.confirm-modal').show();		
+});
 
 function activateStation(id_station) {
-	displayLoader();
-	let id_user = $('.user-id').val();
-	let station_name = $('#edit-station-name_'+id_station).val();	
+	if ($('#input-confirmsubscription_'+id_station).val() == 'je confirme') {	
+		displayLoader();
+		let id_user = $('.user-id').val();
+		let station_name = $('#edit-station-name_'+id_station).val();	
 
-	$.ajax({
-	   url : '/station-activate/',
-	   type : 'POST',
-	   data: {
-	   	id_station: id_station,
-	   	id_user: id_user,
-	   	station_name: station_name
-	   },
-	   dataType : 'json',
-	   success : function(resultat, statut){
-	   	hideLoader();
-	   	$('.confirm-modal').hide();
-   		$('.success-modal h3').text(resultat.message);
-   		$('.success-modal .btn-validate').text('Ok');
-   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
-   		$('.success-modal').show();			   
-	   },
-	   error : function(resultat, statut, erreur) {
-	   		loadError(resultat.responseJSON.message);
-	   		return false;
-	   }
-	})	
+		$.ajax({
+		   url : '/station-activate/',
+		   type : 'POST',
+		   data: {
+		   	id_station: id_station,
+		   	id_user: id_user,
+		   	station_name: station_name
+		   },
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   	hideLoader();
+		   	$('.confirm-modal').hide();
+	   		$('.success-modal h3').text(resultat.message);
+	   		$('.success-modal .btn-validate').text('Ok');
+	   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+	   		$('.success-modal').show();			   
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})	
+	}
+	else {
+		return false;
+	}
 }
 
 

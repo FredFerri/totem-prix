@@ -1,7 +1,7 @@
 const paths = require('../paths');
 var express = require('express');
 var app = express();
-const https = require('https');
+var server = require('http').createServer(app);
 const fs = require('fs');
 var bodyParser = require('body-parser');
 // const db = require('../db/dbManager');
@@ -28,13 +28,6 @@ const writeLog = require(paths.path_app_controllers+'writeLog');
 const STRIPE_API = require(paths.path_app_controllers+'stripe-functions.js');
 const URL_ARGOS_SCRAPER = 'http://localhost:8181/';
 
-
-var key = fs.readFileSync(__dirname + '/../selfsigned.key');
-var cert = fs.readFileSync(__dirname + '/../selfsigned.crt');
-var options = {
-  key: key,
-  cert: cert
-};
 
 // app.use(express.static(__dirname + '/views/assets'));
 app.use(express.static(path.join(__dirname, '/views/assets')));
@@ -65,6 +58,7 @@ app.get('/', async function(req, res) {
 			let stations = await Station.getByUserId(id_user);
 			console.log(stations.length);
 			let oils = await Oil.getAll();
+			let oneStationIsActive = false;
 			for (let i=0; i<stations.length; i++) {
 				let oilsStation = await StationOil.getByStationId(stations[i].id);
 				console.log('OOOOOOOOOOIIIIIIIIIIIILMLLLLLLLLLLLLLLL');
@@ -81,8 +75,12 @@ app.get('/', async function(req, res) {
 				stations[i]['automation'] = automation;
 				let disruptTotal = await StationOil.getDisruptTotal(stations[i].id);
 				stations[i]['disruptTotal'] = disruptTotal;
+				if (stations[i].active === true) {
+					oneStationIsActive = true;
+				}
 			}
 			userInfos['stations'] = stations;
+			userInfos['oneStationIsActive'] = oneStationIsActive;
 			console.dir(userInfos);
 
 	    	res.status(200).render('dashboard.ejs', {userInfos: userInfos, oils: oils});
@@ -154,12 +152,14 @@ async function(req, res) {
 		res.status(401).json({message: "Adresse mail introuvable"});
 	}
 	else {
-		let resetUrl = `argos-dev.com:8080/password-reset/${verifResponse.id}/${verifResponse.reset_password_token}`;
+		let resetUrl = `app.totem-prix.com/password-reset/${verifResponse.id}/${verifResponse.reset_password_token}`;
 		let mailResponse = await mailController.sendMailJet(req.body.email, verifResponse.first_name, 'reset-password', resetUrl);
 		if (mailResponse === true) {
 			res.status(200).json({message: "Demande acceptée ! Veuillez consulter votre boite mail et suivre les instructions."})
 		}
 		else {
+			let errMessage = `SEND RESET PASSWORD MAIL - Problème rencontré: ${err} POUR USER ${verifResponse.id}`;
+			await writeLog('error', errMessage);			
 			res.status(500).json({message: "Problème lors de l'envoi du mail"});
 		}
 	}
@@ -192,6 +192,8 @@ app.post('/password-reset', [
 			await User.clearResetToken(req.body.id);
 		}
 		else {
+			let errMessage = `RESET PASSWORD - Problème rencontré: ${err} POUR USER ${req.body.id}`;
+			await writeLog('error', errMessage);	
 			res.status(500).json({message: "Problème lors de l'enregistrement"});
 		}
 	}
@@ -211,7 +213,7 @@ app.post('/user-manage', [
 				let userResponse = await User.createLight(req.body);
 				console.dir(userResponse);
 				if (userResponse.codeError == 0) {
-					let confirmationUrl = `totem-prix.com:8080/user-activation/${userResponse.datas.id}/${userResponse.datas.activation_token}/`;
+					let confirmationUrl = `app.totem-prix.com/user-activation/${userResponse.datas.id}/${userResponse.datas.activation_token}/`;
       				console.log(`CONFIRMATION URL = ${confirmationUrl}`);
 					await mailController.sendMailJet(req.body.email, userResponse.datas.first_name, 'inscription', confirmationUrl);
 					res.status(200).json({message: `Compte créé ! Veuillez consulter votre boite mail afin de confirmer votre compte.`, confirmationUrl: confirmationUrl});
@@ -235,15 +237,19 @@ app.post('/user-manage', [
 app.get('/user-activation/:id_user/:token', async function(req, res) {
 	let token = req.params.token;
 	let idUser = req.params.id_user;
-	let result = await User.checkActivationToken(idUser, token);
-	if (result === true) {
-		let activationResponse = await User.activate(idUser);
-		console.dir(activationResponse);
-		if (activationResponse === true) {
-			res.redirect('/user-confirmation/'+idUser+'/'+token);
+	try {	
+		let result = await User.checkActivationToken(idUser, token);
+		if (result === true) {
+			let activationResponse = await User.activate(idUser);
+			console.dir(activationResponse);
+			if (activationResponse === true) {
+				res.redirect('/user-confirmation/'+idUser+'/'+token);
+			}
 		}
 	}
-	else {
+	catch(err) {		
+		let errMessage = `ACTIVATE USER - Problème rencontré: ${err} POUR USER ${idUser}`;
+		await writeLog('error', errMessage);	
 		res.sendStatus(500);
 	}
 })
@@ -279,14 +285,16 @@ app.post('/user-confirmation/:id_user/:token', [
 			res.status(400).json({message: "inputs non valides"});
 		}
 		else {		
-			let userInfos = await User.confirm(req.body);
-			if (userInfos !== false) {
+			try {				
+				let userInfos = await User.confirm(req.body);
 				console.dir(userInfos);
 				await mailController.sendMailJet(userInfos.email, userInfos.first_name, 'inscription-confirmation');
 				await User.clearActivationToken(req.params.id_user);
 				res.status(200).json({message: 'Inscription finalisée !', error: false});
 			}
-			else {
+			catch(err) {
+				let errMessage = `CONFIRM USER - Problème rencontré: ${err} POUR USER ${req.body.id}`;
+				await writeLog('error', errMessage);					
 				res.status(500).json({message: "Problème lors de l'enregistrement", error: true});
 			}
 		}
@@ -355,9 +363,11 @@ app.put('/user-manage/:id_user', [
 					res.status(500).json({message: "Problème lors de la mise à jour"});
 				}	
 			}
-			catch(e) {
-				console.log(e);
-				res.status(500).send({message: e})
+			catch(err) {
+				console.log(err);
+				let errMessage = `EDIT USER - Problème rencontré: ${err} POUR USER ${req.params.id_user}`;
+				await writeLog('error', errMessage);					
+				res.status(500).send({message: err})
 			}
 		}
 	}
@@ -436,7 +446,7 @@ app.post('/station-manage/', [
 			}
 			catch(err) {
 				console.log(err);
-				let errMessage = `Problème rencontré lors de la création d'une nouvelle station: ${err}`;
+				let errMessage = `ADD STATION - Problème rencontré: ${err} POUR USER ${id_user}`;
 				await writeLog('error', errMessage);
 				return res.status(500).json({message: 'Problème rencontré lors de la sauvegarde, veuillez réessayer plus tard.'});	
 			}
@@ -488,7 +498,7 @@ app.put('/station-manage/:station_id/:automation_id', [
 			}
 			catch(err) {
 				console.log(err);
-				let errMessage = `Problème rencontré pour la station ${id_station}: ${err}`;
+				let errMessage = `UPDATE STATION - Problème rencontré pour la station ${id_station}: ${err}`;
 				await writeLog('error', errMessage);
 				return res.status(500).json({message: 'Problème rencontré lors de la sauvegarde, veuillez réessayer plus tard.'});	
 			}
@@ -540,7 +550,8 @@ app.delete('/station/:station_id', async function(req, res) {
 	}
 	else {	
 		try  {	
-			if (req.body.subscription_id != '') {
+			console.log('SUBSCRIPTION ID = '+req.body.subscription_id);
+			if (req.body.subscription_id != 0 && req.body.subscription_id != '') {
 				await STRIPE_API.cancelSubscription(req.body.subscription_id);
 			}
 			await Station.delete(req.params.station_id);
@@ -551,6 +562,8 @@ app.delete('/station/:station_id', async function(req, res) {
 		}
 		catch(err) {
 			console.log(err);
+			let errMessage = `DELETE STATION - Problème rencontré pour la station ${req.params.station_id}: ${err}`;
+			await writeLog('error', errMessage);			
 			res.status(500).send({message: 'Erreur lors de la suppression...'});
 		}
 	}	
@@ -586,7 +599,8 @@ app.post('/disrupts/', async function(req, res) {
 			let infosScraping = {
 				roulezeco_username: automationInfos.roulezeco_username,
 				roulezeco_password: encrypt_nohash.decrypt(JSON.parse(automationInfos['roulezeco_password'])),
-				disruptInfos: disruptInfos
+				disruptInfos: disruptInfos,
+				automation_id: automationInfos['id']
 			};
 			console.dir(infosScraping);
 			let setDisruptResult = await axios.post(URL_ARGOS_SCRAPER+'set-disrupts/', {infosScraping});
@@ -645,6 +659,7 @@ app.get('/test-credentials/:automation_id', async function(req, res){
 				roulezeco_password: roulezeco_password,
 				mosaic_username: automation['mosaic_username'],
 				roulezeco_username: automation['roulezeco_username'],
+				automation_id: automation['id']
 			};
 			console.log(credentials);
 			let testResults = await axios.post(URL_ARGOS_SCRAPER+'test-credentials/', {credentials});
@@ -1054,16 +1069,20 @@ app.post('/station-activate/', async function(req, res) {
 			};
 
 		  	try {
-		  		let paymentMethodId = await User.getPaymentMethodId(user_id);
-		  		console.dir(paymentMethodId);
-		  		await STRIPE_API.updateCustomerDefaultPaymentMethod(user_id_stripe, paymentMethodId);
-				let subscription = await STRIPE_API.createSubscription(infos);
-				await Station.activate(station_id, subscription.id);
-				res.status(200).send({message: 'Abonnement activé pour la station '+station_name});
+		  // 		let paymentMethodId = await User.getPaymentMethodId(user_id);
+		  // 		console.dir(paymentMethodId);
+		  // 		await STRIPE_API.updateCustomerDefaultPaymentMethod(user_id_stripe, paymentMethodId);
+				// let subscription = await STRIPE_API.createSubscription(infos);
+				// await Station.activate(station_id, subscription.id);
+				await Station.activate(station_id, 0);
+				// res.status(200).send({message: 'Abonnement activé pour la station '+station_name});
+				res.status(200).send({message: 'Activation effectuée pour la station '+station_name});
 		  	}
 			catch(err) {
 				console.log(err);
-			    res.status(500).send({message: "Erreur lors de l'activation de l'abonnement"});
+				let errMessage = `STATION ACTIVATE - Problème rencontré : ${err} POUR USER ${user_id} ET STATION ${station_id}`;
+				await writeLog('error', errMessage);				
+			    res.status(500).send({message: "Erreur lors de l'activation"});
 			}	 
 		})		
 	}	
@@ -1076,7 +1095,8 @@ app.post('/update-oil-list/', async function(req, res) {
 		console.dir(automationInfos);
 		let roulezeco_username = automationInfos.roulezeco_username;
 		let roulezeco_password = encrypt_nohash.decrypt(JSON.parse(automationInfos['roulezeco_password'])); 
-		let oils = await axios.post(URL_ARGOS_SCRAPER+'detect-oils/', {roulezeco_username, roulezeco_password})
+		let automation_id = automationInfos.id;
+		let oils = await axios.post(URL_ARGOS_SCRAPER+'detect-oils/', {roulezeco_username, roulezeco_password, automation_id})
 		console.log('OIL FILS DE PUTE');
 		console.dir(oils.data);
 		await StationOil.clearAll(req.body.id_station);		
@@ -1093,8 +1113,6 @@ app.post('/update-oil-list/', async function(req, res) {
 		res.status(500).send({message: 'Problème de connexion'});
 	}
 })
-
-var server = https.createServer(options, app);
 
 server.listen(8080, function() {
     console.log('ARGOS APP RUNNING...');

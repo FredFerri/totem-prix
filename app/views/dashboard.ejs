@@ -12,10 +12,23 @@
 		<%- include('form-add-station'); %>
 
 		<button class="btn-add-station bg-gray-800 inline-flex items-center px-2 py-1 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">Ajouter une station</button>
-		<% if (userInfos.stations.length < 1) { %>
-			<p class="my-3">Aucune station enregistrée</p>
-		<% }
-		else { %>
+		<% if (userInfos.oneStationIsActive === false) { %>
+			<div class="bg-white shadow sm:rounded-lg my-3">
+			  <div class="px-4 py-5 sm:p-6">
+			    <h3 class="text-lg leading-6 font-medium text-gray-900">
+			      Vos premiers pas
+			    </h3>
+			    <div class="mt-2 max-w-xl text-sm text-gray-500">
+			      <p>
+			        Pour configurer l'automatisation de vos tâches sur Roulez-eco : <br><br>
+			        1 - Ajoutez une station en cliquant sur le bouton <strong>"Ajouter une station"</strong> juste au dessus.<br><br>
+			        2 - Cliquez sur le bouton <strong>"Lancer un test"</strong> sur la vignette de votre station afin de vous assurer que nos robots d'automatisation arrivent bien à se connecter à vos comptes Mosaïc et Roulez-eco. <br><br>
+			        3 - Cliquez sur <strong>"Activer cette station"</strong>, en haut de la vignette de la station, afin que la programmation du système d'automatisation soit lancé.
+			      </p>
+			    </div>
+			  </div>
+			</div>		
+		<% } %>
 			<ul class="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2 auto-rows-max auto-cols-auto my-10">
 				<% userInfos.stations.forEach(function(station) { %>	
 				  <li id="station-card_<%= station.id %>" class="station-card col-span-1 bg-white rounded-lg shadow" data-subscription="<%= station.subscription_id %>">
@@ -30,7 +43,9 @@
 				          else {
 				          	%> 		          	
 				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-red-200 rounded-full"> Inactive </span> 
-				          	<a href="#" id="btn-activate-station_<%= station.id %>" class="btn-activate-station text-xs text-blue-500">+ Cliquez ici pour activer</a>
+				          	<button id="btn-activate-station_<%= station.id %>" type="button" class="btn-activate-station border border-red-500 bg-red-500 text-white rounded-md px-2 py-1 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
+        						Activer cette station
+      						</button>
 				          	<%} %>
 				        </div>
 				        <p class="mt-1 text-gray-500 text-sm leading-5 truncate"><%= station.street %> - <%= station.cp %> - <%= station.city %></p>
@@ -196,9 +211,7 @@
 				  </li>
 
 				  <% }) %>
-			</ul>
-		<% } %>
-		
+			</ul>		
 	</div>
 
 

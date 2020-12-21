@@ -23,6 +23,14 @@ module.exports = {
         subject = 'Inscription confirmée !';
         templateId = 2031216;
       }
+      else if (type == 'daily-confirmation') {
+        subject = 'Vos prix carburants ont été mis à jour !';
+        templateId = 2089876;
+      }
+      else if (type == 'daily-error') {
+        subject = 'Erreur rencontrée lors de la mise à jour de vos prix carburants';
+        templateId = 2103513;
+      }      
       else {
         subject = 'Demande de réinitialisation de votre mot de passe totem-prix';
         templateId = 2031269;
@@ -60,8 +68,8 @@ module.exports = {
           resolve(true);
         })
         .catch(err => {
-          console.log(err.statusCode)
-          resolve(false);
+          console.dir(err)
+          resolve(err);
         })    
     })
   },
@@ -164,6 +172,24 @@ module.exports = {
       .then(console.log)
       .catch(console.error);
   }
+
+  else if (type == 'daily-confirmation') {
+    email
+      .send({
+        template: 'reset-password',
+        message: {
+          to: to,
+          attachments: [
+          ]
+        },
+        locals: {
+          locale: 'fr',
+          resetUrl: datas
+        }
+      })
+      .then(console.log)
+      .catch(console.error);
+  }  
 
   else {
     console.log('WRONG TYPE');

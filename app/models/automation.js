@@ -57,12 +57,12 @@ exports.update = async function(datas) {
 
 exports.updateLastConnexionTime = async function(success, website, id_automation) {
   return new Promise(async function(resolve, reject) {
-    let date_now = moment().tz('Europe/Paris').locale('fr').format('Do MMMM YYYY, h:mm');    
+    let date_now = moment().tz('Europe/Paris').locale('fr').format('Do MMMM YYYY, HH:mm');    
     let query;
     if (success === false) {
       query = {
         name: `update-${website}-connexion-time-fail`,
-        text: `UPDATE automation SET ${website}_last_connexion = $1 
+        text: `UPDATE automation SET ${website}_last_connexion = $1, ${website}_state = 'Erreur'
               WHERE id = $2`,
         values: [date_now,  id_automation]
       };      
@@ -70,7 +70,7 @@ exports.updateLastConnexionTime = async function(success, website, id_automation
     else {
       query = {
         name: `update-${website}-connexion-time-success`,
-        text: `UPDATE automation SET ${website}_last_connexion = $1 
+        text: `UPDATE automation SET ${website}_last_connexion = $1, ${website}_state = 'Actif'
               WHERE id = $2`,
         values: [date_now, id_automation]
       };        
@@ -89,7 +89,7 @@ exports.updateLastConnexionTime = async function(success, website, id_automation
 exports.updateMosaicState = async function(id_automation, state) {
   return new Promise(async function(resolve, reject) {
     let query;
-    let date_now = moment().tz('Europe/Paris').locale('fr').format('Do MMMM YYYY, h:mm');      
+    let date_now = moment().tz('Europe/Paris').locale('fr').format('Do MMMM YYYY, HH:mm');      
     if (state == 'Actif') {
       query = {
         name: 'update-mosaic-state',
@@ -120,7 +120,7 @@ exports.updateMosaicState = async function(id_automation, state) {
 exports.updateRoulezecoState = async function(id_automation, state) {
   return new Promise(async function(resolve, reject) {
     let query;
-    let date_now = moment().tz('Europe/Paris').locale('fr').format('Do MMMM YYYY, h:mm');
+    let date_now = moment().tz('Europe/Paris').locale('fr').format('Do MMMM YYYY, HH:mm');
     if (state == 'Actif') {
       query = {
         name: 'update-roulezeco-state',

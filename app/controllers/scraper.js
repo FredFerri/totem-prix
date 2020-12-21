@@ -15,13 +15,15 @@ module.exports = {
 				let mosaicTest = await mosaic.testCredentials(datas);
 				console.dir(mosaicTest);
 				if (mosaicTest.error === true) {
-					let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} FOR STATION ${datas['id_station']}, FOR AUTOMATION ${datas['id']}, WEBSITE = MOSAIC`; 
+					let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} 
+					FOR AUTOMATION ${datas['automation_id']}, WEBSITE = MOSAIC`; 
 					await writeLog('error', errorMessage);
 				}
 				let roulezecoTest = await roulezeco.testCredentials(datas);
 				console.dir(roulezecoTest);
 				if (roulezecoTest.error === true) {
-					let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} FOR STATION ${datas['station_id']}, FOR AUTOMATION ${datas['automation_id']}, WEBSITE = ROULEZECO`; 
+					let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} 
+					FOR AUTOMATION ${datas['automation_id']}, WEBSITE = ROULEZECO`; 
 					await writeLog('error', errorMessage);
 				}
 				resolve({mosaicTest: mosaicTest, roulezecoTest: roulezecoTest});
@@ -53,23 +55,31 @@ module.exports = {
 		return new Promise(async function(resolve, reject) {
 			try {
 				await roulezeco.setOilBreak(datas);
+				let successMessage = `DISRUPT SET SUCCEED FOR AUTOMATION ${datas['automation_id']}`;
+				await writeLog('success', errorMessage);
 				resolve({'error': false});
 			}
 			catch(err) {
 				console.log('ERREUR 2');
 				console.log(err);
+				let errorMessage = `DISRUPT SET FAILED FOR AUTOMATION ${datas['automation_id']} WITH ERRROR ${err}`;
+				await writeLog('error', errorMessage);
 				resolve({'error': true});
 			}
 		})
 	},
 
-	detectOils: async function(roulezeco_username, roulezeco_password) {
+	detectOils: async function(roulezeco_username, roulezeco_password, automation_id) {
 		return new Promise(async function(resolve, reject) {
 			try {
 				let oils = await roulezeco.detectOils(roulezeco_username, roulezeco_password);
+				let successMessage = `DETECT OILS SUCCEED FOR AUTOMATION ${automation_id}`;
+				await writeLog('success', successMessage);
 				resolve(oils);
 			}	
 			catch(err) {
+				let errorMessage = `DETECT OILS FAILED FOR AUTOMATION ${automation_id}`;
+				await writeLog('error', errorMessage);
 				reject({'error': true});
 			}
 		})

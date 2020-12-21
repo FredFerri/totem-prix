@@ -1,9 +1,11 @@
 const paths = require('../paths');
 const schedule = require('node-schedule');
 const Automation = require(paths.path_app_models+'automation');
+const User = require(paths.path_app_models+'user');
+const Station = require(paths.path_app_models+'station');
 const writeLog = require('./writeLog');
 const moment = require('moment');
-const sendMail = require('./sendMail');
+const mailController = require(paths.path_app_controllers+'sendMail');
 const { Cluster } = require('puppeteer-cluster');
 const getMosaic = require('./getMosaic');
 const getRoulezEco = require('./getRoulezEco');
@@ -57,11 +59,13 @@ module.exports = {
 	},
 
 	addScheduledJob: async function(automation) {
-		return new Promise(function(resolve, reject) {		
+		return new Promise(async function(resolve, reject) {		
 			let scraping_time = automation['scraping_time'];
 			let hour = scraping_time.split(':')[0];
 			let minutes = scraping_time.split(':')[1];			
-			console.log(`ADDING SCHEDULED JOB FOR AUTOMATION NUM ${automation['id']} at HOUR : ${hour}h${minutes}`);
+			let addScheduleMessage = `ADDING SCHEDULED JOB FOR AUTOMATION NUM ${automation['id']} at HOUR : ${hour}h${minutes}`;
+			console.log(addScheduleMessage);
+			await writeLog('success', addScheduleMessage);			
 			let task = schedule.scheduleJob(`id_${automation['id']}`, `${minutes} ${hour} * * *`, async function() {
 				console.log('SCHEDULED JOB LAUNCHED FOR AUTOMATION NUM '+automation['id']);
 				cluster.queue(automation);
@@ -113,6 +117,12 @@ module.exports = {
                         }
                     }
                     await writeLog('success', `SCRAPING SUCCEED FOR AUTOMATION ${data['id']}`);
+                   	let stationInfos = await Station.getById(data['id_station']);
+
+					let userInfos = await User.getById(stationInfos['id_user']);
+					if (userInfos.email_alert_enabled) {
+                    	await mailController.sendMailJet(userInfos.email_alert, userInfos.first_name, 'daily-confirmation');
+					}
                 }
                 catch(err) {
                 	console.log('CATCH ERROR');
@@ -166,7 +176,7 @@ module.exports = {
 	},
 
 	editScheduledJob: async function(automationInfos) {
-		return new Promise(function(resolve, reject) {		
+		return new Promise(async function(resolve, reject) {		
 			try {			
 				let id_automation = automationInfos['id'];
 				console.dir(automationInfos);
@@ -174,6 +184,7 @@ module.exports = {
 				// console.dir(schedule.scheduledJobs);
 				let old_task = schedule.scheduledJobs[`id_${id_automation}`];
 				old_task.cancel();
+				await writeLog('success', `EDIT SCHEDULED JOB FOR AUTOMATION ${id_automation}`);	
 				module.exports.addScheduledJob(automationInfos);
 				resolve();
 			}
@@ -205,6 +216,7 @@ module.exports = {
 		let updated_date = moment().add(1, 'm').toObject();
 		let updated_id = parseInt(automation['id'], 10) + 5000;		
 		automation['second_try'] = true;
+		automation['initial_id'] = automation['id'];
 		automation['id'] = updated_id;
 		let updated_scraping_time = `${updated_date['hours']}:${updated_date['minutes']}:${updated_date['seconds']}`;
 		console.log('UPDATED SCRAPING TIME FOR AUTOMATION NUM '+automation['id']+' = '+updated_scraping_time);
@@ -223,22 +235,32 @@ module.exports = {
 	},
 
 	credentialsExpired: async function(automation) {
-		let errMessage = `Credentials expired / wrong for automation ${automation['id_station']} on website ${automation['credentials_error_website']}`;
+		let errMessage = `Credentials expired / wrong for automation ${automation['initial_id']} on website ${automation['credentials_error_website']}`;
 		console.log(errMessage);
 		await module.exports.deleteScheduledJob(automation['id']);
 		scheduledTasks = await module.exports.getAllScheduledJobs();
+		await Automation.updateLastConnexionTime(false, automation['credentials_error_website'], automation['initial_id']);	
 		await writeLog('error', errMessage);
-		await sendMail('admin', 'error', errMessage);
+		console.log(`ID STATION = ${automation['id_station']}`);
+		let stationInfos = await Station.getById(automation['id_station']);
+		let userInfos = await User.getById(stationInfos['id_user']);
+		console.dir(userInfos);
+		await mailController.sendMailJet(userInfos.email_alert, userInfos.first_name, 'daily-error', errMessage);
 	},
 
 	scrapingFailed: async function(automation) {
 		console.dir(automation);
 		console.dir(automation['credentials_error_website']);
-		let errMessage = `Scraping failed for automation ${automation['id_station']} on website ${automation['credentials_error_website']}
+		let errMessage = `Scraping failed for automation ${automation['id']} on website ${automation['credentials_error_website']}
 		: ${automation.error_message}`;
 		console.log(errMessage);
+		await Automation.updateLastConnexionTime(false, automation['credentials_error_website'], automation['initial_id']);	
 		await writeLog('error', errMessage);
-		await sendMail('admin', 'error', errMessage);
+		console.log(`ID STATION = ${automation['id_station']}`);
+		let stationInfos = await Station.getById(automation['id_station']);
+		let userInfos = await User.getById(stationInfos['id_user']);
+		console.dir(userInfos);
+		await mailController.sendMailJet(userInfos.email_alert, userInfos.first_name, 'daily-error', errMessage);
 	},	
 
 	// Fonction qui contrôle la cause de l'échec du scraping, et fait remonter l'info

@@ -201,12 +201,12 @@ module.exports = {
           }, disruptOils)
           await page.click('#submitButtonRuptureForm');
           await page.waitFor('.flash-notice');
-          resolve();
+          resolve({error: false, message: 'OIL DISRUPT SUCCEED', website: 'roulezeco'});
           }   
       }
       catch(err) {
         console.log('ERREUR 1');
-        resolve(err);
+        reject({error: true, message: err, website: 'roulezeco'});
       }
     })    
   },
@@ -229,7 +229,7 @@ module.exports = {
         let authentication_success = await page.$('.majcarbu_fieldset');
         console.dir(authentication_success);
         if (!authentication_success) {
-          reject({message: 'CREDENTIALS ERROR', website: 'roulezeco'});
+          reject({error: true, message: 'CREDENTIALS ERROR', website: 'roulezeco'});
           await page.close();
         }
 
@@ -254,12 +254,12 @@ module.exports = {
             return oils;
           })
           console.dir(oils);
-          resolve(oils);
+          resolve({error: false, message: 'DETECT OILS SUCCEED', website: 'roulezeco'});
         }      
     }
     catch(err) {
       console.log(err);
-      reject(err);
+      reject({error: true, message: err, website: 'roulezeco'});
     }
   })
   }
