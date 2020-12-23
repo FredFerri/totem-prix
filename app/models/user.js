@@ -60,9 +60,8 @@ exports.createLight = async function(datas) {
       }
     }
     catch(err) {
-      console.dir(err);
-      response.codeError = 2; 
-      resolve(response);
+      console.log(err);
+      reject(err);
     }
   })
 },

@@ -241,6 +241,7 @@ module.exports = {
 		scheduledTasks = await module.exports.getAllScheduledJobs();
 		await Automation.updateLastConnexionTime(false, automation['credentials_error_website'], automation['initial_id']);	
 		await writeLog('error', errMessage);
+		await writeLogSheets.launch(errMessage, 'scraper');
 		console.log(`ID STATION = ${automation['id_station']}`);
 		let stationInfos = await Station.getById(automation['id_station']);
 		let userInfos = await User.getById(stationInfos['id_user']);
@@ -256,6 +257,7 @@ module.exports = {
 		console.log(errMessage);
 		await Automation.updateLastConnexionTime(false, automation['credentials_error_website'], automation['initial_id']);	
 		await writeLog('error', errMessage);
+		await writeLogSheets.launch(errMessage, 'scraper');
 		console.log(`ID STATION = ${automation['id_station']}`);
 		let stationInfos = await Station.getById(automation['id_station']);
 		let userInfos = await User.getById(stationInfos['id_user']);

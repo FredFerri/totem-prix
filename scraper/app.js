@@ -3,16 +3,14 @@ var app = express();
 var server = require('http').createServer(app);
 const paths = require('../paths');
 const bodyParser = require('body-parser');
-const moment = require('moment');
 const jwtManager = require(paths.path_app_controllers+'jwt');
-const dbManager = require(paths.path_db+'dbManager');
 const { check, oneOf, validationResult } = require('express-validator');
-const validator = require('validator');
 const scheduleManager = require(paths.path_scraper+'scheduleManager');
 const clusterManager = require('./clusterManager');
 const mosaic = require(paths.path_scraper+'getMosaic');
 const roulezeco = require(paths.path_scraper+'getRoulezEco');
 const writeLog = require(paths.path_scraper+'/writeLog');
+const writeLogSheets = require(paths.path_app_controllers+'/writeLogsInSheets');
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -37,21 +35,19 @@ app.get('/restart', async function(req, res) {
 app.post('/test-credentials/', async function(req, res) {
 	try {
 		let credentials = req.body.credentials;			
-		console.log('CONTROLLER SCRAPER');
-		console.dir(credentials);
 		let mosaicTest = await mosaic.testCredentials(credentials);
-		console.dir(mosaicTest);
 		if (mosaicTest.error === true) {
 			let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} 
 			FOR AUTOMATION ${credentials['automation_id']}, WEBSITE = MOSAIC`; 
 			await writeLog('error', errorMessage);
+			await writeLogSheets.launch(errorMessage, 'scraper');
 		}
 		let roulezecoTest = await roulezeco.testCredentials(credentials);
-		console.dir(roulezecoTest);
 		if (roulezecoTest.error === true) {
 			let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} 
 			FOR AUTOMATION ${credentials['automation_id']}, WEBSITE = ROULEZ ECO`; 
 			await writeLog('error', errorMessage);
+			await writeLogSheets.launch(errorMessage, 'scraper');
 		}
 		res.status(200).send({mosaicTest: mosaicTest, roulezecoTest: roulezecoTest});
 	}
@@ -67,13 +63,15 @@ app.post('/set-disrupts/', async function(req, res) {
 		let disrupt = await roulezeco.setOilBreak(infosScraping);
 		let successMessage = `SET DISRUPT SUCCEED 
 		FOR AUTOMATION ${infosScraping['automation_id']}, WEBSITE = ROULEZ ECO`; 
-		await writeLog('error', errorMessage);			
+		await writeLog('error', errorMessage);	
+		await writeLogSheets.launch(errorMessage, 'scraper');		
 		res.status(200).send(true);
 	}
 	catch(errorReturn) {
 		let errorMessage = `SET DISRUPT ERROR : ${errorReturn.message} 
 		FOR AUTOMATION ${infosScraping['automation_id']}, WEBSITE = ROULEZ ECO`; 
-		await writeLog('error', errorMessage);		
+		await writeLog('error', errorMessage);
+		await writeLogSheets.launch(errorMessage, 'scraper');	
 		res.status(500).send(err);
 	}	
 })
@@ -89,20 +87,17 @@ app.post('/detect-oils/', async function(req, res) {
 	catch(errorReturn) {
 		let errorMessage = `SET DISRUPT ERROR : ${errorReturn.message} 
 		FOR AUTOMATION ${automation_id}, WEBSITE = ROULEZ ECO`; 
-		await writeLog('error', errorMessage);		
+		await writeLog('error', errorMessage);
+		await writeLogSheets.launch(errorMessage, 'scraper');
 		res.status(500).send(errorReturn.message);
 	}		
 })
 
 app.post('/add-automation/', async function(req, res) {
 	try {
-		console.log('OUI OUI');
 		let automationInfos = req.body.automationInfos;
-		console.dir(automationInfos);
 		scheduleManager.addScheduledJob(automationInfos);
 		let scheduledJobs = await scheduleManager.getAllScheduledJobs();
-		console.dir(scheduledJobs);		
-		console.log('OKKKKKKKKKKK');
 		res.status(200).send(true);	
 	}
 	catch(err) {
@@ -116,7 +111,6 @@ app.put('/edit-automation/', async function(req, res) {
 		let automationInfos = req.body.automationInfos;
 		await scheduleManager.editScheduledJob(automationInfos);
 		let scheduledJobs = await scheduleManager.getAllScheduledJobs();
-		console.dir(scheduledJobs);		
 		res.status(200).send(true);	
 	}
 	catch(err) {
@@ -127,13 +121,9 @@ app.put('/edit-automation/', async function(req, res) {
 
 app.delete('/delete-automation/:automationId', async function(req, res) {
 	try {	
-		console.log('REQUEST');
-		console.dir(req);
 		let automationId = req.params.automationId;
 		await scheduleManager.deleteScheduledJob(automationId);
-		let scheduledJobs = await scheduleManager.getAllScheduledJobs();
-		console.dir(scheduledJobs);
-		console.log(`AUTOMATION ${automationId} DELETED`);		
+		let scheduledJobs = await scheduleManager.getAllScheduledJobs();	
 		res.status(200).send(true);	
 	}
 	catch(err) {

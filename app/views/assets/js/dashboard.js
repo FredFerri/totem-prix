@@ -347,6 +347,9 @@ $('.test-credentials').on('click', function(e) {
 	   },
 	   error : function(resultat, statut, erreur) {
 	   		loadError(resultat.responseJSON.message);
+	   		setTimeout(function() {
+	   			window.location.reload();
+	   		}, 4000);
 	   		return false;
 	   }
 	})		
