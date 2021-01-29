@@ -139,7 +139,7 @@ module.exports = {
       }
       catch(err) {
         console.log(err);
-        // await page.close();
+        await page.close();
         resolve({message: err, website: 'mosaic'});
       }
     })

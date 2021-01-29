@@ -5,13 +5,13 @@
 
 	<%- include('nav'); -%>
 
-<div class="main mt-32 sm:mt-5 md:mt-5 lg:mt-5 w-3/4 mx-auto px-5">
+<div class="main mt-32 sm:mt-5 md:mt-5 lg:mt-5 w-3/4 mx-auto px-5 w-5/6">
 	<%- include('alert-error'); -%>
 	<h1 class="text-2xl font-bold leading-7 text-cool-gray-900 sm:leading-9 sm:truncate">Tableau de bord</h1>
 	<div class="station-cards-block">
 		<%- include('form-add-station'); %>
 
-		<button class="btn-add-station bg-gray-800 inline-flex items-center px-2 py-1 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">Ajouter une station</button>
+		<button class="btn-add-station bg-gray-800 inline-flex items-center px-2 py-1 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150 mt-6">Ajouter une station</button>
 		<% if (userInfos.oneStationIsActive === false) { %>
 			<div class="bg-white shadow sm:rounded-lg my-3">
 			  <div class="px-4 py-5 sm:p-6">
@@ -22,7 +22,7 @@
 			      <p>
 			        Pour configurer l'automatisation de vos tâches sur Roulez-eco : <br><br>
 			        1 - Ajoutez une station en cliquant sur le bouton <strong>"Ajouter une station"</strong> juste au dessus.<br><br>
-			        2 - Cliquez sur le bouton <strong>"Lancer un test"</strong> sur la vignette de votre station afin de vous assurer que nos robots d'automatisation arrivent bien à se connecter à vos comptes Mosaïc et Roulez-eco. <br><br>
+			        2 - Cliquez sur le bouton <strong>"Synchronisation"</strong> sur la vignette de votre station afin de vous assurer que nos robots d'automatisation arrivent bien à se connecter à vos comptes Mosaïc et Roulez-eco. <br><br>
 			        3 - Cliquez sur <strong>"Activer cette station"</strong>, en haut de la vignette de la station, afin que la programmation du système d'automatisation soit lancé.
 			      </p>
 			    </div>
@@ -50,15 +50,18 @@
 				        </div>
 				        <p class="mt-1 text-gray-500 text-sm leading-5 truncate"><%= station.street %> - <%= station.cp %> - <%= station.city %></p>
 				      </div>
-				      <img class="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0" src="/images/total-logo.jpg" alt="">
+				      <div>
+				      </div>
+				      <img class="hidden w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 sm:inline-block" src="/images/total-logo.jpg" alt="total-logo">
+				      <img class="hidden w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 sm:inline-block" src="/images/total-access-logo.png" alt="total-access-logo">
 				    </div>
 					  <div id="automation_<%= station.automation.id %>" class="automation-block w-full py-3 px-6">
 					  	<div class="w-full flex my-2 items-baseline">
 					  		<% if (station.automation.mosaic_state == 'Erreur') { %>
-					  			<span class="h-4 w-4 bg-red-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-red-500 rounded-full"></span></span><span><%= station.automation.mosaic_state %></span>
+					  			<span class="h-4 w-4 bg-red-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-red-500 rounded-full"></span></span>Identifiant ou mot de passe Mosaïc incorrect
 					  		<% }
 					  		else if (station.automation.mosaic_state == 'Actif') { %>
-					  			<span class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-green-500 rounded-full"></span></span><span><%= station.automation.mosaic_state %></span>
+					  			<span class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-green-500 rounded-full"></span></span><%= station.automation.mosaic_state %>
 					  		<% } 
 					  		else { %>
 					  			<span class="h-4 w-4 bg-yellow-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-yellow-500 rounded-full"></span></span><span><%= station.automation.mosaic_state %></span>	
@@ -67,10 +70,10 @@
 					  	</div>
 					  	<div class="w-full flex my-2 items-baseline">
 					  		<% if (station.automation.roulezeco_state == 'Erreur') { %>
-					  			<span class="h-4 w-4 bg-red-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-red-500 rounded-full"></span></span><span><%= station.automation.roulezeco_state %></span>
+					  			<span class="h-4 w-4 bg-red-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-red-500 rounded-full"></span></span>Identifiant ou mot de passe Roulez-eco incorrect
 					  		<% }
 					  		else if (station.automation.roulezeco_state == 'Actif') { %>
-					  			<span class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-green-500 rounded-full"></span></span><span><%= station.automation.roulezeco_state %></span>
+					  			<span class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-green-500 rounded-full"></span></span><%= station.automation.roulezeco_state %>
 					  		<% } 
 					  		else { %>
 					  			<span class="h-4 w-4 bg-yellow-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-yellow-500 rounded-full"></span></span><span><%= station.automation.roulezeco_state %></span>	
@@ -81,7 +84,7 @@
 					  <div class="w-full px-6 mb-4">
 					  	<input type="hidden" class="automation-id" value="<%= station.automation.id %>">
 					  	<button id="test-credentials_<%= station.automation.id %>" type="button" class="test-credentials bg-gray-800 inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">	  
-					  		Lancer un test
+					  		Synchronisation
 					  	</button>
 
 					  	<button type="button" class="btn-loading hidden bg-gray-800 flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150 cursor-not-allowed" disabled>
@@ -97,7 +100,7 @@
 							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 							</svg>
-				            <span class="ml-3">Modifier</span>
+				            <span class="ml-3">Modifier itentifiants et station</span>
 				          </a>
 				        </div>
 				        <div class="-ml-px w-0 flex-1 flex">
@@ -106,14 +109,14 @@
 							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
 							</svg>
-				            <span class="ml-3">Déclarer une rupture (<%= station.disruptTotal %> en rupture)</span>
+				            <span class="ml-3">Gérer les ruptures carburants (<%= station.disruptTotal %> rupture en cours)</span>
 				          </a>
 				        </div>
 						<div class="-ml-px w-0 flex-1 flex">
 				          <a href="#" id="btn-remove-station_<%= station.id %>" class="btn-remove-station relative w-0 flex-1 inline-flex items-center justify-center py-4 px-2 text-sm leading-5 text-gray-700 font-medium border-l-2 border-gray-100  hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
 				            <!-- Heroicon name: phone -->
 							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-				            <span class="ml-3">Supprimer</span>
+				            <span class="ml-3">Supprimer la station</span>
 				          </a>
 				        </div>				        
 				      </div>

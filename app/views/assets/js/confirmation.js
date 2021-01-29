@@ -9,6 +9,10 @@ $('#confirm_submit').on('click', function(e) {
 		$('.error-message').find('.error-message-txt').text('Votre mot de passe doit contenir au moins 6 caractères');
 	   	$('.error-message').show();
 	}
+	else if ($('#password').val() != $('#password_confirm').val()) {
+		$('.error-message').find('.error-message-txt').text('Les deux mots de passe que vous avez renseigné ne correspondent pas');
+	   	$('.error-message').show();
+	}	
 	else if ($('#tel').val().length < 10 || $('#tel').val().length > 13) {
 		$('.error-message').find('.error-message-txt').text('Numéro de téléphone non valide');
 	   	$('.error-message').show();		
@@ -44,8 +48,13 @@ $('#confirm_submit').on('click', function(e) {
 	else if ($('#company_name').val().length < 3 ) {
 		$('.error-message').find('.error-message-txt').text('Veuillez indiquer le nom de votre entreprise');
 	   	$('.error-message').show();				
-	}									
+	}		
+	else if (!$('#conditions').is(':checked') ) {
+		$('.error-message').find('.error-message-txt').text('Vous devez accepeter nos conditions générales de service');
+	   	$('.error-message').show();				
+	}								
 	else {		
+		displayLoader();
 
 		let id_user = $('#id_user').val();
 		let token = $('#token').val();  
@@ -72,14 +81,14 @@ $('#confirm_submit').on('click', function(e) {
 		   data: infos,
 		   dataType : 'json',
 		   success : function(resultat, statut){
+		   		hideLoader();
 		   		$('.success-modal h3').text('Compte validé !');
 		   		$('.btn-validate').text('Se connecter');
 		   		$('.success-modal').show();	 
 		   },
 
 		   error : function(resultat, statut, erreur){
-		   		alert(erreur);
-		   		alert(resultat.JSONerror.message);
+		   		hideLoader();
 				$('.error-message').find('.error-message-txt').text(resultat.JSONerror.message);
 	   			$('.error-message').show();	
 		   },

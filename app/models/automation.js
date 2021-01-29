@@ -195,7 +195,7 @@ exports.getAll = function(id) {
     let query = {
       name: 'get-all-automations',
       text: `SELECT id, mosaic_username, mosaic_password, roulezeco_username, roulezeco_password, scraping_time, 
-            roulezeco_last_connexion, mosaic_last_connexion, id_station 
+            roulezeco_last_connexion, mosaic_last_connexion, id_station, active 
             FROM automation`,
       values: []
     };           
@@ -253,6 +253,24 @@ exports.delete = function(id) {
     let query = {
       name: 'delete-automation',
       text: `DELETE FROM automation WHERE id = $1`,
+      values: [id]
+    };          
+    try {
+      let response = await db.query(query);
+      resolve(response);
+    }
+    catch(err) {
+      reject(err);
+    }
+  })
+}
+
+exports.activate = function(id) {
+  console.log(id);
+  return new Promise(async function(resolve, reject) {
+    let query = {
+      name: 'activate-automation',
+      text: `UPDATE automation SET active = true WHERE id = $1`,
       values: [id]
     };          
     try {

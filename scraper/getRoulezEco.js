@@ -254,7 +254,7 @@ module.exports = {
             return oils;
           })
           console.dir(oils);
-          resolve({error: false, message: 'DETECT OILS SUCCEED', website: 'roulezeco'});
+          resolve({error: false, message: 'DETECT OILS SUCCEED', website: 'roulezeco', oils: oils});
         }      
     }
     catch(err) {

@@ -1,3 +1,11 @@
 Thu Nov 19 2020 11:01:16 GMT+0100 (Central European Standard Time) - Error: connect ECONNREFUSED 127.0.0.1:8181 
 Thu Nov 19 2020 11:09:19 GMT+0100 (Central European Standard Time) - Problème rencontré pour le station 82: Error: connect ECONNREFUSED 127.0.0.1:8181 
 Wed Nov 25 2020 14:42:45 GMT+0100 (Central European Standard Time) - Problème rencontré lors de la création d'une nouvelle station: Error: connect ECONNREFUSED 127.0.0.1:8181 
+Wed Jan 06 2021 17:00:25 GMT+0100 (Central European Standard Time) - UPDATE OIL LIST - Problème rencontré : TypeError: oils.data is not iterable POUR STATION 114 
+Wed Jan 06 2021 17:04:19 GMT+0100 (Central European Standard Time) - UPDATE OIL LIST - Problème rencontré : TypeError: oils.data is not iterable POUR STATION 114 
+Wed Jan 06 2021 17:05:00 GMT+0100 (Central European Standard Time) - UPDATE OIL LIST - Problème rencontré : TypeError: oils is not iterable POUR STATION 114 
+Wed Jan 06 2021 17:07:00 GMT+0100 (Central European Standard Time) - UPDATE OIL LIST - Problème rencontré : TypeError: oils is not iterable POUR STATION 114 
+Wed Jan 06 2021 17:11:27 GMT+0100 (Central European Standard Time) - UPDATE OIL LIST - Problème rencontré : TypeError: oils.datas is not iterable POUR STATION 114 
+Tue Jan 19 2021 14:30:18 GMT+0100 (Central European Standard Time) - UPDATE OIL LIST - Problème rencontré : Error: Request failed with status code 500 POUR STATION 121 
+Tue Jan 19 2021 16:10:45 GMT+0100 (Central European Standard Time) - UPDATE OIL LIST - Problème rencontré : Error: Request failed with status code 500 POUR STATION 122 
+Wed Jan 20 2021 19:33:26 GMT+0100 (Central European Standard Time) - DELETE STATION - Problème rencontré pour la station 120: Error: Request failed with status code 500 

@@ -423,7 +423,7 @@ exports.confirm = async function(datas) {
             company_name = $5, company_adresse = $6, company_city = $7, company_cp = $8, 
             siret = $9, tva_num = $10, civil = $11
             WHERE id = $12 AND activation_token = $13
-            RETURNING first_name, last_name, email`,
+            RETURNING id, first_name, last_name, email`,
       values: [datas['first_name'], datas['last_name'], datas['tel'], encryptedPassword, 
       datas['company_name'], datas['company_adresse'], datas['company_city'], datas['company_cp'], 
       datas['siret'], datas['tva'], datas['civil'], datas['id_user'], datas['token']]

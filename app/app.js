@@ -26,6 +26,7 @@ const URL_ARGOS_SCRAPER = 'http://localhost:8181/';
 
 // app.use(express.static(__dirname + '/views/assets'));
 app.use(express.static(path.join(__dirname, '/views/assets')));
+app.set('views', path.join(__dirname, '/views'))
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -112,6 +113,7 @@ app.post('/user-login/', async function(req, res) {
 		let token = await jwtManager.authentification(idUser);
 		res.cookie("argos_token", token, { maxAge: hour });
 		await writeLog('success', `CONNECTION SUCCEED FOR USER ${idUser}`);
+		await writeLogSheets.launch(`CONNECTION SUCCEED FOR USER ${idUser}`, 'app');
 		res.status(200).json({message: 'Authentification réussie !', error: false});
 	}
 	else {
@@ -170,9 +172,10 @@ app.post('/password-reset', [
 	else {	
 		let resetResponse = await User.resetPassword(req.body);
 		if (resetResponse === true) {
-			await writeLog('success', `RESET PASSWORD SUCCEED FOR USER ${verifResponse.id}`);
-			res.status(200).json({message:'Mot de passe modifié !'});
+			await writeLog('success', `RESET PASSWORD SUCCEED FOR USER ${req.body.id}`);
+			await writeLogSheets.launch(`RESET PASSWORD SUCCEED FOR USER ${req.body.id}`, 'app');
 			await User.clearResetToken(req.body.id);
+			res.status(200).json({message:'Mot de passe modifié !'});
 		}
 		else {
 			let errMessage = `RESET PASSWORD - Problème rencontré: ${err} POUR USER ${req.body.id}`;
@@ -197,6 +200,7 @@ app.post('/user-manage', [
 				let userResponse = await User.createLight(req.body);
 				if (userResponse.codeError == 0) {
 					await writeLog('success', `NEW USER CREATED, ID = ${userResponse.datas.id}`);
+					await writeLogSheets.launch(`NEW USER CREATED, ID = ${userResponse.datas.id}`, 'app');
 					let confirmationUrl = `app.totem-prix.com/user-activation/${userResponse.datas.id}/${userResponse.datas.activation_token}/`;
 					await mailController.sendMailJet(req.body.email, userResponse.datas.first_name, 'inscription', confirmationUrl);
 					res.status(200).json({message: `Compte créé ! Veuillez consulter votre boite mail afin de confirmer votre compte.`, confirmationUrl: confirmationUrl});
@@ -229,6 +233,7 @@ app.get('/user-activation/:id_user/:token', async function(req, res) {
 			let activationResponse = await User.activate(idUser);
 			console.dir(activationResponse);
 			if (activationResponse === true) {
+
 				res.redirect('/user-confirmation/'+idUser+'/'+token);
 			}
 		}
@@ -268,6 +273,7 @@ app.post('/user-confirmation/:id_user/:token', [
 		const validationErrors = validationResult(req);
 		if (!validationErrors.isEmpty()) {
 			console.dir(validationErrors);
+			console.log('VALIDATION ERROR');
 			res.status(400).json({message: "inputs non valides"});
 		}
 		else {		
@@ -276,6 +282,9 @@ app.post('/user-confirmation/:id_user/:token', [
 				console.dir(userInfos);
 				await mailController.sendMailJet(userInfos.email, userInfos.first_name, 'inscription-confirmation');
 				await User.clearActivationToken(req.params.id_user);
+				let successMessage = `USER CONFIRMATION DONE FOR USER ${userInfos.id}`;
+				await writeLog('success', successMessage);
+				await writeLogSheets.launch(successMessage, 'app');						
 				res.status(200).json({message: 'Inscription finalisée !', error: false});
 			}
 			catch(err) {
@@ -343,6 +352,8 @@ app.put('/user-manage/:id_user', [
 				}		
 				
 				if (result) {
+					await writeLog('success', `USER ${req.params.id_user} UPDATED`);
+					await writeLogSheets.launch(`USER ${req.params.id_user} UPDATED`, 'app');	
 					res.status(200).json({message: 'Utilisateur mis à jour !'});
 				}
 				else {
@@ -371,9 +382,12 @@ app.delete('/user-manage/:id_user', async function(req, res) {
 			let result = await User.delete(req.params.id_user);
 			if (result) {
 				if (result === true) {
+					await writeLog('success', `USER ${req.params.id_user} DELETED`);
+					await writeLogSheets.launch(`USER ${req.params.id_user} DELETED`, 'app');	
 					res.status(200).json({message: "Utilisateur supprimé"});
 				}
 				else {
+					await writeLog('error', `ERROR WHILE REMOVING USER ${req.params.id_user}`);
 					res.status(500).json({message: "Problème lors de la suppression"});
 				}
 			}
@@ -425,7 +439,10 @@ app.post('/station-manage/', [
 				// 	}
 				// }
 				let automationInfos = await Automation.create(datas);
-				await axios.post(URL_ARGOS_SCRAPER+'add-automation', {automationInfos});
+				
+				let successMessage = `NEW STATION CREATED FOR USER ${id_user}`;
+				await writeLog('success', successMessage);
+				await writeLogSheets.launch(successMessage, 'app');
 				res.status(200).json({message: 'Nouvelle station ajoutée'});
 			}
 			catch(err) {
@@ -477,6 +494,9 @@ app.put('/station-manage/:station_id/:automation_id', [
 				// }
 				let automationInfos = await Automation.update(datas);
 				await axios.put(URL_ARGOS_SCRAPER+'edit-automation/', {automationInfos});
+				let successMessage = `STATION ${id_station} UPDATED FOR USER ${id_user}`;
+				await writeLog('success', successMessage);
+				await writeLogSheets.launch(successMessage, 'app');
 				res.status(200).json({message: 'Station mise à jour'});
 			}
 			catch(err) {
@@ -536,6 +556,9 @@ app.delete('/station/:station_id', async function(req, res) {
 			await Station.delete(req.params.station_id);
 			let automationId = req.body.automation_id;
 			await axios.delete(URL_ARGOS_SCRAPER+'delete-automation/'+automationId, {});
+			let successMessage = `STATION ${req.params.station_id} DELETED`;
+			await writeLog('success', successMessage);	
+			await writeLogSheets.launch(successMessage, 'app');					
 			res.status(200).send({message: 'Station supprimée'});
 		}
 		catch(err) {
@@ -975,6 +998,11 @@ app.post('/station-activate/', async function(req, res) {
 				// let subscription = await STRIPE_API.createSubscription(infos);
 				// await Station.activate(station_id, subscription.id);
 				await Station.activate(station_id, 0);
+				let automation = await Automation.getByStationId(station_id);
+				await Automation.activate(automation.id);
+				await axios.post(URL_ARGOS_SCRAPER+'add-automation', {automation});
+				await writeLog('success', `Station ${station_id} activated FOR USER ${user_id}`);
+				await writeLogSheets.launch(`Station ${station_id} activated FOR USER ${user_id}`, 'app');
 				// res.status(200).send({message: 'Abonnement activé pour la station '+station_name});
 				res.status(200).send({message: 'Activation effectuée pour la station '+station_name});
 		  	}
@@ -996,14 +1024,21 @@ app.post('/update-oil-list/', async function(req, res) {
 		let roulezeco_password = encrypt_nohash.decrypt(JSON.parse(automationInfos['roulezeco_password'])); 
 		let automation_id = automationInfos.id;
 		let oils = await axios.post(URL_ARGOS_SCRAPER+'detect-oils/', {roulezeco_username, roulezeco_password, automation_id});
+		console.dir(oils);
+		console.log('&&&&&&&&&&&&&&&&&&&&&&&&&');
 		await StationOil.clearAll(req.body.id_station);		
-		for (oilInfos of oils.data) {
+		for (oilInfos of oils.data.oils) {
 			await StationOil.create(oilInfos.id, oilInfos.name, req.body.id_station, oilInfos.disrupt);
 		}
+		await writeLog('success', `UPDATE OIL LIST SUCCEED FOR STATION ${req.body.id_station}`);
+		await writeLogSheets.launch(`UPDATE OIL LIST SUCCEED FOR STATION ${req.body.id_station}`, 'app');
 		res.status(200).send({message: 'Liste mise à jour'});
 	}
 	catch(err) {
 		console.log(err);
+		let errMessage = `UPDATE OIL LIST - Problème rencontré : ${err} POUR STATION ${req.body.id_station}`;
+		await writeLog('error', errMessage);
+		await writeLogSheets.launch(errMessage, 'app');			
 		res.status(500).send({message: 'Problème de connexion'});
 	}
 })

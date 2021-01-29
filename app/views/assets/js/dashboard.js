@@ -42,6 +42,7 @@ $('#btn-submit-add-station').on('click', function(e) {
 
 $('.form-add-station').on('submit', function(e) {
 	e.preventDefault();	
+	displayLoader();
 	let station_name = $('#add-station-name').val();
 	let station_street = $('#add-station-street').val();
 	let station_cp = $('#add-station-cp').val();
@@ -76,12 +77,14 @@ $('.form-add-station').on('submit', function(e) {
 		   dataType : 'json',
 		   success : function(resultat, statut){
 		   		console.dir(resultat);
+		   		hideLoader();
 		   		$('.success-modal h3').text('Nouvelle station créée !');
 		   		$('.success-modal .btn-validate').text('Ok');
 		   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
 		   		$('.success-modal').show();	
 		   },
 		   error : function(resultat, statut, erreur){
+		   		hideLoader();
 		   		loadError(resultat.responseJSON.message);
 		   		return false;
 		   }
@@ -97,6 +100,7 @@ $('.btn-submit-edit-station').on('click', function() {
 
 $('.form-edit-station').on('submit', function(e) {
 	e.preventDefault();	
+	displayLoader();
 	let id_station = $(this).attr('id');
 	id_station = id_station.replace('form-edit-station_', '');
 	let id_automation =  $('#station-card_'+id_station).find('.automation-id').val();
@@ -137,6 +141,7 @@ $('.form-edit-station').on('submit', function(e) {
 		   dataType : 'json',
 		   success : function(resultat, statut){
 		   		console.dir(resultat);
+		   		hideLoader();
 		   		$('.success-modal h3').text('Informations mises à jour !');
 		   		$('.success-modal .btn-validate').text('Ok');
 		   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
@@ -144,6 +149,7 @@ $('.form-edit-station').on('submit', function(e) {
 
 		   },
 		   error : function(resultat, statut, erreur){
+		   		hideLoader();
 		   		loadError(resultat.responseJSON.message);
 		   		return false;
 		   }
@@ -156,6 +162,7 @@ var id_station_focus;
 
 $('.btn-add-disrupt').on('click', function(e) {
 	e.preventDefault();
+	displayLoader();
 	let station_id = $(this).attr('id');
 	station_id = station_id.replace('btn-add-disrupt_', '');
 	id_station_focus = station_id;
@@ -166,6 +173,7 @@ $('.btn-add-disrupt').on('click', function(e) {
 	   dataType : 'json',
 	   success : function(resultat, statut){
 	   		console.dir(resultat);
+	   		hideLoader();
 	   		let html = `<div class="edit-disrupt" id="edit-disrupt_${station_id}"><form id="form-disrupt" onsubmit="editDisrupt(event, $(this))">`;
 	   		if (resultat.length == 0) {
 	   			html += '<div class="block"><p>Pas de carburant enregistré pour le moment. Appuyez sur le bouton "Mettre à jour ma liste de carburants" pour récupérer la liste enregistrée sur https://gestion.roulez-eco.fr/</p></div>';
@@ -206,7 +214,8 @@ $('.btn-add-disrupt').on('click', function(e) {
 	   		$('.disrupts-modal .modal-text-infos').html(html);
 	   		$('.disrupts-modal').show();
 	   },
-	   error : function(resultat, statut, erreur){
+	   	error : function(resultat, statut, erreur){
+	   		hideLoader();
 	   		loadError(resultat.responseJSON.message);
 	   		return false;
 	   }
@@ -215,6 +224,7 @@ $('.btn-add-disrupt').on('click', function(e) {
 
 function editDisrupt(event, elt) {
 	event.preventDefault();
+	displayLoader();
 	$(elt).hide();
 	$(elt).next('.btn-loading').css('display', 'flex');
 	//let station_id = $(elt).parent().attr('id');
@@ -239,11 +249,13 @@ function editDisrupt(event, elt) {
 	   data: datas,
 	   dataType : 'json',
 	   success : function(resultat, statut){
+	   		hideLoader();
 	   		console.dir(resultat);
 	    	$('.disrupts-modal').hide();
 	    	document.location.reload();
 	   },
 	   error : function(resultat, statut, erreur) {
+	   		hideLoader();
 	   		$('.disrupts-modal').hide();
 	   		loadError(resultat.responseJSON.message);
 	   }

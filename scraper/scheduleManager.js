@@ -4,6 +4,7 @@ const Automation = require(paths.path_app_models+'automation');
 const User = require(paths.path_app_models+'user');
 const Station = require(paths.path_app_models+'station');
 const writeLog = require('./writeLog');
+const writeLogSheets = require(paths.path_app_controllers+'/writeLogsInSheets');
 const moment = require('moment');
 const mailController = require(paths.path_app_controllers+'sendMail');
 const { Cluster } = require('puppeteer-cluster');
@@ -28,7 +29,10 @@ module.exports = {
 		let promises = [];
 		if (automations.length > 0) {
 			for (let i=0; i<automations.length; i++) {
-				promises.push(module.exports.addScheduledJob(automations[i]));
+				console.dir(automations[i]);
+				if (automations[i].active === true) {
+					promises.push(module.exports.addScheduledJob(automations[i]));
+				}
 			}		
 			Promise.all(promises)
 			.then(async function() {
@@ -85,6 +89,8 @@ module.exports = {
             cluster.task(async ({ page, data }) => {
                 console.dir(data);
                 console.log('TASK LAUNCHED FOR AUTOMATION NUM '+data['id']);
+                await writeLog('success', `TASK LAUNCHED FOR AUTOMATION ${data['id']}`);
+                await writeLogSheets.launch(`TASK LAUNCHED FOR AUTOMATION ${data['id']}`, 'scraper');                
                 try {            	
                 	let credentials = {
                 		mosaic_username: data['mosaic_username'],
@@ -117,12 +123,20 @@ module.exports = {
                         }
                     }
                     await writeLog('success', `SCRAPING SUCCEED FOR AUTOMATION ${data['id']}`);
+                    await writeLogSheets.launch(`SCRAPING SUCCEED FOR AUTOMATION ${data['id']}`, 'scraper');
+                    // Si il s'agit d'une task de type secondTry, une fois réussie on la supprime
+                    if (data['id'].length == 4 && data['id'][0] == 5) {
+                    	await module.exports.deleteScheduledJob(data['id']);
+                    }
                    	let stationInfos = await Station.getById(data['id_station']);
 
 					let userInfos = await User.getById(stationInfos['id_user']);
 					if (userInfos.email_alert_enabled) {
                     	await mailController.sendMailJet(userInfos.email_alert, userInfos.first_name, 'daily-confirmation');
 					}
+					data = null;
+					let scheduledTasks = module.exports.getAllScheduledJobs();
+					console.dir(scheduledTasks);					
                 }
                 catch(err) {
                 	console.log('CATCH ERROR');
@@ -144,6 +158,8 @@ module.exports = {
             	console.dir(data);
             	let error_message = `Error of crawling for automation ${data['id']}: ${err.message}`;
                 console.log(error_message);
+                await writeLog('error', error_message);
+				await writeLogSheets.launch(error_message, 'scraper');
 
                 // if ("second_try" in task_updated) {
 					let secondTry_results = await module.exports.treat(err ,data);
@@ -184,7 +200,7 @@ module.exports = {
 				// console.dir(schedule.scheduledJobs);
 				let old_task = schedule.scheduledJobs[`id_${id_automation}`];
 				old_task.cancel();
-				await writeLog('success', `EDIT SCHEDULED JOB FOR AUTOMATION ${id_automation}`);	
+				await writeLog('success', `REMOVED SCHEDULED JOB FOR AUTOMATION ${id_automation}`);	
 				module.exports.addScheduledJob(automationInfos);
 				resolve();
 			}
@@ -196,15 +212,19 @@ module.exports = {
 	},
 
 	deleteScheduledJob: async function(id_automation) {
-		return new Promise(function(resolve, reject) {		
+		return new Promise(async function(resolve, reject) {		
 			try {		
 				console.log(id_automation);
 				let old_task = schedule.scheduledJobs[`id_${id_automation}`];
-				old_task.cancel();		
+				old_task.cancel();	
+            	await writeLog('success', `TASK REMOVED FOR ID  AUTOMATION ${id_automation}`);
+                await writeLogSheets.launch(`TASK REMOVED FOR ID  AUTOMATION ${id_automation}`, 'scraper');					
 				resolve();
 			}
 			catch(err) {
 				console.log(err);
+                await writeLog('error', `FAIL TO TASK REMOVED FOR ID  AUTOMATION ${id_automation}`);
+                await writeLogSheets.launch(`FAIL TO TASK REMOVED FOR ID  AUTOMATION ${id_automation}`, 'scraper');				
 				reject(err);
 			}
 		})
@@ -212,19 +232,25 @@ module.exports = {
 
 	secondTry: async function(automation) {
 		console.log('SECOND TRY FOR AUTOMATION NUM '+automation['id']);
+		await writeLog('error', `SECOND TRY FOR AUTOMATION ${automation['id']}`);	
+		await writeLogSheets.launch(`SECOND TRY FOR AUTOMATION ${automation['id']}`, 'scraper');
 		let scraping_time = automation['scraping_time'];
 		let updated_date = moment().add(1, 'm').toObject();
 		let updated_id = parseInt(automation['id'], 10) + 5000;		
-		automation['second_try'] = true;
-		automation['initial_id'] = automation['id'];
-		automation['id'] = updated_id;
+		let automation_newtest = { ...automation };
+		automation_newtest['second_try'] = true;
+		automation_newtest['initial_id'] = automation['id'];
+		automation_newtest['id'] = updated_id;
 		let updated_scraping_time = `${updated_date['hours']}:${updated_date['minutes']}:${updated_date['seconds']}`;
 		console.log('UPDATED SCRAPING TIME FOR AUTOMATION NUM '+automation['id']+' = '+updated_scraping_time);
-		automation['scraping_time'] = updated_scraping_time;
-		let task = schedule.scheduleJob(`id_${updated_id}`, `${updated_date['minutes']} * * * *`, async function() {
+		await writeLog('error', 'UPDATED SCRAPING TIME FOR AUTOMATION NUM '+automation_newtest['id']+' = '+updated_scraping_time);	
+		automation_newtest['scraping_time'] = updated_scraping_time;
+		console.dir(automation);
+		console.dir(automation_newtest)
+		let task = schedule.scheduleJob(`id_${updated_id}`, `${updated_date['minutes']} ${updated_date['hours']} * * *`, async function() {
 			let scheduledTasks = module.exports.getAllScheduledJobs();
 			// await writeLog(0, 'AUTOMATION '+automation['id']+' SCHEDULED !!');
-			await cluster.queue(automation);
+			await cluster.queue(automation_newtest);
 			// if ("credentials_error_confirmation" in task_updated_secondtime) {
 			// 	await module.exports.credentialsExpired(task_updated_secondtime);
 			// }			
@@ -238,7 +264,7 @@ module.exports = {
 		let errMessage = `Credentials expired / wrong for automation ${automation['initial_id']} on website ${automation['credentials_error_website']}`;
 		console.log(errMessage);
 		await module.exports.deleteScheduledJob(automation['id']);
-		scheduledTasks = await module.exports.getAllScheduledJobs();
+		// let scheduledTasks = await module.exports.getAllScheduledJobs();
 		await Automation.updateLastConnexionTime(false, automation['credentials_error_website'], automation['initial_id']);	
 		await writeLog('error', errMessage);
 		await writeLogSheets.launch(errMessage, 'scraper');
@@ -247,6 +273,9 @@ module.exports = {
 		let userInfos = await User.getById(stationInfos['id_user']);
 		console.dir(userInfos);
 		await mailController.sendMailJet(userInfos.email_alert, userInfos.first_name, 'daily-error', errMessage);
+		automation = null;
+		let scheduledTasks = module.exports.getAllScheduledJobs();
+		console.dir(scheduledTasks);
 	},
 
 	scrapingFailed: async function(automation) {
@@ -263,6 +292,9 @@ module.exports = {
 		let userInfos = await User.getById(stationInfos['id_user']);
 		console.dir(userInfos);
 		await mailController.sendMailJet(userInfos.email_alert, userInfos.first_name, 'daily-error', errMessage);
+		automation = null;
+		let scheduledTasks = module.exports.getAllScheduledJobs();
+		console.dir(scheduledTasks);		
 	},	
 
 	// Fonction qui contrôle la cause de l'échec du scraping, et fait remonter l'info
@@ -295,7 +327,8 @@ module.exports = {
                 task["second_try"] = true;
                 console.log('secondTry');
                 console.log('CONDITON 3');
-            }        
+            }      
+            console.dir(task);  
             resolve(task);
         })
     }	
