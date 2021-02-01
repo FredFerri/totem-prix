@@ -493,7 +493,9 @@ app.put('/station-manage/:station_id/:automation_id', [
 				// 	}		
 				// }
 				let automationInfos = await Automation.update(datas);
-				await axios.put(URL_ARGOS_SCRAPER+'edit-automation/', {automationInfos});
+				if (automationInfos.active === true) {
+					await axios.put(URL_ARGOS_SCRAPER+'edit-automation/', {automationInfos});
+				}
 				let successMessage = `STATION ${id_station} UPDATED FOR USER ${id_user}`;
 				await writeLog('success', successMessage);
 				await writeLogSheets.launch(successMessage, 'app');

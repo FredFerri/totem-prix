@@ -100,9 +100,10 @@ app.post('/detect-oils/', async function(req, res) {
 
 app.post('/add-automation/', async function(req, res) {
 	try {
-		let automationInfos = req.body.automationInfos;
+		let automationInfos = req.body.automation;
 		scheduleManager.addScheduledJob(automationInfos);
 		let scheduledJobs = await scheduleManager.getAllScheduledJobs();
+		console.dir(scheduledJobs);
 		res.status(200).send(true);	
 	}
 	catch(err) {

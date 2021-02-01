@@ -198,10 +198,12 @@ module.exports = {
 				console.dir(automationInfos);
 				console.log(id_automation);
 				// console.dir(schedule.scheduledJobs);
-				let old_task = schedule.scheduledJobs[`id_${id_automation}`];
-				old_task.cancel();
-				await writeLog('success', `REMOVED SCHEDULED JOB FOR AUTOMATION ${id_automation}`);	
-				module.exports.addScheduledJob(automationInfos);
+				if (automationInfos.active === true) {				
+					let old_task = schedule.scheduledJobs[`id_${id_automation}`];
+					old_task.cancel();
+					await writeLog('success', `REMOVED SCHEDULED JOB FOR AUTOMATION ${id_automation}`);	
+					module.exports.addScheduledJob(automationInfos);
+				}
 				resolve();
 			}
 			catch(err) {

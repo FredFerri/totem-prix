@@ -239,3 +239,18 @@ Fri Jan 29 2021 17:30:10 GMT+0100 (Central European Standard Time) - UPDATED SCR
 Fri Jan 29 2021 17:42:07 GMT+0100 (Central European Standard Time) - Error of crawling for automation 108: CREDENTIALS ERROR 
 Fri Jan 29 2021 17:42:08 GMT+0100 (Central European Standard Time) - SECOND TRY FOR AUTOMATION 108 
 Fri Jan 29 2021 17:42:10 GMT+0100 (Central European Standard Time) - UPDATED SCRAPING TIME FOR AUTOMATION NUM 5108 = 17:43:10 
+Sat Jan 30 2021 00:01:07 GMT+0100 (Central European Standard Time) - Error of crawling for automation 117: CREDENTIALS ERROR 
+Sat Jan 30 2021 00:01:09 GMT+0100 (Central European Standard Time) - SECOND TRY FOR AUTOMATION 117 
+Sat Jan 30 2021 00:01:10 GMT+0100 (Central European Standard Time) - UPDATED SCRAPING TIME FOR AUTOMATION NUM 5117 = 0:2:10 
+Sat Jan 30 2021 00:02:07 GMT+0100 (Central European Standard Time) - Error of crawling for automation 5117: CREDENTIALS ERROR 
+Sat Jan 30 2021 00:02:09 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 117 on website mosaic 
+Sat Jan 30 2021 00:10:07 GMT+0100 (Central European Standard Time) - Error of crawling for automation 108: CREDENTIALS ERROR 
+Sat Jan 30 2021 00:10:08 GMT+0100 (Central European Standard Time) - SECOND TRY FOR AUTOMATION 108 
+Sat Jan 30 2021 00:10:09 GMT+0100 (Central European Standard Time) - UPDATED SCRAPING TIME FOR AUTOMATION NUM 5108 = 0:11:9 
+Sat Jan 30 2021 00:11:07 GMT+0100 (Central European Standard Time) - Error of crawling for automation 5108: CREDENTIALS ERROR 
+Sat Jan 30 2021 00:11:08 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation 108 on website mosaic 
+Sat Jan 30 2021 08:09:47 GMT+0100 (Central European Standard Time) - TEST CREDENTIALS ERROR : CREDENTIALS ERROR 
+			FOR AUTOMATION 117, WEBSITE = MOSAIC 
+Sun Jan 31 2021 00:10:07 GMT+0100 (Central European Standard Time) - Error of crawling for automation 108: CREDENTIALS ERROR 
+Sun Jan 31 2021 00:10:10 GMT+0100 (Central European Standard Time) - Credentials expired / wrong for automation undefined on website mosaic 
+Sun Jan 31 2021 22:31:33 GMT+0100 (Central European Standard Time) - FAIL TO TASK REMOVED FOR ID  AUTOMATION 108 
