@@ -21,7 +21,8 @@ const validator = require('validator');
 const writeLog = require(paths.path_app_controllers+'writeLog');
 const writeLogSheets = require(paths.path_app_controllers+'writeLogsInSheets');
 const STRIPE_API = require(paths.path_app_controllers+'stripe-functions.js');
-const URL_ARGOS_SCRAPER = 'http://localhost:8181/';
+const URL_ARGOS_SCRAPER = process.env.URL_ARGOS_SCRAPER_PROD;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 
 // app.use(express.static(__dirname + '/views/assets'));
@@ -76,6 +77,19 @@ app.get('/', async function(req, res) {
 			res.status(500).send({message: e});
 		}	
 	}
+})
+
+app.get('/admin', async function(req, res) {
+	try {
+		let userInfos = await User.getAll();
+		console.dir(userInfos);
+		console.dir(ADMIN_PASSWORD);
+    	res.status(200).render('admin.ejs', {userInfos: userInfos, password: ADMIN_PASSWORD});
+	}
+	catch(e) {
+		console.log(e);
+		res.status(500).send({message: e});
+	}	
 })
 
 app.get('/register', async function(req, res) {

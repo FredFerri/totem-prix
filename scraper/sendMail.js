@@ -1,4 +1,6 @@
 const nodemailer = require('nodemailer');
+const adminMailAddress = process.env.ADMIN_MAIL_ADDRESS;
+const adminMailPassword = process.env.ADMIN_MAIL_PASSWORD;
 
 
 module.exports = async function sendMail(recipient, type, message, datas) {
@@ -6,8 +8,8 @@ module.exports = async function sendMail(recipient, type, message, datas) {
        service: 'gmail',
        port: 465,
        auth: {
-              user: 'ferri.frederic33@gmail.com',
-              pass: 'aby55inians',
+              user: adminMailAddress,
+              pass: adminMailPassword,
           },
             secure: true,    
       });
@@ -30,7 +32,7 @@ module.exports = async function sendMail(recipient, type, message, datas) {
   }
 
   var mailOptions = {
-    from: 'ferri.frederic33@gmail.com', // sender address
+    from: adminMailAddress, // sender address
     to: to, // list of receivers
     subject: 'Argos - information scraping', // Subject line
     html: html_message
