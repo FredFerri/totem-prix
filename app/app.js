@@ -21,7 +21,8 @@ const validator = require('validator');
 const writeLog = require(paths.path_app_controllers+'writeLog');
 const writeLogSheets = require(paths.path_app_controllers+'writeLogsInSheets');
 const STRIPE_API = require(paths.path_app_controllers+'stripe-functions.js');
-const URL_ARGOS_SCRAPER = process.env.URL_ARGOS_SCRAPER;
+const URL_ARGOS_SCRAPER = process.env.URL_ARGOS_SCRAPER_PROD;
+const URL_ARGOS_APP_PORT = process.env.URL_ARGOS_APP_PORT;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 
@@ -1059,6 +1060,6 @@ app.post('/update-oil-list/', async function(req, res) {
 	}
 })
 
-server.listen(8080, function() {
+server.listen(URL_ARGOS_APP_PORT, function() {
     console.log('ARGOS APP RUNNING...');
 });
