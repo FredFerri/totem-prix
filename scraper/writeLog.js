@@ -12,7 +12,7 @@ module.exports = async function(logType, message) {
 
 	let date = new Date();
 	let structuredMessage = `${date} - ${message} \r\n`;
-	fs.appendFile(paths.path_scraper+'/logs/'+logFile, structuredMessage, function (err) {
+	fs.appendFile(paths.path_scraper+'logs/'+logFile, structuredMessage, function (err) {
 	  if (err) throw err;
 	  console.log('Written');
 	})
