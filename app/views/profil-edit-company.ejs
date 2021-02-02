@@ -1,0 +1,70 @@
+<dl class="hidden edit-profil-block" id="edit-profil-company">
+  <div class="sm:grid sm:grid-cols-3 border-t border-gray-200 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Nom de la société
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="company_name" name="company_name" placeholder="Nom de la société" value="<%= userInfos.company_name %>">
+    </dd>
+  </div> 
+  <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Numéro de TVA
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="tva" name="tva" placeholder="Numéro de TVA" value="<%= userInfos.tva_num %>">
+    </dd>
+  </div> 
+  <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Numéro de SIRET
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="siret" name="siret" placeholder="Numéro de SIRET" value="<%= userInfos.siret %>">
+    </dd>
+  </div>   
+  <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Adresse
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="company_adresse" name="company_adresse" placeholder="Adresse" value="<%= userInfos.company_adresse %>">
+    </dd>
+  </div>  
+  <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Code postal
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="company_cp" name="company_cp" placeholder="Code postal" value="<%= userInfos.company_cp %>">
+    </dd>
+  </div>   
+  <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Ville
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <input class="appearance-none rounded-none relative block w-70 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="company_city" name="company_city" placeholder="Ville" value="<%= userInfos.company_city %>">
+    </dd>
+  </div>     
+
+  <div class="flex mt-5 sm:mt-0 sm:px-6 sm:py-5">
+  <button type="submit" name="profil-edit-company_submit" id="profil-edit-company_submit" class="group relative w-20 flex justify-center py-1 px-1 border border-transparent text-sm leading-5 font-small rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out mr-3">
+    Valider
+  </button>
+  <button name="edit-profil-company_cancel" id="edit-profil-company_cancel" class="btn-cancel group relative w-20 flex justify-center py-1 px-1 border border-transparent text-sm leading-5 font-small rounded-md text-black bg-gray-300 hover:bg-black-500 focus:outline-none focus:border-gray-300 focus:shadow-outline-gray-300 active:bg-gray-300 transition duration-150 ease-in-out mr-3">
+    Annuler
+  </button> 
+  </div>  
+</dl>
+
+
+<form class="form-user-edit" id="form-user-edit-company" method="PUT">
+	<input type="text" id="company_name" name="company_name" placeholder="Nom de la société" value="<%= userInfos.company_name %>">
+	<input type="text" id="tva" name="tva" placeholder="Numéro de TVA" value="<%= userInfos.tva_num %>">
+	<input type="text" id="siret" name="siret" placeholder="SIRET" value="<%= userInfos.siret %>">
+	<input type="text" id="company_adresse" name="company_adresse" placeholder="Adresse de facturation" value="<%= userInfos.company_adresse %>">
+	<input type="text" id="company_cp" name="company_cp" placeholder="Code postal" value="<%= userInfos.company_cp %>">
+	<input type="text" id="company_city" name="company_city" placeholder="Ville" value="<%= userInfos.company_city %>">
+	<input type="submit" id="submit_company" name="submit_company" value="Valider">
+</form>

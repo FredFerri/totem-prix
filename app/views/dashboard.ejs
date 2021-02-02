@@ -1,0 +1,260 @@
+<%- include('head'); -%>
+
+<body>
+	<div class="flex overflow-hidden bg-gray-100 min-h-screen">
+
+	<%- include('nav'); -%>
+
+<div class="main mt-32 sm:mt-5 md:mt-5 lg:mt-5 w-3/4 mx-auto px-5 w-5/6">
+	<%- include('alert-error'); -%>
+	<h1 class="text-2xl font-bold leading-7 text-cool-gray-900 sm:leading-9 sm:truncate">Tableau de bord</h1>
+	<div class="station-cards-block">
+		<%- include('form-add-station'); %>
+
+		<button class="btn-add-station bg-gray-800 inline-flex items-center px-2 py-1 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150 mt-6">Ajouter une station</button>
+		<% if (userInfos.oneStationIsActive === false) { %>
+			<div class="bg-white shadow sm:rounded-lg my-3">
+			  <div class="px-4 py-5 sm:p-6">
+			    <h3 class="text-lg leading-6 font-medium text-gray-900">
+			      Vos premiers pas
+			    </h3>
+			    <div class="mt-2 max-w-xl text-sm text-gray-500">
+			      <p>
+			        Pour configurer l'automatisation de vos tâches sur Roulez-eco : <br><br>
+			        1 - Ajoutez une station en cliquant sur le bouton <strong>"Ajouter une station"</strong> juste au dessus.<br><br>
+			        2 - Cliquez sur le bouton <strong>"Synchronisation"</strong> sur la vignette de votre station afin de vous assurer que nos robots d'automatisation arrivent bien à se connecter à vos comptes Mosaïc et Roulez-eco. <br><br>
+			        3 - Cliquez sur <strong>"Activer cette station"</strong>, en haut de la vignette de la station, afin que la programmation du système d'automatisation soit lancé.
+			      </p>
+			    </div>
+			  </div>
+			</div>		
+		<% } %>
+			<ul class="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2 auto-rows-max auto-cols-auto my-10">
+				<% userInfos.stations.forEach(function(station) { %>	
+				  <li id="station-card_<%= station.id %>" class="station-card col-span-1 bg-white rounded-lg shadow" data-subscription="<%= station.subscription_id %>">
+				    <div class="w-full flex items-center justify-between p-6 space-x-6">
+				      <div class="flex-1 truncate">
+				        <div class="flex items-center space-x-3">
+				          <h3 class="text-gray-900 text-sm leading-5 font-medium truncate"><%= station.name %></h3>
+				          <% if (station.active === true) {
+				          	%>
+				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-teal-100 rounded-full"> Active </span>
+				          	<% } 
+				          else {
+				          	%> 		          	
+				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-red-200 rounded-full"> Inactive </span> 
+				          	<button id="btn-activate-station_<%= station.id %>" type="button" class="btn-activate-station border border-red-500 bg-red-500 text-white rounded-md px-2 py-1 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
+        						Activer cette station
+      						</button>
+				          	<%} %>
+				        </div>
+				        <p class="mt-1 text-gray-500 text-sm leading-5 truncate"><%= station.street %> - <%= station.cp %> - <%= station.city %></p>
+				      </div>
+				      <div>
+				      </div>
+				      <img class="hidden w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 sm:inline-block" src="/images/total-logo.jpg" alt="total-logo">
+				      <img class="hidden w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 sm:inline-block" src="/images/total-access-logo.png" alt="total-access-logo">
+				    </div>
+					  <div id="automation_<%= station.automation.id %>" class="automation-block w-full py-3 px-6">
+					  	<div class="w-full flex my-2 items-baseline">
+					  		<% if (station.automation.mosaic_state == 'Erreur') { %>
+					  			<span class="h-4 w-4 bg-red-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-red-500 rounded-full"></span></span>Identifiant ou mot de passe Mosaïc incorrect
+					  		<% }
+					  		else if (station.automation.mosaic_state == 'Actif') { %>
+					  			<span class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-green-500 rounded-full"></span></span><%= station.automation.mosaic_state %>
+					  		<% } 
+					  		else { %>
+					  			<span class="h-4 w-4 bg-yellow-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-yellow-500 rounded-full"></span></span><span><%= station.automation.mosaic_state %></span>	
+					  		<% } %>				  			
+					  		 - Dernière connexion à Mosaïc: <%= station.automation.mosaic_last_connexion %>
+					  	</div>
+					  	<div class="w-full flex my-2 items-baseline">
+					  		<% if (station.automation.roulezeco_state == 'Erreur') { %>
+					  			<span class="h-4 w-4 bg-red-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-red-500 rounded-full"></span></span>Identifiant ou mot de passe Roulez-eco incorrect
+					  		<% }
+					  		else if (station.automation.roulezeco_state == 'Actif') { %>
+					  			<span class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-green-500 rounded-full"></span></span><%= station.automation.roulezeco_state %>
+					  		<% } 
+					  		else { %>
+					  			<span class="h-4 w-4 bg-yellow-100 rounded-full flex items-center justify-center mr-3"><span class="h-2 w-2 bg-yellow-500 rounded-full"></span></span><span><%= station.automation.roulezeco_state %></span>	
+					  		<% } %>
+					  		 - Dernière connexion à Roulez Eco: <%= station.automation.roulezeco_last_connexion %>
+					  	</div>
+					  </div>	
+					  <div class="w-full px-6 mb-4">
+					  	<input type="hidden" class="automation-id" value="<%= station.automation.id %>">
+					  	<button id="test-credentials_<%= station.automation.id %>" type="button" class="test-credentials bg-gray-800 inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">	  
+					  		Synchronisation
+					  	</button>
+
+					  	<button type="button" class="btn-loading hidden bg-gray-800 flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150 cursor-not-allowed" disabled>
+							<svg class="w-6 h-6 animate-spin bg-white-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+						  Test en cours...
+						</button>
+					  </div>	    
+				    <div class="btns-row border-t border-gray-200">
+				      <div class="-mt-px flex">
+				        <div class="w-0 flex-1 flex border-r border-gray-200">
+				          <a href="#" id="btn-edit-station_<%= station.id %>" class="btn-edit-station relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: pencil -->
+							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+							</svg>
+				            <span class="ml-3">Modifier identifiants et station</span>
+				          </a>
+				        </div>
+				        <div class="-ml-px w-0 flex-1 flex">
+				          <a href="#" id="btn-add-disrupt_<%= station.id %>" class="btn-add-disrupt relative w-0 flex-1 inline-flex items-center justify-center py-4 px-2 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: phone -->
+							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
+							</svg>
+				            <span class="ml-3">Gérer les ruptures carburants (<%= station.disruptTotal %> rupture en cours)</span>
+				          </a>
+				        </div>
+						<div class="-ml-px w-0 flex-1 flex">
+				          <a href="#" id="btn-remove-station_<%= station.id %>" class="btn-remove-station relative w-0 flex-1 inline-flex items-center justify-center py-4 px-2 text-sm leading-5 text-gray-700 font-medium border-l-2 border-gray-100  hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: phone -->
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+				            <span class="ml-3">Supprimer station</span>
+				          </a>
+				        </div>				        
+				      </div>
+				    </div>
+				  </li>
+
+
+				<li id="edit-station-card_<%= station.id %>" class="hidden edit-station-card col-span-1 bg-white rounded-lg shadow">
+				    <div class="w-full flex items-center justify-between p-6 space-x-6">
+				      <div class="flex-1 truncate">
+				        <div class="flex items-center space-x-3">
+				          <h3 class="text-gray-900 text-sm leading-5 font-medium truncate"><%= station.name %></h3>
+				          <% if (userInfos.activate == 'true') {
+				          	%>
+				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-teal-100 rounded-full"> Active </span>
+				          	<% } 
+				          else {
+				          	%> 		          	
+				          	<span class="flex-shrink-0 inline-block px-2 py-0.5 text-teal-800 text-xs leading-4 font-medium bg-red-200 rounded-full"> Inactive </span> 
+				          	<%} %>
+				        </div>
+				        <p class="mt-1 text-gray-500 text-sm leading-5 truncate"><%= station.street %> - <%= station.cp %> - <%= station.city %></p>
+				      </div>
+				      <img class="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0" src="/images/total-logo.jpg" alt="">
+				    </div>
+					<form class="form-edit-station" id="form-edit-station_<%= station.id %>">
+						<div class="grid grid-cols-2 gap-3 sm:grid-cols-1 lg:grid-cols-2 px-6">
+							<label for="edit-station-name_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Nom de la station</label>
+			                <input type="text" id="edit-station-name_<%=station.id %>" class="edit-station-name mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.name %>">	
+	  
+							<label for="edit-station-street_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Adresse</label>
+			                <input type="text" id="edit-station-street_<%=station.id %>" class="edit-station-street mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.street %>">
+							<label for="edit-station-cp_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Code Postal</label>
+			                <input type="text" id="edit-station-cp_<%=station.id %>" class="edit-station-cp mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.cp %>">	  
+							<label for="edit-station-city_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Ville</label>
+			                <input type="text" id="edit-station-city_<%=station.id %>" class="edit-station-city mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.city %>">	
+			            </div>
+			           
+						<div class="px-6">                
+			            	<p class="font-bold text-sm col-span-3 my-5">
+			            		Identifiants Mosaïc
+			            	</p>
+			                <div class="grid grid-col-2">	            
+								<label for="edit-mosaic-username_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Nom d'utilisateur Mosaïc</label>
+				                <input type="text" id="edit-mosaic-username_<%=station.id %>" class="edit-mosaic-username mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.automation.mosaic_username %>">
+								<label for="edit-mosaic-password_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Mot de passe Mosaïc</label>
+				                <input type="password" id="edit-mosaic-password_<%=station.id %>" class="edit-mosaic-password mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.automation.mosaic_password %>">	
+				            </div>
+				        </div>    
+
+				        <div class="px-6"> 
+			            	<p class="font-bold text-sm col-span-3 my-5">
+			            		Identifiants Roulez-eco
+			            	</p>
+			                <div class="grid grid-col-2">
+								<label for="edit-roulezeco-username_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Nom d'utilisateur Roulez-eco</label>
+				                <input type="text" id="edit-roulezeco-username_<%=station.id %>" class="edit-roulezeco-username mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.automation.roulezeco_username %>">
+								<label for="edit-roulezeco-password_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Mot de passe Roulez-eco</label>
+				                <input type="password" id="edit-roulezeco-password_<%=station.id %>" class="edit-roulezeco-password mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="<%= station.automation.roulezeco_password %>">
+				            </div>
+				        </div>
+
+						<div class="px-6 mb-6"> 
+			            	<p class="font-bold text-sm col-span-3 my-5">
+			            		Horaire quotidien de l'automatisation
+			            	</p>
+			                <div class="grid grid-col-2">
+								<label for="edit-roulezeco-password_<%=station.id %>" class="block text-sm font-medium leading-5 text-gray-700">Heure</label>
+				                <input type="time" id="edit-scraping-time_<%=station.id %>" class="edit-scraping-time mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" min="21:00" max="23:59" required value="<%= station.automation.scraping_time %>">
+			                </div>
+			            </div>    
+					</form>		    
+				    <div class="border-t border-gray-200">
+				      <div class="-mt-px flex">
+				        <div class="w-0 flex-1 flex border-r border-gray-200">
+				          <a href="#" id="btn-submit-edit-station_<%= station.id %>" class="btn-submit-edit-station relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: check -->
+							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+							</svg>
+				            <span class="ml-3 text-green-500">Valider</span>
+				          </a>
+				        </div>
+				        <div class="cancel-edit-station -ml-px w-0 flex-1 flex">
+				          <a href="#" id="btn-cancel_<%= station.id %>" class="btn-cancel relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+				            <!-- Heroicon name: x -->
+							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+				            <span class="ml-3 text-red-500">Annuler</span>
+				          </a>
+				        </div>
+				      </div>
+				    </div>
+				  </li>
+
+				  <% }) %>
+			</ul>		
+	</div>
+
+
+
+	<div class="email-alert-block grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 auto-rows-max my-10">
+		<h2 class="text-2xl font-bold leading-7 text-cool-gray-900 sm:leading-9 sm:truncate">Mes alertes email</h2>
+		<div class="email-alert-block_top">
+			<h4 class="text-md leading-5 text-cool-black-300 font-medium">Vous recevrez nos emails à cette adresse :</h4>
+			<div class="email-alert-input mt-3">
+				<span class="email-alert-input_email text-sm leading-5 text-blue-500 font-medium"><%= userInfos.email_alert %></span>
+				<div class="email-alert-block-edit">
+					<form>
+						<input type="email" class="email-alert-input_email form-input" value="<%= userInfos.email_alert %>">
+						<input type="submit" class="bg-gray-800 inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150" value="Valider">
+						<button class="cancel-edit-station bg-gray-200 inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-black hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">Annuler</button>
+					</form>
+				</div>
+				<button class="btn-edit bg-gray-800 inline-flex items-center px-2 py-1 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-500 focus:outline-none focus:border-gray-800 focus:shadow-outline-indigo active:bg-gray-800 transition ease-in-out duration-150">Modifier</button>
+			</div>
+		</div>
+		<div class="email-alrt-block_bottom mt-3">
+			<h4 class="text-md leading-5 text-cool-black-300 font-medium">Configurez ici vos alertes email:</h4>
+			<label class="text-sm leading-5 text-cool-gray-500 font-medium" for="alert-email">Recevoir un mail quotidien de confirmation après mise à jour de vos tarifs sur Roulez-eco</label>
+			<% if (userInfos.email_alert_enabled === true) { %>
+				<input checked id="alert-email" type="checkbox">
+			<% }
+			else { %>
+				<input id="alert-email" type="checkbox">
+			<% } %>
+		</div>
+	</div>
+</div>
+<%- include('modal-success'); %>
+<%- include('modal-disrupt'); %>
+<%- include('modal-confirm'); %>
+<%- include('modal-error-activation'); %>
+<input type="hidden" class="user-id" value="<%= userInfos.id %>">
+<input type="hidden" class="user-payment-method" value="<%= userInfos.payment_method %>">
+</body>
+
+</html>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js/dashboard.js"></script>

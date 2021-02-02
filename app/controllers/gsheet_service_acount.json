@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "directed-optics-299317",
+  "private_key_id": "e678456690d952e0e0333c93a7f7695b2a382786",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDgQf+JDyemrvTv\nWf2MovkoZjU8RJDVazu4vNtt/T6t0Aqq2Ms3ETjFeChNalN1apRawJkLtEeDQLg9\n0vYVozO0Q0AZanPsP0Z91sshLI/lxOIdmmwtwf4hoot2ksULKOMLQIo73NHaNuk5\nSZxnqeEF3aWEjytzPOeZ65Yj8gLT8lGjh8WofBshrbjf0wfrg5skGN+xsY7ydxq/\nEqSqbAb69kZWXextyEIGQU/xRcJagAprmVovCcz07oUyOr1p85+X54zlrSSA51JC\nBjmsHW0cRp3x6onvnB04CJJsdMJwbQ/yKSe52HMpvPuDe71ztNBIkR/F3MxklaWc\nbBucqs55AgMBAAECggEAAnV5dmNXZrU5OSJLjKjLzRTZJWpGC++t+wpSaJwT0sbl\ncGFJ/HZV9kT+l3dgkg4YsX8Lnox75+qZf+S0hIu3zn9EmxK8UdKRdLdFHmhql9Uc\nZUEzHvRR05oV5+ICQutQQ/28QPLx98Ui3QPbhmp0gxfepPux469UWxnGxBRMUiPA\niXNdENact6xxlxKY39rI/6rGBvJMHcqLv9VhQ6CNO2zGDVtBHawYEzwyBr8vghX8\noBH7CqmfMwE9btrEIJMQKe4TJjbDRBYh1OxjuWiTUNeVMwhWpG+w3F6XEv3LxzQd\nKF+IyH3e7ix+SffcdOfu1OQoZ9x/NUGWEBZmQt82pQKBgQDv93dh4rILMvuHWSmI\nymq3wyj1ICuSKpU1EdYE9sNhVBwdpw/5DW56HAeUdE9ml0ZmiISU+4SH4XyJkX4W\nptq3bAC9J93FNzU+8o3L+OGwa9Q/gKHa5zvUy28pqiWC4G3q8LwBm5PIkjEyJIsH\nw09tp2y4yBzUviMC0knvUQ1TvQKBgQDvPdaNNF+NJNG/OKJzH2/tKb06njun5pxx\nQOOGYBfZaAe8/VWPiC04WFTGKq4+klSrjlBQeel8jCYXvQw4y4Uu80LJWD+4DKnh\niJIdjhNuC5hxo6asUoHX4pE8Qd2vP8I2+LBlX8tUVRJvZm10ubpMKKwAJR8Ikj6C\nP73DOMWzbQKBgQC28+dzG9E+tJoMsS/3eMwwWnzplqNhh1HG6lhP5ItFs0jUWsDU\n0ya9to0Y5Cx9PSyRk9fxdmmu5315rRGC16e9XHybur9cUyEnYuo07wWy6iMiX0IH\nkXCOZqPUEkMTK2TiULQmTaU4sC0N28qcGo5+Pb2oi/lfQa+TwRxZd2Q/yQKBgQC1\nVX+r44iRKNk6QSkQbUGe10YwigLZjngBd5d9IJSzGqDS5InXkvYDgSAwW+VaU/uN\nVP8XIHCTEH9G+umqmshF/+gdSKBzVlXlNmjZsfiULoHLkKkicB8ujPJcY+gtjvwc\nQn8hN2ycbSbd/Rr1oFjOpP1J1tkg3Ag5HSsuL3faOQKBgHqHp62S4iuDrAIC1uRt\n+OkaMZAE1Qg3ahRY9Qb8SvIjfJ85TQR4w2denhPKUESN68xI0625gU9DStr+NxMU\nt8fUIo7UCNMuGOirATN0nxX3UDmxF0J7p+j6Epj4f4u1I1aoTo4YPsoufVjPbt7T\n0dEEsjmbo9VdmUsrAvNpw4OQ\n-----END PRIVATE KEY-----\n",
+  "client_email": "totem-prix@directed-optics-299317.iam.gserviceaccount.com",
+  "client_id": "106784530106034062125",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/totem-prix%40directed-optics-299317.iam.gserviceaccount.com"
+}

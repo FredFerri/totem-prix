@@ -1,0 +1,153 @@
+<%- include('head'); -%>
+
+<body>
+	<div class="main bg-grey min-h-screen">
+		<h1 class="pt-6 mb-6 text-center text-3xl leading-9 font-extrabold text-gray-900">FINALISEZ VOTRE INSCRIPTION !</h1>
+
+		<%-include('alert-error'); -%>
+
+		<div class="w-3/4 m-auto py-10"
+			<div class="md:grid md:grid-cols-2 md:gap-6">
+				<div class="">
+			      <div class="px-4 sm:px-0">
+			        <h3 class="font-bold text-lg font-medium leading-6 text-gray-900 mb-5">Informations personnelles</h3>
+			      </div>
+			    </div>		
+				<div class="mt-5 md:mt-0 md:col-span-2">
+					<form id="form-confirm-user">
+						<input type="hidden" name="id_user" id="id_user" value="<%= user_id %>">
+						<input type="hidden" name="token" id="token" value="<%= activation_token %>">
+					        <div class="shadow overflow-hidden sm:rounded-md">
+					          <div class="px-4 py-5 bg-white sm:p-6">
+					            <div class="grid grid-cols-6 gap-6">
+
+					              <div class="col-span-6 sm:col-span-6">
+					                <input type="radio" name="civil" id="civil_mr" class="civil form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" value="Monsieur">
+					                <label class="" for="civil_mme">Monsieur</label>
+					                <input type="radio" name="civil" id="civil_mr" class="civil form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" value="Madame">
+					                <label class="" for="civil_mme">Madame</label>
+					              </div>
+
+					              <div class="col-span-6 sm:col-span-3">
+					                <label for="first_name" class="block text-sm font-medium leading-5 text-gray-700">Votre prénom</label>
+					                <input id="first_name" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>
+
+					              <div class="col-span-6 sm:col-span-3">
+					                <label for="last_name" class="block text-sm font-medium leading-5 text-gray-700">Votre nom</label>
+					                <input id="last_name" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>	
+
+
+								   <div class="col-span-6 sm:col-span-3">
+					                <label for="tel" class="block text-sm font-medium leading-5 text-gray-700">Votre numéro de téléphone</label>
+					                <input type="tel" id="tel" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>
+
+								   <div class="col-span-6 sm:col-span-3">
+					                <label for="password" class="block text-sm font-medium leading-5 text-gray-700">Votre mot de passe (au moins 6 caractères)</label>
+					                <input type="password" id="password" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>
+
+								   <div class="col-span-6 sm:col-span-3">
+					                <label for="password_confirm" class="block text-sm font-medium leading-5 text-gray-700">Confirmez votre mot de passe</label>
+					                <input type="password" id="password_confirm" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+					              </div>	
+
+					            </div>
+					        </div>
+					    </div>
+					</form>
+				</div>
+
+
+			<div class="hidden sm:block">
+			  <div class="py-5">
+			  </div>
+			</div>
+
+
+			<div class="mt-10 sm:mt-0">
+			  <div class="md:grid md:grid-cols-2 md:gap-6">
+			    <div class="">
+			      <div class="px-4 sm:px-0">
+			        <h3 class="font-bold text-lg font-medium leading-6 text-gray-900">Informations entreprise</h3>
+			      </div>
+			    </div>
+			    <div class="mt-5 md:mt-0 md:col-span-2">
+			      <form action="#" method="POST">
+			        <div class="shadow overflow-hidden sm:rounded-md">
+			          <div class="px-4 py-5 bg-white sm:p-6">
+			            <div class="grid grid-cols-6 gap-6">
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="company_name" class="block text-sm font-medium leading-5 text-gray-700">Nom de l'entreprise</label>
+			                <input type="text" id="company_name" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="tva" class="block text-sm font-medium leading-5 text-gray-700">Numéro de TVA</label>
+			                <input type="text" id="tva" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="siret" class="block text-sm font-medium leading-5 text-gray-700">Numéro de SIRET</label>
+			                <input type="text" id="siret" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="company_adresse" class="block text-sm font-medium leading-5 text-gray-700">Adresse</label>
+			                <input type="text" id="company_adresse" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="company_cp" class="block text-sm font-medium leading-5 text-gray-700">Code postal</label>
+			                <input type="text" id="company_cp" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>   
+
+			              <div class="col-span-6 sm:col-span-3">
+			                <label for="company_city" class="block text-sm font-medium leading-5 text-gray-700">Ville</label>
+			                <input type="text" id="company_city" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+			              </div>                          
+
+			            </div>
+			           </div>
+			        </div>
+			      </form>
+			    </div>
+			   </div>
+			</div>
+
+		<div class="hidden sm:block">
+		  <div class="py-5">
+		  </div>
+		</div>
+
+		<div class="relative flex items-start my-4">
+              <div class="flex items-center h-5">
+                <input id="conditions" name="conditions" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+              </div>
+              <div class="ml-3 text-sm">
+                <label for="candidates" class="font-medium text-gray-700">J'accepte les <a href="https://totem-prix.com/conditions-generales-de-services/" target="_blank" class="text-indigo-400">conditions générales de service</a></label>
+                <p class="text-gray-500"></p>
+              </div>
+        </div>
+		<div class="text-left">
+              <span class="inline-flex rounded-md shadow-sm">
+                <button id="confirm_submit" type="submit" class="inline-flex justify-center py-3 px-5 border border-transparent text-md leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                  Valider
+                </button>
+              </span>
+        </div>
+
+		</div>
+
+	</div>
+
+	<%- include('modal-success') -%>
+
+
+</body>
+
+</html>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js/confirmation.js"></script>

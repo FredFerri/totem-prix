@@ -1,0 +1,72 @@
+<dl class="hidden edit-profil-block" id="edit-profil-payments">
+  <div class="sm:grid sm:grid-cols-3 border-t border-gray-200 sm:gap-4 sm:px-6 sm:py-5">
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Type de moyen de paiement
+    </dt>
+    <dd class="mt-1 text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <div class="flex items-center">
+        <input type="hidden" id="email" value="<%= userInfos.email%>">
+        <input id="option_cb" class="option_payment" name="option_payment" type="radio" class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+        <label for="option_cb" class="ml-3">
+          <span class="block text-sm leading-5 font-medium text-gray-700">Carte bancaire</span>
+        </label>
+      </div>
+      <div class="flex items-center">
+        <input id="option_sepa" class="option_payment" name="option_payment" type="radio" class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+        <label for="option_sepa" class="ml-3">
+          <span class="block text-sm leading-5 font-medium text-gray-700">Prélèvement SEPA</span>
+        </label>
+      </div>
+    </dd>
+    <dt class="text-sm leading-5 font-medium text-gray-300-500">
+      Informations
+    </dt>
+    <dd class="hidden mt-1 sepa-block text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <% if (paymentInfos.sepa) { %>
+        <div class="justify-start mb-4">
+          <span class="font-bold">IBAN enregistré :</span><span><%= paymentInfos.sepa.iban %></span>
+          <p class="my-2">Pour changer de compte, indiquez un nouvel IBAN ci-dessous:</p>
+        </div>
+      <% } %>    
+      <div class="flex items-center">
+        <label for="iban" class="ml-3">
+          <span class="block text-sm leading-5 font-medium text-gray-700">IBAN</span>
+        </label>      
+        <input class="appearance-none rounded-none relative block w-70 px-3 py-2 mx-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" type="text" id="iban" name="iban" pattern="^[0-9A-Z]{27}$" placeholder="IBAN" value="">
+      </div>
+      <div class="flex mt-5 sm:mt-0 sm:px-6 sm:py-5">
+      <button type="submit" name="profil-edit-payment-sepa_submit" id="profil-edit-payment-sepa_submit" class="group relative w-20 flex justify-center py-1 px-1 border border-transparent text-sm leading-5 font-small rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out mr-3">
+        Valider
+      </button>
+      <button name="edit-profil-payments_cancel" id="edit-profil-payments_cancel" class="btn-cancel group relative w-20 flex justify-center py-1 px-1 border border-transparent text-sm leading-5 font-small rounded-md text-black bg-gray-300 hover:bg-black-500 focus:outline-none focus:border-gray-300 focus:shadow-outline-gray-300 active:bg-gray-300 transition duration-150 ease-in-out mr-3">
+        Annuler
+      </button> 
+      </div>       
+    </dd>
+    <dd class="hidden mt-1 cb-block text-sm leading-5 text-gray-300-900 sm:mt-0 sm:col-span-2">
+      <% if (paymentInfos.cb) { %>
+        <div class="justify-start mb-3">
+          <strong>Carte enregistrée</strong>
+          <div class="block">
+            <span class="font-bold block">Numéro :</span><span><%= paymentInfos.cb.cardNumber %></span>
+            <span class="font-bold block">Expire le :</span><span><%= paymentInfos.cb.expiryMonth %>/<%= paymentInfos.cb.expiryYear %></span>
+          </div>
+          <p class="my-2">Pour changer de carte, renseignez les informations ci-dessous:</p>
+        </div>
+      <% } %>
+      <div>
+        <div class="card-js"
+          data-stripe="true">
+        </div>
+      </div>
+      <div class="flex mt-5 sm:mt-0 sm:px-6 sm:py-5">
+      <button type="submit" name="profil-edit-payment-cb_submit" id="profil-edit-payment-cb_submit" class="group relative w-20 flex justify-center py-1 px-1 border border-transparent text-sm leading-5 font-small rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out mr-3">
+        Valider
+      </button>
+      <button name="edit-profil-payments_cancel" id="edit-profil-payments_cancel" class="btn-cancel group relative w-20 flex justify-center py-1 px-1 border border-transparent text-sm leading-5 font-small rounded-md text-black bg-gray-300 hover:bg-black-500 focus:outline-none focus:border-gray-300 focus:shadow-outline-gray-300 active:bg-gray-300 transition duration-150 ease-in-out mr-3">
+        Annuler
+      </button> 
+      </div>       
+    </dd>
+  </div>  
+</dl>
