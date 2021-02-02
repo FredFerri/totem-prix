@@ -22,10 +22,7 @@ const writeLog = require(paths.path_app_controllers+'writeLog');
 const writeLogSheets = require(paths.path_app_controllers+'writeLogsInSheets');
 const STRIPE_API = require(paths.path_app_controllers+'stripe-functions.js');
 const URL_ARGOS_SCRAPER = process.env.URL_ARGOS_SCRAPER_PROD;
-<<<<<<< HEAD
 const URL_ARGOS_APP_PORT = process.env.URL_ARGOS_APP_PORT;
-=======
->>>>>>> b4e8343f62bd1932ba2931d627009ca8a660da3d
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 
@@ -1063,10 +1060,6 @@ app.post('/update-oil-list/', async function(req, res) {
 	}
 })
 
-<<<<<<< HEAD
 server.listen(URL_ARGOS_APP_PORT, function() {
-=======
-server.listen(8080, function() {
->>>>>>> b4e8343f62bd1932ba2931d627009ca8a660da3d
     console.log('ARGOS APP RUNNING...');
 });

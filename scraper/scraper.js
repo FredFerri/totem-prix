@@ -11,11 +11,7 @@ const mosaic = require(paths.path_scraper+'getMosaic');
 const roulezeco = require(paths.path_scraper+'getRoulezEco');
 const writeLog = require(paths.path_scraper+'/writeLog');
 const writeLogSheets = require(paths.path_app_controllers+'/writeLogsInSheets');
-<<<<<<< HEAD
 const URL_ARGOS_SCRAPER_PORT = process.env.URL_ARGOS_SCRAPER_PORT;
-
-=======
->>>>>>> b4e8343f62bd1932ba2931d627009ca8a660da3d
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -144,7 +140,7 @@ app.delete('/delete-automation/:automationId', async function(req, res) {
 })
 
 
-server.listen(8181, async function() {
+server.listen(URL_ARGOS_SCRAPER_PORT, async function() {
 	await clusterManager.init();
 	await scheduleManager.init();	
 	let scheduledJobs = await scheduleManager.getAllScheduledJobs();
