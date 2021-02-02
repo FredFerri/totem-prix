@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-let result = dotenv.config({path: '/var/www/argos/.env'});
+let result = dotenv.config({path: './.env'});
 
 
 if (result.error) {
