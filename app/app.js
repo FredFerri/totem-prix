@@ -83,6 +83,17 @@ app.get('/', async function(req, res) {
 app.get('/admin', async function(req, res) {
 	try {
 		let userInfos = await User.getAll();
+		for (let i=0; i<userInfos.length; i++) {
+			let station = await Station.getByUserId(userInfos[i].id);
+			console.dir(station.rows);
+			if (station.length > 0) {
+				userInfos[i].station_created = true;
+				userInfos[i].station_created_active = station.active;
+			}
+			else {
+				userInfos[i].station_created = false;	
+			}
+		}
 		console.dir(userInfos);
 		console.dir(ADMIN_PASSWORD);
     	res.status(200).render('admin.ejs', {userInfos: userInfos, password: ADMIN_PASSWORD});

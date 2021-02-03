@@ -73,7 +73,6 @@ exports.getByUserId = function(userId) {
     console.log(query);
     try {
     	let station = await db.query(query);
-    	console.dir(station);
     	resolve(station.rows);
     }
     catch(err) {
