@@ -15,7 +15,7 @@ module.exports = {
             cluster = await Cluster.launch({
                 concurrency: Cluster.CONCURRENCY_CONTEXT,
                 maxConcurrency: maxConcurrency,
-                monitor: monitor
+                monitor: monitor,
             })
             resolve();
         })
