@@ -4,6 +4,7 @@ var app = express();
 var server = require('http').createServer(app);
 var bodyParser = require('body-parser');
 const path = require('path');
+const helmet = require('helmet');
 const cookierParser = require('cookie-parser');
 const jwtManager = require(paths.path_app_controllers+'jwt');
 const hour = 3600000;
@@ -34,6 +35,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+
+app.disable('x-powered-by');
 
 app.use(cookierParser());
 
@@ -1069,6 +1072,15 @@ app.post('/update-oil-list/', async function(req, res) {
 		res.status(500).send({message: 'Problème de connexion'});
 	}
 })
+
+async function errorHandler(err, req, res, next) {
+	stLogger.error('Catch-All error handler.', err)
+	res.status(500).send(err.message);
+	await writeLog('error', err.message);
+	await writeLogSheets.launch(err.message, 'app');		  
+}
+
+app.use(errorHandler);
 
 server.listen(URL_ARGOS_APP_PORT, function() {
     console.log('ARGOS APP RUNNING...');
