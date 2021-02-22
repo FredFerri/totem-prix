@@ -175,6 +175,9 @@ module.exports = {
 					else if ("second_try" in secondTry_results) {
 						await module.exports.secondTry(secondTry_results);
 					}
+					else if ("third_try" in secondTry_results) {
+						await module.exports.thirdTry(secondTry_results);
+					}					
 
 				// }
             });
@@ -262,12 +265,42 @@ module.exports = {
 		});				
 	},
 
+	thirdTry: async function(automation) {
+		console.log('THIRD TRY FOR AUTOMATION NUM '+automation['id']);
+		await writeLog('error', `THIRD TRY FOR AUTOMATION ${automation['id']}`);	
+		await writeLogSheets.launch(`THIRD TRY FOR AUTOMATION ${automation['id']}`, 'scraper');
+		let scraping_time = automation['scraping_time'];
+		let updated_date = moment().add(1, 'h').toObject();
+		let updated_id = parseInt(automation['id'], 10) + 7000;		
+		let automation_newtest = { ...automation };
+		automation_newtest['third_try'] = true;
+		automation_newtest['initial_id'] = automation['id'];
+		automation_newtest['id'] = updated_id;
+		let updated_scraping_time = `${updated_date['hours']}:${updated_date['minutes']}:${updated_date['seconds']}`;
+		console.log('UPDATED SCRAPING TIME FOR AUTOMATION NUM '+automation['id']+' = '+updated_scraping_time);
+		await writeLog('error', 'UPDATED SCRAPING TIME FOR AUTOMATION NUM '+automation_newtest['id']+' = '+updated_scraping_time);	
+		automation_newtest['scraping_time'] = updated_scraping_time;
+		console.dir(automation);
+		console.dir(automation_newtest)
+		let task = schedule.scheduleJob(`id_${updated_id}`, `${updated_date['minutes']} ${updated_date['hours']} * * *`, async function() {
+			let scheduledTasks = module.exports.getAllScheduledJobs();
+			// await writeLog(0, 'AUTOMATION '+automation['id']+' SCHEDULED !!');
+			await cluster.queue(automation_newtest);
+			// if ("credentials_error_confirmation" in task_updated_secondtime) {
+			// 	await module.exports.credentialsExpired(task_updated_secondtime);
+			// }			
+			// await module.exports.deleteScheduledJob(updated_id);
+			// scheduledTasks = module.exports.getAllScheduledJobs();
+			// return true;	
+		});				
+	},	
+
 	credentialsExpired: async function(automation) {
-		let errMessage = `Credentials expired / wrong for automation ${automation['initial_id']} on website ${automation['credentials_error_website']}`;
+		let errMessage = `Credentials expired / wrong for automation ${automation['initial_id']} on website ${automation['error_website']}`;
 		console.log(errMessage);
 		await module.exports.deleteScheduledJob(automation['id']);
 		// let scheduledTasks = await module.exports.getAllScheduledJobs();
-		await Automation.updateLastConnexionTime(false, automation['credentials_error_website'], automation['initial_id']);	
+		await Automation.updateLastConnexionTime(false, automation['error_website'], automation['initial_id']);	
 		await writeLog('error', errMessage);
 		await writeLogSheets.launch(errMessage, 'scraper');
 		console.log(`ID STATION = ${automation['id_station']}`);
@@ -282,11 +315,11 @@ module.exports = {
 
 	scrapingFailed: async function(automation) {
 		console.dir(automation);
-		console.dir(automation['credentials_error_website']);
-		let errMessage = `Scraping failed for automation ${automation['id']} on website ${automation['credentials_error_website']}
+		console.dir(automation['error_website']);
+		let errMessage = `Scraping failed for automation ${automation['id']} on website ${automation['error_website']}
 		: ${automation.error_message}`;
 		console.log(errMessage);
-		await Automation.updateLastConnexionTime(false, automation['credentials_error_website'], automation['initial_id']);	
+		await Automation.updateLastConnexionTime(false, automation['error_website'], automation['initial_id']);	
 		await writeLog('error', errMessage);
 		await writeLogSheets.launch(errMessage, 'scraper');
 		console.log(`ID STATION = ${automation['id_station']}`);
@@ -308,11 +341,10 @@ module.exports = {
         	// on déinit ici s'il s'agit d'un problème d'authentification
             if (err.message.indexOf('CREDENTIALS') > -1) {
                 task["credentials_error"] = true;
-                task["credentials_error_website"] = err.website;
+                task["error_website"] = err.website;
                 console.log('CONDITON 1');
             }
-            // on définit ici si c'est la première ou seconde tentative
-            if ("second_try" in task) {
+            if ("third_try" in task) {
             	// Ici, on identifie qu'il s'agit certainement d'une erreur d'authentification
                 if ("credentials_error" in task) {
                     task["credentials_error_confirmation"] = true;
@@ -321,14 +353,21 @@ module.exports = {
                 else {
                 	task["unknown_error_confirmation"] = true;
                 	task["error_message"] = err;
-                	task["unknown_error_website"] = err.website;
+                	task["error_website"] = err.website;
                 }
-                console.log('CONDITON 2');
+                console.log('CONDITON 2');            	
+            }
+            // on définit ici si c'est la première ou seconde tentative
+            if ("second_try" in task) {
+            	delete task["second_try"];
+                task["third_try"] = true;
+                console.log('secondTry');
+                console.log('CONDITON 3');
             }
             else {
                 task["second_try"] = true;
                 console.log('secondTry');
-                console.log('CONDITON 3');
+                console.log('CONDITON 4');
             }      
             console.dir(task);  
             resolve(task);

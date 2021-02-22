@@ -1085,3 +1085,6 @@ app.use(errorHandler);
 server.listen(URL_ARGOS_APP_PORT, function() {
     console.log('ARGOS APP RUNNING...');
 });
+
+
+module.exports = app; // for testing
