@@ -42,7 +42,6 @@ $('#btn-submit-add-station').on('click', function(e) {
 
 $('.form-add-station').on('submit', function(e) {
 	e.preventDefault();	
-	displayLoader();
 	let station_name = $('#add-station-name').val();
 	let station_street = $('#add-station-street').val();
 	let station_cp = $('#add-station-cp').val();
@@ -70,6 +69,7 @@ $('.form-add-station').on('submit', function(e) {
 	let verification = checkFormDatas(datas);	
 
 	if (verification !== false) {	
+		displayLoader();
 		$.ajax({
 		   url : '/station-manage/',
 		   type : 'POST',
@@ -100,7 +100,6 @@ $('.btn-submit-edit-station').on('click', function() {
 
 $('.form-edit-station').on('submit', function(e) {
 	e.preventDefault();	
-	displayLoader();
 	let id_station = $(this).attr('id');
 	id_station = id_station.replace('form-edit-station_', '');
 	let id_automation =  $('#station-card_'+id_station).find('.automation-id').val();
@@ -134,6 +133,7 @@ $('.form-edit-station').on('submit', function(e) {
 	let verification = checkFormDatas(datas);
 
 	if (verification !== false) {	
+		displayLoader();
 		$.ajax({
 		   url : '/station-manage/'+id_station+'/'+id_automation,
 		   type : 'PUT',
