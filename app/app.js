@@ -459,19 +459,22 @@ app.post('/station-manage/', [
 				datas['crypted_mosaic_password'] = crypted_mosaic_password;
 				let crypted_roulezeco_password = encrypt_nohash.encrypt(datas['roulezeco_password']);
 				datas['crypted_roulezeco_password'] = crypted_roulezeco_password;		
-				let id_station = await Station.create(datas);
-				datas['id_station'] = id_station;
+				let station = await Station.create(datas);
+				datas['id_station'] = station.id;
+				datas['name_station'] = station.name;
 				// if (datas['oils']) {				
 				// 	for (let i=0; i<datas['oils'].length; i++) {
 				// 		await StationOil.create(datas['oils'][i].id, datas['oils'][i].name, id_station);
 				// 	}
 				// }
+				console.dir(datas);
 				let automationInfos = await Automation.create(datas);
+				datas['id_automation'] = automationInfos.id;
 				
 				let successMessage = `NEW STATION CREATED FOR USER ${id_user}`;
 				await writeLog('success', successMessage);
 				await writeLogSheets.launch(successMessage, 'app');
-				res.status(200).json({message: 'Nouvelle station ajoutée'});
+				res.status(200).json({message: 'Nouvelle station ajoutée', datas: datas});
 			}
 			catch(err) {
 				console.log(err);
@@ -580,11 +583,12 @@ app.delete('/station/:station_id', async function(req, res) {
 	}
 	else {	
 		try  {	
-			if (req.body.subscription_id != 0 && req.body.subscription_id != '') {
+			if (req.body.subscription_id && req.body.subscription_id != 0 && req.body.subscription_id != '') {
 				await STRIPE_API.cancelSubscription(req.body.subscription_id);
 			}
 			await Station.delete(req.params.station_id);
 			let automationId = req.body.automation_id;
+			console.log(automationId);
 			await axios.delete(URL_ARGOS_SCRAPER+'delete-automation/'+automationId, {});
 			let successMessage = `STATION ${req.params.station_id} DELETED`;
 			await writeLog('success', successMessage);	
@@ -1049,6 +1053,7 @@ app.post('/station-activate/', async function(req, res) {
 
 app.post('/update-oil-list/', async function(req, res) {
 	try {	
+		console.log(req.body);
 		let automationInfos = await Automation.getByStationId(req.body.id_station);
 		let roulezeco_username = automationInfos.roulezeco_username;
 		let roulezeco_password = encrypt_nohash.decrypt(JSON.parse(automationInfos['roulezeco_password'])); 
@@ -1069,7 +1074,7 @@ app.post('/update-oil-list/', async function(req, res) {
 		let errMessage = `UPDATE OIL LIST - Problème rencontré : ${err} POUR STATION ${req.body.id_station}`;
 		await writeLog('error', errMessage);
 		await writeLogSheets.launch(errMessage, 'app');			
-		res.status(500).send({message: 'Problème de connexion'});
+		res.status(500).send({message: 'Problème de connexion à votre compte roulez-eco'});
 	}
 })
 

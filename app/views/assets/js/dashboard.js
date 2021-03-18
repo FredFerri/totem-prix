@@ -77,10 +77,14 @@ $('.form-add-station').on('submit', function(e) {
 		   dataType : 'json',
 		   success : function(resultat, statut){
 		   		console.dir(resultat);
+		   		let id_station = resultat.datas.id_station;
+		   		let id_user = resultat.datas.id_user;
+		   		let station_name = resultat.datas.station_name;
+		   		let id_automation = resultat.datas.id_automation;
 		   		hideLoader();
 		   		$('.success-modal h3').text('Nouvelle station créée !');
 		   		$('.success-modal .btn-validate').text('Ok');
-		   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+		   		$('.success-modal .btn-validate').attr('onclick', `firstUpdateOilList(${id_station}, ${id_user}, '${station_name}', ${id_automation})`);
 		   		$('.success-modal').show();	
 		   },
 		   error : function(resultat, statut, erreur){
@@ -92,6 +96,82 @@ $('.form-add-station').on('submit', function(e) {
 	}	
 
 })
+
+function firstUpdateOilList(id_station, id_user, station_name, id_automation) {
+	$('.success-modal').hide();	
+	$('.success-modal h3').text('Synchronisation de vos données carburants avec https://gestion.roulez-eco.fr/ (Cela peut prendre 1 à 2 minutes...)');
+	$('.success-modal .btn-validate').text('Veuillez patienter...');
+	$('.success-modal .btn-validate').attr('onclick', null);
+	$('.success-modal').show();	
+	// displayLoader();
+
+	$.ajax({
+		   url : '/update-oil-list/',
+		   type : 'POST',
+		   data: {
+		   	id_station: id_station
+		   },
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.log('firstUpdateOilList success');
+		   		automaticActivateStation(id_station, id_user, station_name);
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		$('.disrupts-modal').hide();
+		   		loadError(resultat.responseJSON.message);
+		   		deleteStation(id_station, id_automation);
+		   		//setTimeout(function() {
+		   		//	document.location.reload();
+		   		//}, 3000)
+		   }
+		})			
+}
+
+function deleteStation(id_station, id_automation) {
+	$.ajax({
+		   url : '/station/'+id_station,
+		   type : 'DELETE',
+		   data: {
+		   	automation_id: id_automation
+		   },
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.log('deleteStation success');
+		   		hideLoader();
+		   		$('.success-modal').hide();	
+		   		loadError('Problème de synchronisation de vos données roulez-eco. Veuillez vérifier que les identifiants que vous avez indiqué sont bien valides.');
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		alert(erreur);
+		   		console.log(erreur);
+		   }
+		})		
+}
+
+function automaticActivateStation(id_station, id_user, station_name) {
+		$.ajax({
+		   url : '/station-activate/',
+		   type : 'POST',
+		   data: {
+		   	id_station: id_station,
+		   	id_user: id_user,
+		   	station_name: station_name
+		   },
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   	hideLoader();
+		   	$('.confirm-modal').hide();
+	   		$('.success-modal h3').text('Informations synchonisées !');
+	   		$('.success-modal .btn-validate').text('Ok');
+	   		$('.success-modal .btn-validate').attr('onclick', 'reload()');
+	   		$('.success-modal').show();			   
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		loadError(resultat.responseJSON.message);
+		   		return false;
+		   }
+		})	
+}
 
 $('.btn-submit-edit-station').on('click', function() {
 	let id_station = $(this).attr('id').replace('btn-submit-edit-station_', '');
@@ -455,8 +535,8 @@ function checkFormDatas(datas) {
 		loadError("Vous devez renseigner un nom de société");
    		return false;		
 	}		
-	if (datas.station_street == '') {
-		loadError("Vous devez renseigner une adresse");
+	if (datas.station_street == '' || datas.station_street.length < 5) {
+		loadError("Vous devez renseigner une adresse valide");
    		return false;		
 	}	
 	if (datas.station_city == '') {

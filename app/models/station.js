@@ -9,13 +9,13 @@ exports.create = async function(datas) {
       let date_now = moment().format();
       let query = {
         name: 'add-station',
-        text: 'INSERT INTO station (name, street, cp, city, company, id_user) VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+        text: 'INSERT INTO station (name, street, cp, city, company, id_user) VALUES($1, $2, $3, $4, $5, $6) RETURNING id, name',
         values: [datas["station_name"], datas["station_street"], datas["station_cp"], 
                 datas["station_city"], datas["company_name"], datas["id_user"]]
       };
       console.log(query);
       let results = await db.query(query);
-      resolve(results.rows[0].id);      
+      resolve(results.rows[0]);      
     }
     catch(err) {
       reject(err);

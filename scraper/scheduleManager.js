@@ -221,10 +221,16 @@ module.exports = {
 			try {		
 				console.log(id_automation);
 				let old_task = schedule.scheduledJobs[`id_${id_automation}`];
-				old_task.cancel();	
-            	await writeLog('success', `TASK REMOVED FOR ID  AUTOMATION ${id_automation}`);
-                await writeLogSheets.launch(`TASK REMOVED FOR ID  AUTOMATION ${id_automation}`, 'scraper');					
-				resolve();
+				if (old_task) {				
+					old_task.cancel();	
+	            	await writeLog('success', `TASK REMOVED FOR ID  AUTOMATION ${id_automation}`);
+	                await writeLogSheets.launch(`TASK REMOVED FOR ID  AUTOMATION ${id_automation}`, 'scraper');					
+					resolve();
+				}
+				else {
+					console.log('Non existent schedule job');
+					resolve('Non existent schedule job');
+				}
 			}
 			catch(err) {
 				console.log(err);
