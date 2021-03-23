@@ -125,7 +125,7 @@ module.exports = {
                     await writeLog('success', `SCRAPING SUCCEED FOR AUTOMATION ${data['id']}`);
                     await writeLogSheets.launch(`SCRAPING SUCCEED FOR AUTOMATION ${data['id']}`, 'scraper');
                     // Si il s'agit d'une task de type secondTry, une fois réussie on la supprime
-                    if (data['id'].length == 4 && data['id'][0] == 5) {
+                    if ((data['id'].length == 4 && data['id'][0] == 5) || (data['id'].length == 5 && data['id'][0] == 1)) {
                     	await module.exports.deleteScheduledJob(data['id']);
                     }
                    	let stationInfos = await Station.getById(data['id_station']);
@@ -333,6 +333,7 @@ module.exports = {
 		let userInfos = await User.getById(stationInfos['id_user']);
 		console.dir(userInfos);
 		await mailController.sendMailJet(userInfos.email_alert, userInfos.first_name, 'daily-error', errMessage);
+		await mailController.sendMailJet('f.ferri@totem-prix.com', userInfos.first_name, 'daily-error-admin-alert', errMessage);
 		automation = null;
 		let scheduledTasks = module.exports.getAllScheduledJobs();
 		console.dir(scheduledTasks);		

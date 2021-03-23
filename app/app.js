@@ -605,6 +605,28 @@ app.delete('/station/:station_id', async function(req, res) {
 	}	
 })
 
+app.post('/station-manage-error', async function(req, res) {
+	let tokenCheck = await jwtManager.tokenVerification(req.cookies.argos_token);
+	if (tokenCheck === false) {	
+		res.status(403).render('index.ejs', {});		
+	}
+	else {	
+		try  {	
+			let errMessage = `Station creation error for user ${req.body.id_user}`;
+			await writeLog('error', errMessage);	
+			await writeLogSheets.launch(errMessage, 'app');					
+			let mailResponse = await mailController.sendMailJet('f.ferri@totem-prix.com', 'admin', 'daily-error-admin-alert', errMessage);
+			res.status(200);
+		}
+		catch(err) {
+			console.log(err);
+			await writeLog('error', err);	
+			res.status(500).send({message: 'Erreur'});
+		}
+	}	
+})
+
+
 app.post('/disrupts/', async function(req, res) {
 	let tokenCheck = await jwtManager.tokenVerification(req.cookies.argos_token);
 	if (tokenCheck === false) {	
@@ -706,6 +728,46 @@ app.get('/test-credentials/:automation_id', async function(req, res){
 		catch(err) {
 			console.log(err);
 			res.status(500).send({message: 'Problème rencontré lors du test, veuillez réessayer plus tard.'});
+		}
+	}	
+})
+
+// test credential lancé lors de la création d'une nouvelle station
+app.get('/automatic-test-credentials/:automation_id', async function(req, res){
+	let tokenCheck = await jwtManager.tokenVerification(req.cookies.argos_token);	
+	if (tokenCheck === false) {	
+		res.status(403).render('index.ejs', {});
+	}
+	else {	
+		let automation_id = req.params.automation_id;
+		try {		
+			let automation = await Automation.getById(automation_id);
+			let mosaic_password = encrypt_nohash.decrypt(JSON.parse(automation['mosaic_password']));
+			let roulezeco_password = encrypt_nohash.decrypt(JSON.parse(automation['roulezeco_password'])); 
+			let credentials = {
+				mosaic_password: mosaic_password,
+				roulezeco_password: roulezeco_password,
+				mosaic_username: automation['mosaic_username'],
+				roulezeco_username: automation['roulezeco_username'],
+				automation_id: automation['id']
+			};
+			let testResults = await axios.post(URL_ARGOS_SCRAPER+'test-credentials/', {credentials});
+			console.dir(testResults);
+			if (testResults.data.mosaicTest.error === true) {
+				res.status(400).send({errWebsite: 'mosaic'});
+			}
+			if (testResults.data.roulezecoTest.error === true) {
+				res.status(400).send({errWebsite: 'roulez-eco'});
+			}
+			else {			
+				console.log('OK TEST CREDENTIALS');
+				res.status(200).send({message: 'ok'});
+			}
+
+		}
+		catch(err) {
+			console.log(err);
+			res.status(500).send({message: 'Problème rencontré lors du test, veuillez réessayer plus tard. '+err});
 		}
 	}	
 })
@@ -1079,10 +1141,12 @@ app.post('/update-oil-list/', async function(req, res) {
 })
 
 async function errorHandler(err, req, res, next) {
+	let errMessage = 'Erreur 500 sur Totem-prix, consuler logs';
 	stLogger.error('Catch-All error handler.', err)
 	res.status(500).send(err.message);
 	await writeLog('error', err.message);
-	await writeLogSheets.launch(err.message, 'app');		  
+	await writeLogSheets.launch(err.message, 'app');	
+	await mailController.sendMailJet('f.ferri@totem-prix.com', 'admin', 'daily-error-admin-alert', errMessage);	  
 }
 
 app.use(errorHandler);

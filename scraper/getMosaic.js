@@ -63,7 +63,7 @@ module.exports = {
 
       try {
         await page.setDefaultNavigationTimeout(0);
-        await page.goto('https://www.mosaic.total.fr/');
+        await page.goto('https://www.mosaic.total.fr/', { waitUntil: 'load', timeout: 0 });
         await page.waitFor('#login');
         await page.type('#login', data['mosaic_username']);
         await page.type('#pwd', data['mosaic_password']);
@@ -75,7 +75,7 @@ module.exports = {
           return false;
         }
         await page.waitFor('.tetemenu', { visible: true })
-        await page.goto('https://www.mosaic.total.fr/WDLClient/do/displayRecomPrice');
+        await page.goto('https://www.mosaic.total.fr/WDLClient/do/displayRecomPrice', { waitUntil: 'load', timeout: 0 });
         await page.waitFor('table.fondpave', { visible: true })
         const html = await page.evaluate(() => document.querySelector('*').outerHTML);
 
@@ -246,7 +246,7 @@ module.exports = {
         //   }
         // });      
 
-        await page.goto('https://www.mosaic.total.fr/');
+        await page.goto('https://www.mosaic.total.fr/', { waitUntil: 'load', timeout: 0 });
         await page.waitFor('#login');
         await page.type('#login', data['mosaic_username']);
         await page.type('#pwd', data['mosaic_password']);

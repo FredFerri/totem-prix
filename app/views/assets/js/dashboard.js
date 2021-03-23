@@ -84,7 +84,7 @@ $('.form-add-station').on('submit', function(e) {
 		   		hideLoader();
 		   		$('.success-modal h3').text('Nouvelle station créée !');
 		   		$('.success-modal .btn-validate').text('Ok');
-		   		$('.success-modal .btn-validate').attr('onclick', `firstUpdateOilList(${id_station}, ${id_user}, '${station_name}', ${id_automation})`);
+		   		$('.success-modal .btn-validate').attr('onclick', `synchronizeAccount(${id_station}, ${id_user}, '${station_name}', ${id_automation})`);
 		   		$('.success-modal').show();	
 		   },
 		   error : function(resultat, statut, erreur){
@@ -97,13 +97,35 @@ $('.form-add-station').on('submit', function(e) {
 
 })
 
-function firstUpdateOilList(id_station, id_user, station_name, id_automation) {
+function synchronizeAccount(id_station, id_user, station_name, id_automation) {
 	$('.success-modal').hide();	
 	$('.success-modal h3').text('Synchronisation de vos données carburants avec https://gestion.roulez-eco.fr/ (Cela peut prendre 1 à 2 minutes...)');
 	$('.success-modal .btn-validate').text('Veuillez patienter...');
 	$('.success-modal .btn-validate').attr('onclick', null);
 	$('.success-modal').show();	
 	// displayLoader();
+
+	$.ajax({
+		   url : '/automatic-test-credentials/'+id_automation,
+		   type : 'GET',
+		   dataType : 'json',
+		   success : function(resultat, statut){
+		   		console.log('test credentials success');
+		   		firstUpdateOilList(id_station, id_user, station_name, id_automation);
+		   },
+		   error : function(resultat, statut, erreur) {
+		   		$('.disrupts-modal').hide();
+		   		loadError(resultat.responseJSON.message);
+		   		deleteStation(id_station, id_automation);
+		   		sendErrorMail(id_user);
+		   		//setTimeout(function() {
+		   		//	document.location.reload();
+		   		//}, 3000)
+		   }
+		})		
+}
+
+function firstUpdateOilList(id_station, id_user, station_name, id_automation) {
 
 	$.ajax({
 		   url : '/update-oil-list/',
@@ -120,11 +142,29 @@ function firstUpdateOilList(id_station, id_user, station_name, id_automation) {
 		   		$('.disrupts-modal').hide();
 		   		loadError(resultat.responseJSON.message);
 		   		deleteStation(id_station, id_automation);
+		   		sendErrorMail(id_user);
 		   		//setTimeout(function() {
 		   		//	document.location.reload();
 		   		//}, 3000)
 		   }
 		})			
+}
+
+function sendErrorMail(id_user) {
+	$.ajax({
+	   url : '/station-manage-error/',
+	   type : 'POST',
+	   data: {
+	   	id_user: id_user
+	   },
+	   dataType : 'json',
+	   success : function(resultat, statut){
+	   		console.log('sendErrorMail OK');
+	   },
+	   error : function(resultat, statut, erreur) {
+	   		console.log(erreur);
+	   }
+	})
 }
 
 function deleteStation(id_station, id_automation) {
@@ -139,10 +179,11 @@ function deleteStation(id_station, id_automation) {
 		   		console.log('deleteStation success');
 		   		hideLoader();
 		   		$('.success-modal').hide();	
-		   		loadError('Problème de synchronisation de vos données roulez-eco. Veuillez vérifier que les identifiants que vous avez indiqué sont bien valides.');
+		   		loadError(`Veuillez vérifier que les identifiants que vous avez indiqué sont bien valides. 
+		   			Si vos identifiants sont corrects, veuillez réessayer votre création de station ultérieurement, 
+		   			le problème peut venir d'un bug temporaire de la plateforme roulez-eco`);
 		   },
 		   error : function(resultat, statut, erreur) {
-		   		alert(erreur);
 		   		console.log(erreur);
 		   }
 		})		

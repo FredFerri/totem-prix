@@ -30,7 +30,11 @@ module.exports = {
       else if (type == 'daily-error') {
         subject = 'Erreur rencontrée lors de la mise à jour de vos prix carburants';
         templateId = 2103513;
-      }      
+      }     
+      else if (type == 'daily-error-admin-alert') {
+        subject = datas;
+        templateId = 2103513;
+      }             
       else {
         subject = 'Demande de réinitialisation de votre mot de passe totem-prix';
         templateId = 2031269;

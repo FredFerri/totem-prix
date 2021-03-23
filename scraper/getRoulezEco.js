@@ -82,8 +82,10 @@ module.exports = {
                 }
 
                 for (absentCarbuId of absentCarbus) {
-                  if (document.querySelector('#fuel_'+absentCarbuId).checked != true) {
-                    document.querySelector('#fuel_'+absentCarbuId).click();
+                  if ((document.querySelector('#fuel_'+absentCarbuId))) {                  
+                    if (document.querySelector('#fuel_'+absentCarbuId).checked != true) {
+                      document.querySelector('#fuel_'+absentCarbuId).click();
+                    }
                   }
                 }
 
@@ -132,7 +134,7 @@ module.exports = {
             }
           });     
                 
-          await page.goto('https://gestion.roulez-eco.fr/');
+          await page.goto('https://gestion.roulez-eco.fr/', { waitUntil: 'load', timeout: 0 });
           await page.type('#username', data['roulezeco_username']);
           await page.type('#password', data['roulezeco_password']);
           await page.click('input[name="_submit"]');
@@ -218,7 +220,7 @@ module.exports = {
         console.log('Browser launched')
         const page = await browser.newPage();
         console.log('Page launched');
-        await page.goto('https://gestion.roulez-eco.fr/');
+        await page.goto('https://gestion.roulez-eco.fr/', { waitUntil: 'load', timeout: 0 });
         await page.type('#username', roulezeco_username);
         await page.type('#password', roulezeco_password);
         await page.click('input[name="_submit"]');

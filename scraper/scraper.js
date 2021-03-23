@@ -45,7 +45,7 @@ app.post('/test-credentials/', async function(req, res) {
 		}
 		let roulezecoTest = await roulezeco.testCredentials(credentials);
 		if (roulezecoTest.error === true) {
-			let errorMessage = `TEST CREDENTIALS ERROR : ${mosaicTest.message} 
+			let errorMessage = `TEST CREDENTIALS ERROR : ${roulezecoTest.message} 
 			FOR AUTOMATION ${credentials['automation_id']}, WEBSITE = ROULEZ ECO`; 
 			await writeLog('error', errorMessage);
 			await writeLogSheets.launch(errorMessage, 'scraper');
