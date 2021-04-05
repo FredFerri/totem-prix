@@ -30,7 +30,7 @@ module.exports = {
 			}
 			catch(err) {
 				console.log(err);
-				reject(err);
+				resolve(err);
 			}
 		})
 	},
@@ -52,7 +52,8 @@ module.exports = {
 
 		catch(e) {
 			console.log(e);
-			throw new Error(e.message);
+			return true;
+			// throw new Error(e.message);
 		}
 	},
 
