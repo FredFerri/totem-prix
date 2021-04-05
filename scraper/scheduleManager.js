@@ -3,6 +3,7 @@ const schedule = require('node-schedule');
 const Automation = require(paths.path_app_models+'automation');
 const User = require(paths.path_app_models+'user');
 const Station = require(paths.path_app_models+'station');
+const StationOils = require(paths.path_app_models+'station_oil');
 const writeLog = require('./writeLog');
 const writeLogSheets = require(paths.path_app_controllers+'/writeLogsInSheets');
 const moment = require('moment');
@@ -89,6 +90,7 @@ module.exports = {
             cluster.task(async ({ page, data }) => {
                 console.dir(data);
                 console.log('TASK LAUNCHED FOR AUTOMATION NUM '+data['id']);
+                console.log('TASK LAUNCHED FOR STATION NUM '+data['id_station']);
                 await writeLog('success', `TASK LAUNCHED FOR AUTOMATION ${data['id']}`);
                 await writeLogSheets.launch(`TASK LAUNCHED FOR AUTOMATION ${data['id']}`, 'scraper');                
                 try {            	
@@ -98,18 +100,20 @@ module.exports = {
                 		roulezeco_username: data['roulezeco_username'],
                 		roulezeco_password: encrypt_nohash.decrypt(JSON.parse(data['roulezeco_password'])),                		
                 	}
-	                let result = await getMosaic.launch(page, credentials);
+                	let carbus = await StationOils.getByStationId(data['id_station']);
+                	console.log('LISTE CARBUS POUR STATION '+data['id']);
+	                let result = await getMosaic.launch(page, credentials, carbus);
                    	await Automation.updateLastConnexionTime(true, 'mosaic', data['id']);	                	
                     console.log('MOSAIC SCRAPING RESULTS FOR AUTOMATION NUM '+data["id"]+' = '+result);           
                     let carbusDatas = result[0].stationPrix;
                     let absentCarbus = result[1];
-                    let result2 = await getRoulezEco.launch(page, credentials, result[0], absentCarbus);
+                    let result2 = await getRoulezEco.launch(page, credentials, result[0]);
                     console.log('ROULEZECO SCRAPING RESULTS FOR AUTOMATION NUM '+data["id"]+' = '+result);
                     await Automation.updateLastConnexionTime(true, 'roulezeco', data['id']);
                     let stationId = data.id_station;
                     for (let oilTypeObj of carbusDatas) {
                         // console.dir(oilTypeObj);
-                        let oilId = oilTypeObj.oil_id;
+                        let oilId = oilTypeObj.carbuIndexRE;
                         let oilPrice = oilTypeObj.carbuPrice;
                         console.log('PREPARING TO INSERT PRICE TO AUTOMATION NUM '+data['id']);
                         let recordingResult = await stationOil.insertPrice({id_station: stationId, id_oil: oilId, price: oilPrice});

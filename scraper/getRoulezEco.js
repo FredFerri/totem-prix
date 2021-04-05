@@ -36,7 +36,7 @@ const skippedResources = [
 ];
 
 module.exports = {
-  launch: async function(page, credentials, carbuDatas, absentCarbus) {
+  launch: async function(page, credentials, carbuDatas) {
       return new Promise(async function(resolve, reject) {  
         try {
           console.log('ROULEZ ECO');
@@ -63,7 +63,7 @@ module.exports = {
 
             console.log('OKKKK 2');
 
-            await page.evaluate(function(carbuDatas, absentCarbus) {
+            await page.evaluate(function(carbuDatas) {
                 for (let z=0; z<carbuDatas.stationPrix.length; z++) {
                   let indexCarbu = carbuDatas.stationPrix[z].carbuIndexRE;
                   // On vérifie si l'élément ci dessous existe (si l'input du carburant en question est bien présent)
@@ -81,15 +81,15 @@ module.exports = {
                   }
                 }
 
-                for (absentCarbuId of absentCarbus) {
-                  if ((document.querySelector('#fuel_'+absentCarbuId))) {                  
-                    if (document.querySelector('#fuel_'+absentCarbuId).checked != true) {
-                      document.querySelector('#fuel_'+absentCarbuId).click();
-                    }
-                  }
-                }
+                // for (absentCarbuId of absentCarbus) {
+                //   if ((document.querySelector('#fuel_'+absentCarbuId))) {                  
+                //     if (document.querySelector('#fuel_'+absentCarbuId).checked != true) {
+                //       document.querySelector('#fuel_'+absentCarbuId).click();
+                //     }
+                //   }
+                // }
 
-            }, carbuDatas, absentCarbus.indexes)
+            }, carbuDatas)
 
             console.log('OKKKK 3');
 
