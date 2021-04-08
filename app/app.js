@@ -850,6 +850,17 @@ app.get('/invoices/:user_id', async function(req, res) {
 	}	
 })
 
+app.get('/assistance', async function(req, res) {
+	let tokenCheck = await jwtManager.tokenVerification(req.cookies.argos_token);	
+	if (tokenCheck === false) {	
+		res.status(403).render('index.ejs', {});		
+	}
+	else {	
+		let userInfos = await User.getById(req.params.user_id);	
+		res.status(200).render('assistance.ejs', {userInfos});
+	}
+})
+
 app.get('/prices/:user_id', async function(req, res) {
 	let tokenCheck = await jwtManager.tokenVerification(req.cookies.argos_token);	
 	if (tokenCheck === false) {	
