@@ -1,6 +1,8 @@
 $('#confirm_submit').on('click', function(e) {
 	e.preventDefault();
 	let civil = $('.civil:checked').val();
+	let tel = $('#tel').val().replace(/\s/g,'');
+	let siret = $('#siret').val().replace(/\s/g,'');
 	if (!civil) {
 		$('.error-message').find('.error-message-txt').text('Vous devez indiquer une civilité');
 	   	$('.error-message').show();						
@@ -13,7 +15,7 @@ $('#confirm_submit').on('click', function(e) {
 		$('.error-message').find('.error-message-txt').text('Les deux mots de passe que vous avez renseigné ne correspondent pas');
 	   	$('.error-message').show();
 	}	
-	else if ($('#tel').val().length < 10 || $('#tel').val().length > 13) {
+	else if (tel.length < 10 || tel.length > 13) {
 		$('.error-message').find('.error-message-txt').text('Numéro de téléphone non valide');
 	   	$('.error-message').show();		
 	}
@@ -21,7 +23,7 @@ $('#confirm_submit').on('click', function(e) {
 		$('.error-message').find('.error-message-txt').text('Numéro de TVA non valide');
 	   	$('.error-message').show();				
 	}
-	else if ($('#siret').val().length < 14) {
+	else if (siret.length < 14) {
 		$('.error-message').find('.error-message-txt').text('Numéro SIRET non valide');
 	   	$('.error-message').show();		
 	}	
@@ -65,11 +67,11 @@ $('#confirm_submit').on('click', function(e) {
 			civil: civil,
 			last_name: $('#last_name').val(),
 			first_name: $('#first_name').val(),
-			tel: $('#tel').val(),
+			tel: tel,
 			password: $('#password').val(),
 			company_name: $('#company_name').val(),
 			tva: $('#tva').val(),
-			siret: $('#siret').val(),
+			siret: siret,
 			company_adresse: $('#company_adresse').val(),
 			company_cp: $('#company_cp').val(),
 			company_city: $('#company_city').val(),
