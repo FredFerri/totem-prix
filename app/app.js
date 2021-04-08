@@ -850,6 +850,7 @@ app.get('/invoices/:user_id', async function(req, res) {
 	}	
 })
 
+// assistance menu
 app.get('/assistance', async function(req, res) {
 	let tokenCheck = await jwtManager.tokenVerification(req.cookies.argos_token);	
 	if (tokenCheck === false) {	
